@@ -78,15 +78,19 @@ def aggregate(xlsx_bytes: bytes) -> dict:
 
     total = df["項番"].dropna().nunique()           # 母数 = 歯科医療機関数
     sub = df.dropna(subset=["受理届出名称"]).copy()
-    g = (sub.groupby(["受理届出名称", "受理記号"])["項番"]
-            .nunique().reset_index())
-    g.columns = ["name", "abbr", "count"]
+    grp = sub.groupby(["受理届出名称", "受理記号"])
+    g = pd.DataFrame({
+        "count": grp.size(),               # 単純集計（届出の延べ件数 = 行数）
+        "count_uniq": grp["項番"].nunique() # 医療機関単位（重複を除いた実数）
+    }).reset_index()
+    g.columns = ["name", "abbr", "count", "count_uniq"]
     g = g.sort_values("count", ascending=False)
 
     standards = [
         {"name": r["name"],
          "abbr": (r["abbr"] if pd.notna(r["abbr"]) else ""),
-         "count": int(r["count"])}
+         "count": int(r["count"]),
+         "count_uniq": int(r["count_uniq"])}
         for _, r in g.iterrows()
     ]
     return {"total_clinics": int(total),
@@ -146,6 +150,7 @@ def main():
             "version": info["version"],
             "created": created,
             "source_url": "./data/source.xlsx",
+            "count_mode": data.get("count_mode", "raw"),
             "total_clinics": agg["total_clinics"],
             "n_standards": agg["n_standards"],
             "standards": agg["standards"],
