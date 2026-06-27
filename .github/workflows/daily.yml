@@ -1,0 +1,50 @@
+name: Update dental dashboard
+
+# 毎日1回、近畿厚生局の歯科データ更新をチェックして反映する。
+# - schedule は UTC。21:00 UTC = 翌 06:00 JST に実行。
+#   （GitHub の cron は混雑時 10〜30 分ほど遅延することがある）
+# - 手動実行したいときは Actions タブから "Run workflow"。
+on:
+  schedule:
+    - cron: "0 21 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write          # data/ と index.html をコミットするために必要
+
+concurrency:
+  group: update-dashboard
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check & update data
+        id: run
+        run: python scripts/update.py
+
+      - name: Commit & push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            if [ "${{ steps.run.outputs.changed }}" = "true" ]; then
+              git commit -m "data: ${{ steps.run.outputs.version }} に更新 ($(TZ=Asia/Tokyo date +%Y-%m-%d))"
+            else
+              git commit -m "chore: 最終チェック更新 ($(TZ=Asia/Tokyo date +%Y-%m-%d))"
+            fi
+            git push
+          else
+            echo "差分なし"
+          fi
