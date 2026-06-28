@@ -9,7 +9,7 @@
     --bg:#e8edef; --surface:#ffffff; --ink:#16242d; --muted:#65737d;
     --line:#e1e7eb; --line-strong:#cfd8dd;
     --t1:#0a6460; --t2:#2a857d; --t3:#4a9f96; --t4:#7cbcb4; --t5:#aed4ce; --t6:#d6e7e4;
-    --accent:#0a6460; --warm:#9a6a1f; --warm-bg:#fbf3e3;
+    --accent:#0a6460; --warm:#9a6a1f; --warm-bg:#fbf3e3; --faint:#b9c4ca;
     --track:#eef2f4;
     --shadow:0 1px 2px rgba(20,40,50,.05),0 8px 24px -16px rgba(20,40,50,.25);
     --radius:14px;
@@ -50,7 +50,7 @@
   .chip.warm{background:var(--warm-bg);border-color:#ecd9b0;color:var(--warm)}
 
   /* ---- KPI strip ---- */
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:0 0 24px}
+  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:0 0 24px;max-width:540px}
   .kpi{
     background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
     padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden
@@ -165,6 +165,80 @@
   .switch-text .t{font-size:13.5px;font-weight:700;color:var(--ink)}
   .switch-text .d{font-size:11.5px;color:var(--muted)}
 
+  /* sample banner */
+  .sbanner{font-size:12px;color:var(--warm);background:var(--warm-bg);border:1px solid #ecd9b0;
+    border-radius:10px;padding:9px 14px;margin:0 0 14px}
+  .sbanner b{color:#7a531a}
+
+  /* prefecture tabs */
+  .ptabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;margin-bottom:6px;-webkit-overflow-scrolling:touch}
+  .ptab{flex:none;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;
+    border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);border-radius:999px;padding:8px 16px;transition:.12s}
+  .ptab:hover{color:var(--ink)}
+  .ptab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .ptab .est{font-size:9.5px;font-weight:700;color:var(--warm);background:var(--warm-bg);border:1px solid #ecd9b0;border-radius:4px;padding:0 4px;margin-left:5px;vertical-align:1px}
+  .ptab.on .est{color:#fff;background:rgba(255,255,255,.18);border-color:transparent}
+
+  /* trend card */
+  .trend{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:22px}
+  .trend-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px 0;flex-wrap:wrap}
+  .trend-h h2{font-size:15px;margin:0;font-weight:800}
+  .trend-h .st{font-size:11.5px;color:var(--muted);margin:4px 0 0}
+  .stage{display:inline-block;font-size:10.5px;font-weight:700;color:var(--accent);background:rgba(10,100,96,.09);
+    border:1px solid rgba(10,100,96,.18);border-radius:6px;padding:1px 7px;margin-left:6px}
+  .tread{font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .tread b{color:var(--accent);font-weight:800;font-size:15px}
+  .tchips{display:flex;flex-wrap:wrap;gap:7px;padding:12px 18px 4px}
+  .tchip{font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;border:1px solid var(--line-strong);
+    background:#fbfdfd;color:var(--muted);border-radius:999px;padding:6px 13px;transition:.12s}
+  .tchip:hover{color:var(--ink)}
+  .tchip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .prev{display:flex;align-items:center;gap:12px;padding:8px 18px 4px}
+  .prev-lab{font-size:11.5px;color:var(--muted);white-space:nowrap}
+  .prev input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:6px;
+    background:linear-gradient(var(--accent),var(--accent)) no-repeat,#dde4e8;background-size:var(--pct,100%) 100%;outline:none}
+  .prev input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:pointer;box-shadow:0 1px 4px rgba(20,40,50,.25)}
+  .prev input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:pointer}
+  .trend-body{padding:10px 18px 14px;min-height:230px;display:flex;flex-direction:column;justify-content:center}
+  .trend-hint{margin:0;padding:0 18px 16px;font-size:11.5px;color:var(--muted)}
+  .t-empty{text-align:center;color:var(--muted);padding:22px 10px}
+  .t-empty .ic{width:44px;height:44px;margin:0 auto 11px;border-radius:12px;background:#eef2f4;display:flex;align-items:center;justify-content:center}
+  .t-empty b{display:block;color:var(--ink);font-size:14px;margin-bottom:5px}
+  .t-empty p{margin:0;font-size:12.5px;max-width:380px;margin-inline:auto}
+  .t-hero{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;margin-bottom:6px}
+  .t-hero .big{font-weight:800;line-height:1;letter-spacing:-.02em}
+  .t-hero .big .u{font-size:17px;font-weight:700;color:var(--muted);margin-left:3px}
+  .t-hero .meta{font-size:12.5px;color:var(--muted)}
+  .t-diff{display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:800;padding:4px 11px;border-radius:999px}
+  .t-diff.up{color:#1f7a4d;background:rgba(31,122,77,.1)} .t-diff.down{color:#b5483a;background:rgba(181,72,58,.1)} .t-diff.flat{color:var(--muted);background:#eef2f4}
+  .t-cap{font-size:12px;color:var(--muted);margin-top:8px}
+  svg .tgrid{stroke:var(--line);stroke-width:1} svg .taxis{fill:var(--muted);font-size:11px}
+  svg .tline{fill:none;stroke:var(--accent);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+  svg .tseg{fill:none;stroke:var(--accent);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+  svg .tseg.bridge{stroke:var(--faint);stroke-width:2;stroke-dasharray:5 5}
+  svg .tdot{fill:var(--accent)} svg .tstart{fill:none;stroke:var(--accent);stroke-width:2} svg .tend{fill:var(--accent);font-size:12px;font-weight:800}
+  svg .tmark{stroke:var(--warm);stroke-width:1.5;stroke-dasharray:4 4;opacity:.85}
+  svg .tflag{fill:var(--warm)}
+  .trend-hint b{color:#7a531a}
+
+  .row{cursor:pointer}
+  .row.is-sel{background:#eef7f5;box-shadow:inset 3px 0 0 var(--accent)}
+
+  .t-hero .t-cnt{font-size:20px;font-weight:800;color:var(--ink)}
+  .t-hero .t-cnt .u{font-size:12px;font-weight:600;color:var(--muted);margin-left:2px}
+
+  /* detail modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(20,35,42,.5);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}
+  .modal-bg[hidden]{display:none}
+  .modal{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px -20px rgba(20,40,50,.5);width:100%;max-width:640px;max-height:88vh;overflow:auto}
+  .modal-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 0}
+  .modal-ht{min-width:0}
+  .modal-ht h3{font-size:16px;margin:4px 0 0;font-weight:800;line-height:1.35}
+  .modal-ht .dsub{font-size:12px;color:var(--muted);margin:6px 0 0}
+  .modal-x{flex:none;width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fbfdfd;font-size:20px;line-height:1;color:var(--muted);cursor:pointer}
+  .modal-x:hover{background:#fff;color:var(--ink)}
+  .clickhint{margin-left:10px;font-size:11px;color:var(--accent);background:rgba(10,100,96,.08);border:1px solid rgba(10,100,96,.16);border-radius:6px;padding:1px 8px;white-space:nowrap}
+
   @media (max-width:720px){
     .kpis{grid-template-columns:1fr 1fr}
     .meta{flex-wrap:wrap;gap:4px 12px}
@@ -186,10 +260,10 @@
   <!-- masthead -->
   <header class="mast">
     <div class="lead">
-      <p class="eyebrow">近畿厚生局 公開データ ／ 歯科</p>
-      <h1>大阪府 施設基準 届出状況ダッシュボード</h1>
+      <p class="eyebrow">近畿・北陸 ／ 歯科</p>
+      <h1>施設基準 届出状況ダッシュボード</h1>
       <p class="sub">
-        母数は府内の歯科医療機関数。各施設基準を届け出ている医療機関数とその割合（届出率）を表示します。点数改定月等、更新がない場合があります。<br>
+        府県を切り替えて届出状況を確認できます。母数は各府県の歯科医療機関数。点数改定月等、更新がない場合があります。<br>
         出典：<a href="https://kouseikyoku.mhlw.go.jp/kinki/gyomu/gyomu/hoken_kikan/shitei_jokyo_00004.html" target="_blank" rel="noopener">近畿厚生局 施設基準の届出状況</a>
       </p>
     </div>
@@ -198,6 +272,11 @@
       <span class="chip"><span class="dot"></span>最終チェック <b id="checked">2026/06/27 06:00</b></span>
     </div>
   </header>
+
+  <div class="sbanner">大阪は実データ。<b>他府県の数値と推移グラフは説明用のサンプル（推計）</b>で、本実装時に各府県の実データへ置き換わります。</div>
+
+  <!-- prefecture tabs -->
+  <div class="ptabs" id="ptabs"></div>
 
   <!-- KPI -->
   <section class="kpis">
@@ -208,16 +287,6 @@
     <div class="kpi k2">
       <p class="lab">施設基準の種類</p>
       <p class="val tnum"><span id="kStd">113</span><span class="u">種</span></p>
-    </div>
-    <div class="kpi k3">
-      <p class="lab">ほぼ全院が届出（80%以上）</p>
-      <p class="val tnum"><span id="kHigh">3</span><span class="u">種</span></p>
-      <button class="kpi-btn" data-min="80">この条件で絞り込む</button>
-    </div>
-    <div class="kpi k4">
-      <p class="lab">過半数が届出（50%以上）</p>
-      <p class="val tnum"><span id="kMaj">8</span><span class="u">種</span></p>
-      <button class="kpi-btn" data-min="50">この条件で絞り込む</button>
     </div>
   </section>
 
@@ -245,7 +314,7 @@
     <div class="tiers" id="tiers"></div>
 
     <div class="meta">
-      <span><b id="shown">113</b> 件を表示<span id="filterNote"></span></span>
+      <span><b id="shown">113</b> 件を表示<span id="filterNote"></span><span class="clickhint">行をクリックで詳細分析（推移）</span></span>
       <span id="ratebasis">届出率＝届出件数 ÷ <b class="tnum">5,260</b>院</span>
     </div>
 
@@ -275,11 +344,65 @@
 
 </div>
 
+<!-- detail analysis modal -->
+<div class="modal-bg" id="detail" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <div class="modal-h">
+      <div class="modal-ht">
+        <span class="badge" id="dBadge"></span>
+        <h3 id="dTitle"></h3>
+        <p class="dsub" id="dSub"></p>
+      </div>
+      <button class="modal-x" id="dClose" aria-label="閉じる">×</button>
+    </div>
+    <div class="prev">
+      <span class="prev-lab">推移プレビュー：蓄積月数</span>
+      <input type="range" id="tslider" min="0" max="12" step="1" value="12">
+      <span class="tread" id="tread"></span>
+    </div>
+    <div class="trend-body" id="trendBody"></div>
+    <p class="trend-hint">月次の集計を保存して育てる想定です。蓄積月数を動かすと、初期からの見え方が確認できます（推移は説明用サンプル）。</p>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const DATA = /*DATA:START*/{"asof":"令和8年5月1日現在","version":"2026.5","created":"令和8年5月1日作成","checked":"2026/06/28 07:09","source_url":"./data/source.xlsx","count_mode":"raw","total_clinics":5260,"n_standards":113,"standards":[{"name":"クラウン・ブリッジ維持管理料","abbr":"補管","count":5145,"count_uniq":5145},{"name":"初診料（歯科）の注１に掲げる基準","abbr":"歯初診","count":5018,"count_uniq":5017},{"name":"ＣＡＤ／ＣＡＭ冠及びＣＡＤ／ＣＡＭインレー","abbr":"歯ＣＡＤ","count":4745,"count_uniq":4741},{"name":"歯科外来診療感染対策加算１","abbr":"外感染１","count":3329,"count_uniq":3327},{"name":"歯科訪問診療料の注15に規定する基準","abbr":"歯訪診","count":3158,"count_uniq":3155},{"name":"歯科外来診療医療安全対策加算１","abbr":"外安全１","count":3040,"count_uniq":3037},{"name":"歯科外来・在宅ベースアップ評価料（Ⅰ）","abbr":"歯外在ベⅠ","count":2825,"count_uniq":2821},{"name":"歯科治療時医療管理料","abbr":"医管","count":2815,"count_uniq":2808},{"name":"小児口腔機能管理料の注３に規定する口腔管理体制強化加算","abbr":"口管強","count":1701,"count_uniq":1701},{"name":"歯科技工士連携加算１及び光学印象歯科技工士連携加算","abbr":"歯技連１","count":1650,"count_uniq":1650},{"name":"薬剤名等省略","abbr":"１７５","count":1627,"count_uniq":1627},{"name":"医療ＤＸ推進体制整備加算","abbr":"医療ＤＸ","count":1603,"count_uniq":1601},{"name":"歯科技工士連携加算２","abbr":"歯技連２","count":1534,"count_uniq":1534},{"name":"口腔粘膜処置","abbr":"口腔粘膜","count":1491,"count_uniq":1490},{"name":"レーザー機器加算","abbr":"手光機","count":1457,"count_uniq":1456},{"name":"地域医療連携体制加算","abbr":"歯地連","count":1283,"count_uniq":1282},{"name":"光学印象","abbr":"光印象","count":1218,"count_uniq":1218},{"name":"歯科口腔リハビリテーション料２","abbr":"歯リハ２","count":1138,"count_uniq":1138},{"name":"在宅患者歯科治療時医療管理料","abbr":"在歯管","count":1092,"count_uniq":1089},{"name":"歯周組織再生誘導手術","abbr":"ＧＴＲ","count":944,"count_uniq":943},{"name":"手術用顕微鏡加算","abbr":"手顕微加","count":858,"count_uniq":858},{"name":"有床義歯咀嚼機能検査１のロ及び咀嚼能力検査","abbr":"咀嚼能力","count":800,"count_uniq":799},{"name":"歯根端切除手術の注３","abbr":"根切顕微","count":785,"count_uniq":785},{"name":"在宅療養支援歯科診療所２","abbr":"歯援診２","count":670,"count_uniq":670},{"name":"有床義歯咀嚼機能検査２のロ及び咬合圧検査","abbr":"咬合圧","count":577,"count_uniq":577},{"name":"う蝕歯無痛的窩洞形成加算","abbr":"う蝕無痛","count":567,"count_uniq":565},{"name":"歯科技工加算１及び２","abbr":"歯技工","count":488,"count_uniq":485},{"name":"手術時歯根面レーザー応用加算","abbr":"手術歯根","count":471,"count_uniq":469},{"name":"酸素の購入単価","abbr":"酸単","count":305,"count_uniq":305},{"name":"在宅療養支援歯科診療所１","abbr":"歯援診１","count":274,"count_uniq":274},{"name":"在宅歯科医療推進加算","abbr":"在推進","count":260,"count_uniq":260},{"name":"在宅患者訪問診療料（Ⅰ）の注13（在宅患者訪問診療料（Ⅱ）の注６の規定により準用する場合を含む。）、在宅がん医療総合診療料の注８及び歯科訪問診療料の注20 に規定する在宅医療ＤＸ情報活用加算","abbr":"在宅ＤＸ","count":200,"count_uniq":200},{"name":"歯科矯正診断料","abbr":"矯診","count":178,"count_uniq":178},{"name":"外来後発医薬品使用体制加算","abbr":"外後発使","count":170,"count_uniq":170},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）１","abbr":"歯外在ベⅡ１","count":143,"count_uniq":143},{"name":"口腔細菌定量検査","abbr":"口菌検","count":127,"count_uniq":127},{"name":"初診料（歯科）の注16及び再診料（歯科）の注12に掲げる基準","abbr":"歯情報通信","count":120,"count_uniq":120},{"name":"歯科外来診療感染対策加算２","abbr":"外感染２","count":109,"count_uniq":109},{"name":"歯科診療特別対応連携加算","abbr":"歯特連","count":106,"count_uniq":105},{"name":"有床義歯咀嚼機能検査１のイ","abbr":"咀嚼機能１","count":81,"count_uniq":80},{"name":"顎口腔機能診断料（顎変形症（顎離断等の手術を必要とするものに限る。）の手術前後における歯科矯正に係るもの）","abbr":"顎診","count":77,"count_uniq":76},{"name":"口腔粘膜血管腫凝固術","abbr":"口血凝","count":45,"count_uniq":45},{"name":"有床義歯咀嚼機能検査２のイ","abbr":"咀嚼機能２","count":37,"count_uniq":37},{"name":"睡眠時歯科筋電図検査","abbr":"歯筋電図","count":36,"count_uniq":36},{"name":"歯科疾患在宅療養管理料の注７、在宅患者訪問口腔リハビリテーション指導管理料の注８及び小児在宅患者訪問口腔リハビリテーション指導管理料の注８に規定する在宅歯科医療情報連携加算","abbr":"歯医情連","count":28,"count_uniq":28},{"name":"検査・画像情報提供加算及び電子的診療情報評価料","abbr":"電情","count":20,"count_uniq":20},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）２","abbr":"歯外在ベⅡ２","count":19,"count_uniq":19},{"name":"精密触覚機能検査","abbr":"精密触覚","count":16,"count_uniq":16},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）３","abbr":"歯外在ベⅡ３","count":8,"count_uniq":8},{"name":"歯科麻酔管理料","abbr":"歯麻管","count":7,"count_uniq":7},{"name":"在宅時医学総合管理料及び施設入居時等医学総合管理料","abbr":"在医総管１","count":6,"count_uniq":6},{"name":"時間外対応加算１","abbr":"時間外１","count":5,"count_uniq":5},{"name":"がん性疼痛緩和指導管理料","abbr":"がん疼","count":5,"count_uniq":5},{"name":"在宅がん医療総合診療料","abbr":"在総","count":4,"count_uniq":4},{"name":"情報通信機器を用いた診療に係る基準","abbr":"情報通信","count":4,"count_uniq":4},{"name":"遠隔画像診断","abbr":"遠画","count":4,"count_uniq":4},{"name":"時間外対応加算３","abbr":"時間外３","count":3,"count_uniq":3},{"name":"がん治療連携指導料","abbr":"がん指","count":3,"count_uniq":3},{"name":"保険医療機関間の連携による病理診断","abbr":"連携診","count":3,"count_uniq":3},{"name":"別添１の「第９」の１の(２)に規定する在宅療養支援診療所","abbr":"支援診２","count":3,"count_uniq":3},{"name":"外来・在宅ベースアップ評価料（Ⅰ）","abbr":"外在ベⅠ","count":3,"count_uniq":3},{"name":"ＣＴ撮影及びＭＲＩ撮影","abbr":"Ｃ・Ｍ","count":3,"count_uniq":3},{"name":"歯科画像診断管理加算２","abbr":"歯画２","count":2,"count_uniq":2},{"name":"病棟薬剤業務実施加算１","abbr":"病棟薬１","count":2,"count_uniq":2},{"name":"療養環境加算","abbr":"療","count":2,"count_uniq":2},{"name":"地域歯科診療支援病院歯科初診料","abbr":"病初診","count":2,"count_uniq":2},{"name":"入院時食事療養／生活療養（Ⅰ）","abbr":"食","count":2,"count_uniq":2},{"name":"別添１の「第９」の１の(３)に規定する在宅療養支援診療所","abbr":"支援診３","count":2,"count_uniq":2},{"name":"広範囲顎骨支持型装置埋入手術","abbr":"人工歯根","count":2,"count_uniq":2},{"name":"外来感染対策向上加算","abbr":"外来感染","count":2,"count_uniq":2},{"name":"在宅持続陽圧呼吸療法指導管理料の注２に規定する遠隔モニタリング加算","abbr":"遠隔持陽","count":2,"count_uniq":2},{"name":"一般病棟入院基本料","abbr":"一般入院","count":2,"count_uniq":2},{"name":"上顎骨形成術（骨移動を伴う場合に限る。）（歯科）、下顎骨形成術（骨移動を伴う場合に限る。）（歯科）","abbr":"歯顎移","count":2,"count_uniq":2},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）４","abbr":"歯外在ベⅡ４","count":2,"count_uniq":2},{"name":"歯科外来診療医療安全対策加算２","abbr":"外安全２","count":2,"count_uniq":2},{"name":"機能強化加算","abbr":"機能強化","count":2,"count_uniq":2},{"name":"糖尿病合併症管理料","abbr":"糖管","count":2,"count_uniq":2},{"name":"薬剤管理指導料","abbr":"薬","count":2,"count_uniq":2},{"name":"診療録管理体制加算３","abbr":"診療録３","count":2,"count_uniq":2},{"name":"歯科外来診療感染対策加算３","abbr":"外感染３","count":2,"count_uniq":2},{"name":"入院ベースアップ評価料１３８","abbr":"入ベ１３８","count":1,"count_uniq":1},{"name":"地域歯科診療支援病院入院加算","abbr":"地歯入院","count":1,"count_uniq":1},{"name":"地域包括診療加算","abbr":"地包加","count":1,"count_uniq":1},{"name":"在宅時医学総合管理料の注15（施設入居時等医学総合管理料の注５の規定により準用する場合を含む。）及び在宅がん医療総合診療料の注９に規定する在宅医療情報連携加算","abbr":"医情連","count":1,"count_uniq":1},{"name":"入院ベースアップ評価料９８","abbr":"入ベ９８","count":1,"count_uniq":1},{"name":"医療安全対策加算２","abbr":"医療安全２","count":1,"count_uniq":1},{"name":"医師事務作業補助体制加算２","abbr":"事補２","count":1,"count_uniq":1},{"name":"口腔病理診断管理加算１","abbr":"口病診１","count":1,"count_uniq":1},{"name":"在宅データ提出加算","abbr":"在データ提","count":1,"count_uniq":1},{"name":"せん妄ハイリスク患者ケア加算","abbr":"せん妄ケア","count":1,"count_uniq":1},{"name":"こころの連携指導料（Ⅰ）","abbr":"こ連指Ⅰ","count":1,"count_uniq":1},{"name":"がん患者指導管理料ハ","abbr":"がん指ハ","count":1,"count_uniq":1},{"name":"がん患者指導管理料ロ","abbr":"がん指ロ","count":1,"count_uniq":1},{"name":"がん患者指導管理料イ","abbr":"がん指イ","count":1,"count_uniq":1},{"name":"データ提出加算","abbr":"データ提","count":1,"count_uniq":1},{"name":"コンタクトレンズ検査料１","abbr":"コン１","count":1,"count_uniq":1},{"name":"栄養サポートチーム加算","abbr":"栄養チ","count":1,"count_uniq":1},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）８","abbr":"歯外在ベⅡ８","count":1,"count_uniq":1},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）７","abbr":"歯外在ベⅡ７","count":1,"count_uniq":1},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）５","abbr":"歯外在ベⅡ５","count":1,"count_uniq":1},{"name":"検体検査管理加算（Ⅰ）","abbr":"検Ⅰ","count":1,"count_uniq":1},{"name":"放射線治療専任加算","abbr":"放専","count":1,"count_uniq":1},{"name":"悪性腫瘍病理組織標本加算","abbr":"悪病組","count":1,"count_uniq":1},{"name":"無菌製剤処理料","abbr":"菌","count":1,"count_uniq":1},{"name":"歯科画像診断管理加算１","abbr":"歯画１","count":1,"count_uniq":1},{"name":"運動器リハビリテーション料（Ⅲ）","abbr":"運Ⅲ","count":1,"count_uniq":1},{"name":"胃瘻造設時嚥下機能評価加算","abbr":"胃瘻造嚥","count":1,"count_uniq":1},{"name":"脂肪組織由来の多系統前駆細胞を用いた歯周組織再生療法　重度歯周炎（従来の歯周組織再生療法ではその治療に係る効果が認められないものに限る。）","abbr":"先－３７８","count":1,"count_uniq":1},{"name":"脳血管疾患等リハビリテーション料（Ⅰ）","abbr":"脳Ⅰ","count":1,"count_uniq":1},{"name":"顎関節人工関節全置換術","abbr":"顎人工","count":1,"count_uniq":1},{"name":"重症者等療養環境特別加算","abbr":"重","count":1,"count_uniq":1},{"name":"麻酔管理料（Ⅰ）","abbr":"麻管Ⅰ","count":1,"count_uniq":1},{"name":"顎関節人工関節全置換術（歯科）","abbr":"歯顎人工","count":1,"count_uniq":1}]}/*DATA:END*/;
+const OSAKA = /*DATA:START*/{"asof":"令和8年5月1日現在","version":"2026.5","created":"令和8年5月1日作成","checked":"2026/06/27 06:00","source_url":"./data/source.xlsx","count_mode":"raw","total_clinics":5260,"n_standards":113,"standards":[{"name":"クラウン・ブリッジ維持管理料","abbr":"補管","count":5145,"count_uniq":5145},{"name":"初診料（歯科）の注１に掲げる基準","abbr":"歯初診","count":5018,"count_uniq":5017},{"name":"ＣＡＤ／ＣＡＭ冠及びＣＡＤ／ＣＡＭインレー","abbr":"歯ＣＡＤ","count":4745,"count_uniq":4741},{"name":"歯科外来診療感染対策加算１","abbr":"外感染１","count":3329,"count_uniq":3327},{"name":"歯科訪問診療料の注15に規定する基準","abbr":"歯訪診","count":3158,"count_uniq":3155},{"name":"歯科外来診療医療安全対策加算１","abbr":"外安全１","count":3040,"count_uniq":3037},{"name":"歯科外来・在宅ベースアップ評価料（Ⅰ）","abbr":"歯外在ベⅠ","count":2825,"count_uniq":2821},{"name":"歯科治療時医療管理料","abbr":"医管","count":2815,"count_uniq":2808},{"name":"小児口腔機能管理料の注３に規定する口腔管理体制強化加算","abbr":"口管強","count":1701,"count_uniq":1701},{"name":"歯科技工士連携加算１及び光学印象歯科技工士連携加算","abbr":"歯技連１","count":1650,"count_uniq":1650},{"name":"薬剤名等省略","abbr":"１７５","count":1627,"count_uniq":1627},{"name":"医療ＤＸ推進体制整備加算","abbr":"医療ＤＸ","count":1603,"count_uniq":1601},{"name":"歯科技工士連携加算２","abbr":"歯技連２","count":1534,"count_uniq":1534},{"name":"口腔粘膜処置","abbr":"口腔粘膜","count":1491,"count_uniq":1490},{"name":"レーザー機器加算","abbr":"手光機","count":1457,"count_uniq":1456},{"name":"地域医療連携体制加算","abbr":"歯地連","count":1283,"count_uniq":1282},{"name":"光学印象","abbr":"光印象","count":1218,"count_uniq":1218},{"name":"歯科口腔リハビリテーション料２","abbr":"歯リハ２","count":1138,"count_uniq":1138},{"name":"在宅患者歯科治療時医療管理料","abbr":"在歯管","count":1092,"count_uniq":1089},{"name":"歯周組織再生誘導手術","abbr":"ＧＴＲ","count":944,"count_uniq":943},{"name":"手術用顕微鏡加算","abbr":"手顕微加","count":858,"count_uniq":858},{"name":"有床義歯咀嚼機能検査１のロ及び咀嚼能力検査","abbr":"咀嚼能力","count":800,"count_uniq":799},{"name":"歯根端切除手術の注３","abbr":"根切顕微","count":785,"count_uniq":785},{"name":"在宅療養支援歯科診療所２","abbr":"歯援診２","count":670,"count_uniq":670},{"name":"有床義歯咀嚼機能検査２のロ及び咬合圧検査","abbr":"咬合圧","count":577,"count_uniq":577},{"name":"う蝕歯無痛的窩洞形成加算","abbr":"う蝕無痛","count":567,"count_uniq":565},{"name":"歯科技工加算１及び２","abbr":"歯技工","count":488,"count_uniq":485},{"name":"手術時歯根面レーザー応用加算","abbr":"手術歯根","count":471,"count_uniq":469},{"name":"酸素の購入単価","abbr":"酸単","count":305,"count_uniq":305},{"name":"在宅療養支援歯科診療所１","abbr":"歯援診１","count":274,"count_uniq":274},{"name":"在宅歯科医療推進加算","abbr":"在推進","count":260,"count_uniq":260},{"name":"在宅患者訪問診療料（Ⅰ）の注13（在宅患者訪問診療料（Ⅱ）の注６の規定により準用する場合を含む。）、在宅がん医療総合診療料の注８及び歯科訪問診療料の注20 に規定する在宅医療ＤＸ情報活用加算","abbr":"在宅ＤＸ","count":200,"count_uniq":200},{"name":"歯科矯正診断料","abbr":"矯診","count":178,"count_uniq":178},{"name":"外来後発医薬品使用体制加算","abbr":"外後発使","count":170,"count_uniq":170},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）１","abbr":"歯外在ベⅡ１","count":143,"count_uniq":143},{"name":"口腔細菌定量検査","abbr":"口菌検","count":127,"count_uniq":127},{"name":"初診料（歯科）の注16及び再診料（歯科）の注12に掲げる基準","abbr":"歯情報通信","count":120,"count_uniq":120},{"name":"歯科外来診療感染対策加算２","abbr":"外感染２","count":109,"count_uniq":109},{"name":"歯科診療特別対応連携加算","abbr":"歯特連","count":106,"count_uniq":105},{"name":"有床義歯咀嚼機能検査１のイ","abbr":"咀嚼機能１","count":81,"count_uniq":80},{"name":"顎口腔機能診断料（顎変形症（顎離断等の手術を必要とするものに限る。）の手術前後における歯科矯正に係るもの）","abbr":"顎診","count":77,"count_uniq":76},{"name":"口腔粘膜血管腫凝固術","abbr":"口血凝","count":45,"count_uniq":45},{"name":"有床義歯咀嚼機能検査２のイ","abbr":"咀嚼機能２","count":37,"count_uniq":37},{"name":"睡眠時歯科筋電図検査","abbr":"歯筋電図","count":36,"count_uniq":36},{"name":"歯科疾患在宅療養管理料の注７、在宅患者訪問口腔リハビリテーション指導管理料の注８及び小児在宅患者訪問口腔リハビリテーション指導管理料の注８に規定する在宅歯科医療情報連携加算","abbr":"歯医情連","count":28,"count_uniq":28},{"name":"検査・画像情報提供加算及び電子的診療情報評価料","abbr":"電情","count":20,"count_uniq":20},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）２","abbr":"歯外在ベⅡ２","count":19,"count_uniq":19},{"name":"精密触覚機能検査","abbr":"精密触覚","count":16,"count_uniq":16},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）３","abbr":"歯外在ベⅡ３","count":8,"count_uniq":8},{"name":"歯科麻酔管理料","abbr":"歯麻管","count":7,"count_uniq":7},{"name":"在宅時医学総合管理料及び施設入居時等医学総合管理料","abbr":"在医総管１","count":6,"count_uniq":6},{"name":"時間外対応加算１","abbr":"時間外１","count":5,"count_uniq":5},{"name":"がん性疼痛緩和指導管理料","abbr":"がん疼","count":5,"count_uniq":5},{"name":"在宅がん医療総合診療料","abbr":"在総","count":4,"count_uniq":4},{"name":"情報通信機器を用いた診療に係る基準","abbr":"情報通信","count":4,"count_uniq":4},{"name":"遠隔画像診断","abbr":"遠画","count":4,"count_uniq":4},{"name":"時間外対応加算３","abbr":"時間外３","count":3,"count_uniq":3},{"name":"がん治療連携指導料","abbr":"がん指","count":3,"count_uniq":3},{"name":"保険医療機関間の連携による病理診断","abbr":"連携診","count":3,"count_uniq":3},{"name":"別添１の「第９」の１の(２)に規定する在宅療養支援診療所","abbr":"支援診２","count":3,"count_uniq":3},{"name":"外来・在宅ベースアップ評価料（Ⅰ）","abbr":"外在ベⅠ","count":3,"count_uniq":3},{"name":"ＣＴ撮影及びＭＲＩ撮影","abbr":"Ｃ・Ｍ","count":3,"count_uniq":3},{"name":"歯科画像診断管理加算２","abbr":"歯画２","count":2,"count_uniq":2},{"name":"病棟薬剤業務実施加算１","abbr":"病棟薬１","count":2,"count_uniq":2},{"name":"療養環境加算","abbr":"療","count":2,"count_uniq":2},{"name":"地域歯科診療支援病院歯科初診料","abbr":"病初診","count":2,"count_uniq":2},{"name":"入院時食事療養／生活療養（Ⅰ）","abbr":"食","count":2,"count_uniq":2},{"name":"別添１の「第９」の１の(３)に規定する在宅療養支援診療所","abbr":"支援診３","count":2,"count_uniq":2},{"name":"広範囲顎骨支持型装置埋入手術","abbr":"人工歯根","count":2,"count_uniq":2},{"name":"外来感染対策向上加算","abbr":"外来感染","count":2,"count_uniq":2},{"name":"在宅持続陽圧呼吸療法指導管理料の注２に規定する遠隔モニタリング加算","abbr":"遠隔持陽","count":2,"count_uniq":2},{"name":"一般病棟入院基本料","abbr":"一般入院","count":2,"count_uniq":2},{"name":"上顎骨形成術（骨移動を伴う場合に限る。）（歯科）、下顎骨形成術（骨移動を伴う場合に限る。）（歯科）","abbr":"歯顎移","count":2,"count_uniq":2},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）４","abbr":"歯外在ベⅡ４","count":2,"count_uniq":2},{"name":"歯科外来診療医療安全対策加算２","abbr":"外安全２","count":2,"count_uniq":2},{"name":"機能強化加算","abbr":"機能強化","count":2,"count_uniq":2},{"name":"糖尿病合併症管理料","abbr":"糖管","count":2,"count_uniq":2},{"name":"薬剤管理指導料","abbr":"薬","count":2,"count_uniq":2},{"name":"診療録管理体制加算３","abbr":"診療録３","count":2,"count_uniq":2},{"name":"歯科外来診療感染対策加算３","abbr":"外感染３","count":2,"count_uniq":2},{"name":"入院ベースアップ評価料１３８","abbr":"入ベ１３８","count":1,"count_uniq":1},{"name":"地域歯科診療支援病院入院加算","abbr":"地歯入院","count":1,"count_uniq":1},{"name":"地域包括診療加算","abbr":"地包加","count":1,"count_uniq":1},{"name":"在宅時医学総合管理料の注15（施設入居時等医学総合管理料の注５の規定により準用する場合を含む。）及び在宅がん医療総合診療料の注９に規定する在宅医療情報連携加算","abbr":"医情連","count":1,"count_uniq":1},{"name":"入院ベースアップ評価料９８","abbr":"入ベ９８","count":1,"count_uniq":1},{"name":"医療安全対策加算２","abbr":"医療安全２","count":1,"count_uniq":1},{"name":"医師事務作業補助体制加算２","abbr":"事補２","count":1,"count_uniq":1},{"name":"口腔病理診断管理加算１","abbr":"口病診１","count":1,"count_uniq":1},{"name":"在宅データ提出加算","abbr":"在データ提","count":1,"count_uniq":1},{"name":"せん妄ハイリスク患者ケア加算","abbr":"せん妄ケア","count":1,"count_uniq":1},{"name":"こころの連携指導料（Ⅰ）","abbr":"こ連指Ⅰ","count":1,"count_uniq":1},{"name":"がん患者指導管理料ハ","abbr":"がん指ハ","count":1,"count_uniq":1},{"name":"がん患者指導管理料ロ","abbr":"がん指ロ","count":1,"count_uniq":1},{"name":"がん患者指導管理料イ","abbr":"がん指イ","count":1,"count_uniq":1},{"name":"データ提出加算","abbr":"データ提","count":1,"count_uniq":1},{"name":"コンタクトレンズ検査料１","abbr":"コン１","count":1,"count_uniq":1},{"name":"栄養サポートチーム加算","abbr":"栄養チ","count":1,"count_uniq":1},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）８","abbr":"歯外在ベⅡ８","count":1,"count_uniq":1},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）７","abbr":"歯外在ベⅡ７","count":1,"count_uniq":1},{"name":"歯科外来・在宅ベースアップ評価料（Ⅱ）５","abbr":"歯外在ベⅡ５","count":1,"count_uniq":1},{"name":"検体検査管理加算（Ⅰ）","abbr":"検Ⅰ","count":1,"count_uniq":1},{"name":"放射線治療専任加算","abbr":"放専","count":1,"count_uniq":1},{"name":"悪性腫瘍病理組織標本加算","abbr":"悪病組","count":1,"count_uniq":1},{"name":"無菌製剤処理料","abbr":"菌","count":1,"count_uniq":1},{"name":"歯科画像診断管理加算１","abbr":"歯画１","count":1,"count_uniq":1},{"name":"運動器リハビリテーション料（Ⅲ）","abbr":"運Ⅲ","count":1,"count_uniq":1},{"name":"胃瘻造設時嚥下機能評価加算","abbr":"胃瘻造嚥","count":1,"count_uniq":1},{"name":"脂肪組織由来の多系統前駆細胞を用いた歯周組織再生療法　重度歯周炎（従来の歯周組織再生療法ではその治療に係る効果が認められないものに限る。）","abbr":"先－３７８","count":1,"count_uniq":1},{"name":"脳血管疾患等リハビリテーション料（Ⅰ）","abbr":"脳Ⅰ","count":1,"count_uniq":1},{"name":"顎関節人工関節全置換術","abbr":"顎人工","count":1,"count_uniq":1},{"name":"重症者等療養環境特別加算","abbr":"重","count":1,"count_uniq":1},{"name":"麻酔管理料（Ⅰ）","abbr":"麻管Ⅰ","count":1,"count_uniq":1},{"name":"顎関節人工関節全置換術（歯科）","abbr":"歯顎人工","count":1,"count_uniq":1}]}/*DATA:END*/;
 
-const TOTAL = DATA.total_clinics;
+/* ---- prefecture datasets（フォールバック：大阪＝実データ／他府県＝推計サンプル） ---- */
+/* 実データ（data/*.json）が取得できれば下の loadReal() が PREFS/PREF_DATA を差し替える */
+let REAL = false, META = null; const HISTORY = {};
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function clampN(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
+let PREFS = [
+  {code:"osaka",   name:"大阪", base:OSAKA.total_clinics, f:1.00, real:true},
+  {code:"hyogo",   name:"兵庫", base:3480, f:0.95},
+  {code:"kyoto",   name:"京都", base:1590, f:0.98},
+  {code:"shiga",   name:"滋賀", base:690,  f:0.90},
+  {code:"nara",    name:"奈良", base:880,  f:0.93},
+  {code:"wakayama",name:"和歌山",base:680, f:0.88},
+  {code:"fukui",   name:"福井", base:470,  f:0.86},
+  {code:"ishikawa",name:"石川", base:660,  f:0.91},
+  {code:"toyama",  name:"富山", base:560,  f:0.89},
+];
+const oBase = OSAKA.total_clinics;
+let PREF_DATA = {};
+PREFS.forEach(p=>{
+  if(p.real){ PREF_DATA[p.code] = OSAKA; return; }
+  const rnd = mulberry32(p.code.length*97 + p.base);
+  const standards = OSAKA.standards.map(s=>{
+    const orate = s.count / oBase * 100;
+    const rate  = clampN(orate*p.f + (rnd()-0.5)*4, 0, 99.9);
+    const count = Math.round(p.base*rate/100);
+    const ur = s.count ? s.count_uniq/s.count : 1;
+    return {name:s.name, abbr:s.abbr, count, count_uniq:Math.round(count*ur)};
+  }).filter(s=>s.count>0);   // その府県で届出のある基準のみ（A案：種類数は府県ごと可変）
+  PREF_DATA[p.code] = {...OSAKA, total_clinics:p.base, n_standards:standards.length, standards};
+});
+
+let curPref = "osaka";
+let DATA  = PREF_DATA[curPref];
+let TOTAL = DATA.total_clinics;
 const TIER_DEFS = [
   {key:"all",  label:"すべて", color:null,            test:()=>true},
   {key:"t1",   label:"80%以上", color:"var(--t1)",    test:r=>r>=80},
@@ -303,14 +426,12 @@ let state = {q:"", sort:"rate_desc", mode:{kind:"all"}, countMode:(DATA.count_mo
 recompute();
 
 const fmt = n => n.toLocaleString("ja-JP");
-const rateLabel = r => r>=0.1 ? r.toFixed(1)+"%" : "<0.1%";
+const rateLabel = r => r>0 ? r.toFixed(2)+"%" : "0.00%";
 
-// KPIs
-document.getElementById("kTotal").textContent = fmt(TOTAL);
-document.getElementById("kStd").textContent = DATA.n_standards;
-document.getElementById("ver").textContent = DATA.version;
-document.getElementById("checked").textContent = DATA.checked || "—";
-document.getElementById("footver").textContent = `${DATA.version}版（${DATA.asof}）`;
+// global meta (prefecture-independent)
+document.getElementById("ver").textContent = OSAKA.version;
+document.getElementById("checked").textContent = OSAKA.checked || "—";
+document.getElementById("footver").textContent = `${OSAKA.version}版（${OSAKA.asof}）`;
 
 // tier chips
 const tiersEl = document.getElementById("tiers");
@@ -357,11 +478,12 @@ function currentList(){
 function render(){
   const unit = state.countMode==="uniq" ? "院" : "件";
 
-  // KPI (届出率の階層は数え方で変わるので毎回計算)
-  document.getElementById("kHigh").textContent = DATA.standards.filter(s=>s.rate>=80).length;
-  document.getElementById("kMaj").textContent  = DATA.standards.filter(s=>s.rate>=50).length;
+  // KPI (母数・基準数は府県で変わる)
+  document.getElementById("kTotal").textContent = fmt(TOTAL);
+  document.getElementById("kStd").textContent   = DATA.n_standards;
   document.getElementById("ratebasis").innerHTML =
     `届出率＝${state.countMode==="uniq" ? "届出医療機関数" : "届出件数"} ÷ <b class="tnum">${fmt(TOTAL)}</b>院`;
+  if(typeof renderTrend==="function" && !document.getElementById("detail").hidden) renderTrend();
 
   // dedup switch reflects current mode (on = 重複排除 = uniq)
   const dedupEl = document.getElementById("dedup");
@@ -403,7 +525,8 @@ function render(){
 
   listEl.innerHTML = rows.map(s=>{
     const w = Math.max(s.rate,0.6); // visible sliver for tiny values
-    return `<div class="row">
+    const sel = s.abbr===curTrendStd ? " is-sel" : "";
+    return `<div class="row${sel}" data-abbr="${s.abbr}" title="クリックで上の推移グラフに表示">
       <div class="rank tnum">${rankMap.get(s)}</div>
       <div class="name-cell">
         <span class="badge" title="${s.abbr}">${s.abbr||"—"}</span>
@@ -418,6 +541,7 @@ function render(){
       </div>
     </div>`;
   }).join("");
+  listEl.querySelectorAll(".row").forEach(r=>r.addEventListener("click",()=>openDetail(r.dataset.abbr)));
 }
 
 // KPI quick-filter buttons (min-rate threshold; click again to clear)
@@ -441,7 +565,7 @@ function buildAggregateSheet(){
   const ws = XLSX.utils.aoa_to_sheet(aoa);
   for(let r=1;r<aoa.length;r++){
     const c = ws[XLSX.utils.encode_cell({r, c:4})];
-    if(c){ c.t="n"; c.z="0.0%"; }
+    if(c){ c.t="n"; c.z="0.00%"; }
   }
   ws["!cols"] = [{wch:50},{wch:13},{wch:16},{wch:16},{wch:9}];
   return ws;
@@ -451,7 +575,7 @@ function buildAggregateSheet(){
 // daily Action). It is fetched only when the user clicks download, so the page
 // itself stays light. If it can't be reached (e.g. local preview), the
 // download still works — it just contains the aggregate sheet only.
-const SOURCE_URL = (DATA.source_url || "./data/source.xlsx");
+function sourceUrl(){ return REAL ? `data/source/${curPref}.xlsx` : (DATA.source_url || "./data/source.xlsx"); }
 
 function downloadCSV(base){
   const rows = currentList();
@@ -459,7 +583,7 @@ function downloadCSV(base){
   const head = ["正式名称","略称",`届出件数（${modeLabel}）`,"歯科医療機関数","割合"];
   const esc = v => `"${String(v).replace(/"/g,'""')}"`;
   const lines = [head.map(esc).join(",")];
-  rows.forEach(s=>lines.push([s.name, s.abbr, s.cnt, TOTAL, (s.cnt/TOTAL*100).toFixed(1)+"%"].map(esc).join(",")));
+  rows.forEach(s=>lines.push([s.name, s.abbr, s.cnt, TOTAL, (s.cnt/TOTAL*100).toFixed(2)+"%"].map(esc).join(",")));
   const blob = new Blob(["\uFEFF"+lines.join("\r\n")], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a"); a.href=url; a.download=base+".csv"; a.click();
@@ -468,7 +592,8 @@ function downloadCSV(base){
 
 async function downloadResult(){
   const btn = document.getElementById("dl");
-  const base = `大阪府歯科_施設基準届出状況_${DATA.version}`;
+  const pname = (PREFS.find(p=>p.code===curPref)||{}).name || "";
+  const base = `${pname}_歯科施設基準届出状況_${(META&&META.version)||DATA.version}`;
 
   // no SheetJS → CSV fallback (aggregate only)
   if(typeof XLSX==="undefined"){ downloadCSV(base); return; }
@@ -482,7 +607,7 @@ async function downloadResult(){
 
     // sheet 2+: attach the source workbook, fetched on demand
     try{
-      const res = await fetch(SOURCE_URL, {cache:"no-store"});
+      const res = await fetch(sourceUrl(), {cache:"no-store"});
       if(res.ok){
         const buf = await res.arrayBuffer();
         const src = XLSX.read(buf, {type:"array"});
@@ -507,7 +632,227 @@ document.getElementById("dedup").addEventListener("change", e=>{
   render();
 });
 
+/* ---------- prefecture tabs ---------- */
+const ptabsEl = document.getElementById("ptabs");
+function buildTabs(){
+  ptabsEl.innerHTML="";
+  PREFS.forEach(p=>{
+    const b=document.createElement("button");
+    b.className="ptab"+(p.code===curPref?" on":"");
+    b.dataset.code=p.code;
+    b.innerHTML = p.name + (p.real ? "" : ` <span class="est">推計</span>`);
+    b.addEventListener("click",()=>setPref(p.code));
+    ptabsEl.appendChild(b);
+  });
+}
+buildTabs();
+function setPref(code){
+  curPref = code; DATA = PREF_DATA[code]; TOTAL = DATA.total_clinics;
+  recompute();
+  document.querySelectorAll(".ptab").forEach(t=>t.classList.toggle("on",t.dataset.code===code));
+  render();
+}
+
+/* ---------- trend ---------- */
+let curTrendStd = "医療ＤＸ";
+let trendN = 12;
+const trendMonths = (()=>{const o=[];let y=2026,m=5;for(let i=0;i<12;i++){o.push(`${y}.${m}`);m++;if(m>12){m=1;y++;}}return o;})();
+
+// 名称変更履歴（サンプル）: 受理記号ごとに、変更が効いた月index と 変更後の名称。
+// 受理記号が同じなら線は連続。変更月にマーカーを出す（2回以上もそのまま並ぶ）。
+const NAME_CHANGES = {
+  "医療ＤＸ": [
+    {at:5, to:"医療ＤＸ推進体制整備加算１"},
+    {at:9, to:"医療ＤＸ推進体制整備加算２"},
+  ],
+  "光印象": [
+    {at:7, to:"光学印象（歯科）"},
+  ],
+};
+function changesInWindow(abbr,n){ return (NAME_CHANGES[abbr]||[]).filter(c=>c.at>=1 && c.at<=n-1); }
+function latestName(abbr,baseName,n){ const a=(NAME_CHANGES[abbr]||[]).filter(c=>c.at<=n-1); return a.length?a[a.length-1].to:baseName; }
+
+const tslider=document.getElementById("tslider");
+tslider.addEventListener("input",()=>{ trendN=+tslider.value; renderTrend(); });
+
+async function tryJSON(url){ try{ const r=await fetch(url,{cache:"no-store"}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; } }
+
+const stdInPref = abbr => DATA.standards.find(s=>s.abbr===abbr);
+function trendSeries(abbr){
+  const s=stdInPref(abbr);
+  const end = s ? s.cnt/TOTAL*100 : 0;
+  const shape = end>=85?"flat" : end>=45?"step" : end>=18?"fast" : "slow";
+  const rnd=mulberry32(abbr.length*131 + Math.round(end*10) + curPref.length*7);
+  let drop;
+  if(shape==="flat") drop=1+rnd()*2;
+  else if(shape==="slow") drop=Math.min(end,4+rnd()*5);
+  else if(shape==="fast") drop=Math.min(end,14+rnd()*9);
+  else drop=Math.min(end,18+rnd()*9);
+  const start=Math.max(0,end-drop), jump=5+Math.floor(rnd()*3), a=[];
+  for(let m=0;m<12;m++){
+    const tt=m/11; let base;
+    if(shape==="fast") base=start+(end-start)*(1-Math.pow(1-tt,1.8));
+    else if(shape==="step") base= m<jump ? start+(end-start)*0.10*(m/jump) : start+(end-start)*(0.18+0.82*((m-jump)/(11-jump)));
+    else base=start+(end-start)*tt;
+    a.push(clampN(base+(rnd()-0.5)*(shape==="flat"?0.5:1.5),0,99.9));
+  }
+  a[11]=end;  // 最新月は実際の現在値にピン留め（一覧と一致）
+  return a.map(v=>Math.round(v*100)/100);
+}
+const NSV="http://www.w3.org/2000/svg";
+function svel(t,a,txt){const e=document.createElementNS(NSV,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+function mkEmpty(){const d=document.createElement("div");d.className="t-empty";
+  d.innerHTML=`<div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#65737d" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><b>推移データはこれから蓄積します</b><p>毎月の更新を保存していくため、グラフは数か月分が揃ってから表示されます。</p>`;
+  return d;}
+function mkHero(rate,count,meta,diffPt,diffCount,size){const d=document.createElement("div");let dh="";
+  if(diffPt!=null){const cls=diffPt>0?"up":diffPt<0?"down":"flat",ar=diffPt>0?"▲":diffPt<0?"▼":"±";
+    const cs=diffCount>0?"+":"";
+    dh=`<span class="t-diff ${cls}">${ar} ${Math.abs(diffPt).toFixed(2)} pt</span><span class="t-diff ${cls}">${cs}${fmt(diffCount)} 件</span>`;}
+  d.innerHTML=`<div class="t-hero"><span class="big tnum" style="font-size:${size}px">${rate.toFixed(2)}<span class="u">%</span></span>`+
+    `<span class="t-cnt tnum">${fmt(count)}<span class="u">件</span></span>${dh}<span class="meta">${meta}</span></div>`;return d;}
+function mkCap(t){const d=document.createElement("div");d.className="t-cap";d.textContent=t;return d;}
+
+/* ---- 月軸（カレンダー固定）チャート。欠測は前後を破線で橋渡し ---- */
+function yScale(rates){let mn=Math.min(...rates),mx=Math.max(...rates);let lo=Math.max(0,Math.floor((mn-4)/5)*5),hi=Math.min(100,Math.ceil((mx+4)/5)*5);if(hi-lo<10)hi=Math.min(100,lo+10);return [lo,hi];}
+function axisLabels(svg,axis,x,H){const step=axis.length<=8?1:Math.ceil(axis.length/8);axis.forEach((lb,i)=>{if(i%step===0||i===axis.length-1)svg.appendChild(svel("text",{x:x(i),y:H-9,class:"taxis","text-anchor":"middle"},lb));});}
+function lineChartAxis(axis,pts,marks){
+  const [lo,hi]=yScale(pts.map(p=>p.rate));
+  const W=700,H=200,L=40,R=54,T=18,B=26,n=axis.length;
+  const x=i=> n===1?(L+(W-L-R)/2):L+(W-L-R)*(i/(n-1)), y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+  const svg=svel("svg",{viewBox:`0 0 ${W} ${H}`,style:"width:100%;height:auto"});
+  for(let g=0;g<=3;g++){const gv=lo+(hi-lo)*g/3;svg.appendChild(svel("line",{x1:L,x2:W-R,y1:y(gv),y2:y(gv),class:"tgrid"}));svg.appendChild(svel("text",{x:L-8,y:y(gv)+4,class:"taxis","text-anchor":"end"},Math.round(gv)+"%"));}
+  axisLabels(svg,axis,x,H);
+  (marks||[]).forEach(m=>{ if(m.i>=1 && m.i<=n-1){
+    svg.appendChild(svel("line",{x1:x(m.i),x2:x(m.i),y1:T,y2:H-B,class:"tmark"}));
+    svg.appendChild(svel("path",{d:`M ${x(m.i)} ${T-4} l 10 3.5 l -10 3.5 z`,class:"tflag"}));
+  }});
+  for(let k=0;k<pts.length-1;k++){const a=pts[k],b=pts[k+1];
+    svg.appendChild(svel("line",{x1:x(a.i),y1:y(a.rate),x2:x(b.i),y2:y(b.rate),class:"tseg"+(b.i-a.i>1?" bridge":"")}));}
+  pts.forEach((p,k)=>svg.appendChild(svel("circle",{cx:x(p.i),cy:y(p.rate),r:k===pts.length-1?4:3,class:"tdot"})));
+  const last=pts[pts.length-1];
+  svg.appendChild(svel("text",{x:x(last.i)+8,y:y(last.rate)+4,class:"tend"},last.rate.toFixed(2)+"%"));
+  return svg;}
+function dotChartAxis(label,pt){
+  const v=pt.rate; let lo=Math.max(0,Math.floor((v-10)/5)*5),hi=Math.min(100,lo+20);
+  const W=700,H=200,L=40,R=54,T=18,B=26;
+  const cx=L+(W-L-R)/2, y=vv=>T+(H-T-B)*(1-(vv-lo)/(hi-lo));
+  const svg=svel("svg",{viewBox:`0 0 ${W} ${H}`,style:"width:100%;height:auto"});
+  for(let g=0;g<=3;g++){const gv=lo+(hi-lo)*g/3;svg.appendChild(svel("line",{x1:L,x2:W-R,y1:y(gv),y2:y(gv),class:"tgrid"}));svg.appendChild(svel("text",{x:L-8,y:y(gv)+4,class:"taxis","text-anchor":"end"},Math.round(gv)+"%"));}
+  svg.appendChild(svel("text",{x:cx,y:H-9,class:"taxis","text-anchor":"middle"},label));
+  svg.appendChild(svel("circle",{cx,cy:y(v),r:9,class:"tstart"}));
+  svg.appendChild(svel("circle",{cx,cy:y(v),r:4,class:"tdot"}));
+  svg.appendChild(svel("text",{x:cx+14,y:y(v)+4,class:"tend"},v.toFixed(2)+"%"));
+  return svg;}
+
+/* ---- 現在の府県×基準の推移データを集める（実データ or 合成） ---- */
+function gatherTrend(){
+  const mode = state.countMode;
+  if(REAL){
+    const hist = HISTORY[curPref] || {versions:[],totals:{},kigo:{}};
+    const axis = (META && META.versions && META.versions.length) ? META.versions.slice() : (hist.versions||[]).slice();
+    const rec = (hist.kigo||{})[curTrendStd];
+    const pts=[];
+    if(rec){ axis.forEach((v,i)=>{ const sp=rec.series.find(p=>p.v===v); if(sp){
+      const val = mode==="uniq"? sp.u : sp.c; const tot=(hist.totals||{})[v]||0;
+      pts.push({i, count:val, rate: tot? Math.round(val/tot*10000)/100 : 0}); }});}
+    const names = rec ? (rec.names||[]) : [];
+    const changeMonths = names.slice(1).map(nm=>nm.v);
+    const marks = changeMonths.map(v=>({i:axis.indexOf(v)})).filter(m=>m.i>=1);
+    return {axis, pts, marks, dispName: rec?rec.name:curTrendStd, changeMonths};
+  }
+  const n=Math.max(trendN,0);
+  const axis=trendMonths.slice(0,n);
+  const all=trendSeries(curTrendStd), pts=[];
+  for(let i=0;i<n;i++){ pts.push({i, rate:all[i], count:Math.round(all[i]/100*TOTAL)}); }
+  const vis = changesInWindow(curTrendStd,trendN);
+  const s=stdInPref(curTrendStd);
+  return {axis, pts, marks:vis.map(c=>({i:c.at})), dispName:latestName(curTrendStd,s?s.name:curTrendStd,trendN), changeMonths:vis.map(c=>trendMonths[c.at])};
+}
+
+function openDetail(abbr){
+  curTrendStd = abbr;
+  document.getElementById("detail").hidden = false;
+  document.body.style.overflow = "hidden";
+  document.querySelectorAll(".row").forEach(x=>x.classList.toggle("is-sel",x.dataset.abbr===abbr));
+  if(REAL && !HISTORY[curPref]){
+    document.getElementById("trendBody").innerHTML = '<div class="t-empty"><b>読み込み中…</b></div>';
+    tryJSON(`data/history/${curPref}.json`).then(h=>{ HISTORY[curPref]=h||{versions:[],totals:{},kigo:{}}; renderTrend(); });
+    document.getElementById("dBadge").textContent=curTrendStd;
+    document.getElementById("dTitle").textContent=(stdInPref(curTrendStd)||{}).name||curTrendStd;
+    return;
+  }
+  renderTrend();
+}
+function closeDetail(){
+  document.getElementById("detail").hidden = true;
+  document.body.style.overflow = "";
+  document.querySelectorAll(".row").forEach(x=>x.classList.remove("is-sel"));
+}
+document.getElementById("dClose").addEventListener("click", closeDetail);
+document.getElementById("detail").addEventListener("click", e=>{ if(e.target.id==="detail") closeDetail(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !document.getElementById("detail").hidden) closeDetail(); });
+
+function renderTrend(){
+  const pname=PREFS.find(p=>p.code===curPref).name;
+  document.querySelector(".prev").style.display = REAL ? "none" : "";
+  const g = gatherTrend();
+  const stage = g.pts.length===0?0:g.pts.length===1?1:g.pts.length===2?2:3;
+  const stageNames=["未集計","測定開始","前月比","推移"];
+  document.getElementById("dBadge").textContent = curTrendStd;
+  document.getElementById("dTitle").textContent = g.dispName;
+  document.getElementById("dSub").innerHTML = `${pname} ・ 母数 ${fmt(TOTAL)}院 <span class="stage">${stageNames[stage]}</span>`;
+  if(!REAL){ tslider.style.setProperty("--pct",(trendN/12*100)+"%");
+    document.getElementById("tread").innerHTML = trendN===0?"<b>未集計</b>":`<b>${trendN}</b> か月分（最新 ${trendMonths[trendN-1]}）`; }
+
+  const hint=document.querySelector(".trend-hint");
+  if(g.changeMonths.length){ hint.innerHTML = `${g.changeMonths.join("・")} に名称変更があります。略称（受理記号）で続けて集計しているため推移はつながっていますが、<b>要件の連続性にはご留意ください。</b>`; hint.style.display=""; }
+  else hint.style.display="none";
+
+  const body=document.getElementById("trendBody"); body.innerHTML="";
+  if(stage===0){ body.appendChild(mkEmpty()); hint.style.display="none"; return; }
+  const last=g.pts[g.pts.length-1];
+  if(stage===1){
+    body.appendChild(mkHero(last.rate,last.count,`${g.axis[last.i]} 時点（測定開始）`,null,null,42));
+    body.appendChild(dotChartAxis(g.axis[last.i],last));
+    body.appendChild(mkCap("翌月の更新が入ると、前月差（pt・件数）が表示されます。")); return;
+  }
+  const prev=g.pts[g.pts.length-2];
+  const gap = last.i-prev.i>1;
+  const dPt=Math.round((last.rate-prev.rate)*100)/100, dC=last.count-prev.count;
+  const meta = gap ? `${g.axis[last.i]} 時点 ・ 前回公表（${g.axis[prev.i]}）比`
+                   : `${g.axis[last.i]} 時点 ・ 前月比`;
+  body.appendChild(mkHero(last.rate,last.count,meta,dPt,dC, stage===2?42:30));
+  body.appendChild(lineChartAxis(g.axis,g.pts,g.marks));
+  if(stage===2 && !gap) body.appendChild(mkCap("3か月目から折れ線グラフが伸びていきます。"));
+}
+
+/* ---- 実データ（data/*.json）が取れれば差し替え。無ければ合成のまま ---- */
+async function loadReal(){
+  const meta = await tryJSON("data/prefectures.json");
+  if(!meta || !Array.isArray(meta.prefectures) || !meta.prefectures.length) return;
+  const currents={};
+  for(const p of meta.prefectures){ const c=await tryJSON(`data/current/${p.code}.json`); if(c) currents[p.code]=c; }
+  const codes=Object.keys(currents);
+  if(!codes.length) return;
+  REAL=true; META=meta;
+  PREFS = meta.prefectures.filter(p=>currents[p.code]).map(p=>({code:p.code,name:p.name,base:p.total_clinics,real:true}));
+  PREF_DATA={};
+  codes.forEach(code=>{ const c=currents[code];
+    PREF_DATA[code]={...c, total_clinics:c.total_clinics, n_standards:c.n_standards,
+      standards:c.standards.map(s=>({name:s.name, abbr:s.kigo, count:s.count, count_uniq:s.count_uniq}))}; });
+  document.getElementById("ver").textContent = meta.version;
+  if(meta.checked && meta.checked!=="(seed)") document.getElementById("checked").textContent = meta.checked;
+  document.getElementById("footver").textContent = `${meta.version}版（${meta.asof}）`;
+  const sb=document.querySelector(".sbanner");
+  if(sb){ if(PREFS.length<=1){ sb.innerHTML='実データを表示中。現在は<b>大阪のみ</b>のデータです（他府県は更新処理の実行で追加されます）。推移は月次で蓄積されます。'; }
+    else sb.style.display="none"; }
+  curPref = PREFS.some(p=>p.code==="osaka") ? "osaka" : PREFS[0].code;
+  DATA = PREF_DATA[curPref]; TOTAL = DATA.total_clinics;
+  buildTabs(); recompute(); render();
+}
+
 render();
+loadReal();
 </script>
 </body>
 </html>
