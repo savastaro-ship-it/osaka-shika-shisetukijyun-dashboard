@@ -36,48 +36,74 @@ ADAPTERS: list = [
 
 
 def run_adapter(adapter: Adapter, state: dict) -> bool:
-    """1局分を処理。変更があれば True、無ければ False。例外は呼び出し側で捕捉。"""
+    """1局分を処理。新規データがあれば True、無ければ False。例外は呼び出し側で捕捉。
+
+    - discover() は利用可能な全月のリストを返す
+    - 既に処理済みのsignatureは飛ばす
+    - 残り（新規）を古い月から順に処理（history を時系列順に追記するため）
+    """
     bureau = adapter.bureau
-    print(f"[{bureau}] discover …")
-    disc = adapter.discover()
-    if not disc:
-        print(f"[{bureau}] 歯科ファイルが見つかりません（ページ構造変更の可能性）")
+    bureau_state = state["bureaus"].get(bureau, {})
+    processed_sigs = set(bureau_state.get("signatures", []))
+
+    print(f"[{bureau}] discover…")
+    discoveries = adapter.discover()
+    if not discoveries:
+        print(f"[{bureau}] 利用可能なファイルが見つかりません")
         return False
 
-    sig_prev = state["bureaus"].get(bureau, {}).get("signature")
-    print(f"[{bureau}] signature: {disc.signature} (prev={sig_prev})")
-    if disc.signature == sig_prev:
-        print(f"[{bureau}] 前回から変化なし、スキップ")
+    new_discs = [d for d in discoveries if d.signature not in processed_sigs]
+    if not new_discs:
+        print(f"[{bureau}] 新規データなし、スキップ（{len(discoveries)}月分すべて処理済み）")
         return False
 
-    n_prefs = 0
-    all_records = []
-    for ref in disc.file_refs:
-        print(f"[{bureau}] fetch {ref.filename}")
-        blob = adapter.fetch(ref)
-        for name, xlsx_bytes in adapter.extract_xlsxs(blob, ref):
-            recs = parse_xlsx_to_records(xlsx_bytes)
-            all_records.extend(recs)
+    # 古い月から処理（history を時系列順に追記）
+    new_discs.sort(key=lambda d: (d.year, d.month))
+    print(f"[{bureau}] {len(new_discs)}月分の新規データを処理: "
+          f"{[d.version for d in new_discs]}")
 
-    # 同じpref/versionが複数レコードに分かれてたらマージ
-    merged = merge_records_by_pref(all_records)
-    for rec in merged:
-        write_pref_outputs(rec, bureau=bureau)
-        rate = (rec.standards[0]["count"] / rec.total_clinics * 100
-                if rec.standards and rec.total_clinics else 0)
-        print(f"  {rec.pref_code} {rec.pref_name}: "
-              f"母数={rec.total_clinics} 種類={len(rec.standards)} "
-              f"trend1={rate:.2f}%")
-        n_prefs += 1
+    n_succeeded_months = 0
+    for disc in new_discs:
+        print(f"\n[{bureau}] === {disc.version} ===")
+        all_records = []
+        for ref in disc.file_refs:
+            print(f"[{bureau}] fetch {ref.filename}")
+            try:
+                blob = adapter.fetch(ref)
+            except Exception as e:
+                print(f"[{bureau}] fetch失敗 ({ref.filename}): {e!r}")
+                continue
+            for name, xlsx_bytes in adapter.extract_xlsxs(blob, ref):
+                recs = parse_xlsx_to_records(xlsx_bytes)
+                all_records.extend(recs)
 
-    if n_prefs == 0:
-        print(f"[{bureau}] パース結果ゼロ。失敗扱い、stateは更新しません")
+        merged = merge_records_by_pref(all_records)
+        if not merged:
+            print(f"[{bureau}] {disc.version}: 0府県分しか取れず、この月はスキップ")
+            continue
+
+        for rec in merged:
+            write_pref_outputs(rec, bureau=bureau)
+            rate = (rec.standards[0]["count"] / rec.total_clinics * 100
+                    if rec.standards and rec.total_clinics else 0)
+            print(f"  {rec.pref_code} {rec.pref_name}: "
+                  f"母数={rec.total_clinics} 種類={len(rec.standards)} "
+                  f"trend1={rate:.2f}%")
+        processed_sigs.add(disc.signature)
+        n_succeeded_months += 1
+
+    if n_succeeded_months == 0:
+        print(f"[{bureau}] 1月分も成功せず、stateは更新しません")
         return False
+
+    # 処理済みの中で最新月を求める
+    all_processed_discs = [d for d in discoveries if d.signature in processed_sigs]
+    latest = max(all_processed_discs, key=lambda d: (d.year, d.month))
 
     state["bureaus"][bureau] = {
-        "signature": disc.signature,
-        "version": disc.version,
-        "asof": f"令和{disc.year - 2018}年{disc.month}月1日現在",
+        "signatures": sorted(processed_sigs),
+        "latest_version": latest.version,
+        "asof": f"令和{latest.year - 2018}年{latest.month}月1日現在",
         "checked": now_jst_str(),
     }
     return True

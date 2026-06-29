@@ -10,14 +10,14 @@
 import io
 import re
 import zipfile
-from typing import List, Tuple, Optional
+from typing import List, Tuple
+from urllib.parse import urljoin
 
 from lib import Adapter, DiscoveryResult, FileRef, http_get
 
 
 INDEX_URL = ("https://kouseikyoku.mhlw.go.jp/kinki/gyomu/gyomu/"
              "hoken_kikan/shitei_jokyo_00004.html")
-BASE = "https://kouseikyoku.mhlw.go.jp/kinki/"
 
 # ZIP内の府県別xlsxを拾う
 _RE_PREF_XLSX = re.compile(r"_sisetukijun_([a-z]+)_sika\.xlsx$")
@@ -31,22 +31,23 @@ _RE_ZIP_HREF = re.compile(
 class KinkiAdapter(Adapter):
     bureau = "kinki"
 
-    def discover(self) -> Optional[DiscoveryResult]:
+    def discover(self) -> List[DiscoveryResult]:
+        """近畿は最新月のみ（過去月アーカイブは未対応）。"""
         html = http_get(INDEX_URL).decode("utf-8", "replace")
         m = _RE_ZIP_HREF.search(html)
         if not m:
-            return None
+            return []
         href, fname = m.group(1), m.group(2)
         year, month = int(m.group(3)), int(m.group(4))
-        url = href if href.startswith("http") else (BASE + href.lstrip("/").split("/")[-1])
-        return DiscoveryResult(
+        url = urljoin(INDEX_URL, href)
+        return [DiscoveryResult(
             bureau=self.bureau,
             file_refs=[FileRef(url=url, filename=fname)],
             version=f"{year}.{month}",
             year=year,
             month=month,
             signature=fname,
-        )
+        )]
 
     def extract_xlsxs(self, blob: bytes, ref: FileRef) -> List[Tuple[str, bytes]]:
         out: List[Tuple[str, bytes]] = []

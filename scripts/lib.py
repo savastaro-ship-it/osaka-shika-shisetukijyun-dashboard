@@ -346,7 +346,7 @@ def _update_history(rec: PrefRecord):
 
 
 def rebuild_prefectures_json(now_str: str, state: dict):
-    """current/*.json を全部読んで prefectures.json を組み立て直す"""
+    """current/*.json と history/*.json を読んで prefectures.json を組み立て直す"""
     def sort_key(code: str):
         # 1. FEATURED_TOP の順（無ければ大きな値で後ろ送り）
         primary = FEATURED_TOP.index(code) if code in FEATURED_TOP else len(FEATURED_TOP)
@@ -357,9 +357,9 @@ def rebuild_prefectures_json(now_str: str, state: dict):
         return (primary, bi, code)
 
     prefs = []
-    versions_set = set()
     files = sorted(DIR_CURRENT.glob("*.json"), key=lambda p: sort_key(p.stem))
     latest_asof = ""
+    latest_version = ""
     for p in files:
         c = json.loads(p.read_text(encoding="utf-8"))
         prefs.append({
@@ -371,19 +371,28 @@ def rebuild_prefectures_json(now_str: str, state: dict):
             "version": c["version"],
             "asof": c["asof"],
         })
-        versions_set.add(c["version"])
 
-    versions = sorted(versions_set,
+    # 公表月一覧は history を全部見て union を取る（current は最新だけなので不十分）
+    all_versions = set()
+    for hp in DIR_HISTORY.glob("*.json"):
+        try:
+            h = json.loads(hp.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        all_versions.update(h.get("versions", []))
+    versions = sorted(all_versions,
                       key=lambda v: tuple(int(x) for x in v.split(".")))
-    latest = versions[-1] if versions else ""
+    if versions:
+        latest_version = versions[-1]
+    # asof は latest_version を持つ府県のものを使う
     for p in files:
         c = json.loads(p.read_text(encoding="utf-8"))
-        if c["version"] == latest:
+        if c["version"] == latest_version:
             latest_asof = c["asof"]
             break
 
     meta = {
-        "version": latest,
+        "version": latest_version,
         "asof": latest_asof,
         "versions": versions,
         "prefectures": prefs,
@@ -399,7 +408,7 @@ def rebuild_prefectures_json(now_str: str, state: dict):
 # ============ state ============
 
 def load_state() -> dict:
-    """state.json を読む。旧形式（{"signature":...}）は捨てて新形式の空っぽを返す。"""
+    """state.json を読む。旧形式（{"signature":...}）を新形式（{"signatures":[...]}）に自動変換。"""
     if not STATE_FILE.exists():
         return {"bureaus": {}}
     try:
@@ -408,6 +417,16 @@ def load_state() -> dict:
         return {"bureaus": {}}
     if not isinstance(s, dict) or "bureaus" not in s:
         return {"bureaus": {}}
+
+    # 旧形式 → 新形式に変換
+    for bureau, b_state in s["bureaus"].items():
+        if not isinstance(b_state, dict):
+            continue
+        if "signatures" not in b_state and "signature" in b_state:
+            b_state["signatures"] = [b_state["signature"]]
+            if "version" in b_state and "latest_version" not in b_state:
+                b_state["latest_version"] = b_state["version"]
+            # 古いキーは残してもOK、無害
     return s
 
 
@@ -431,10 +450,15 @@ def ensure_dirs():
 # ============ アダプタ基底 ============
 
 class Adapter:
-    """局アダプタの基底。各局はこれを継承して discover / extract_xlsxs を実装する。"""
+    """局アダプタの基底。各局はこれを継承して discover / extract_xlsxs を実装する。
+
+    discover() は **利用可能な月のリスト** を返す：
+      - 通常の局（過去アーカイブなし、もしくは未対応）は最新1月だけのリスト
+      - 過去月backfill対応の局は全月を返す（順不同でOK、update.py側で時系列順に並べる）
+    """
     bureau: str = ""
 
-    def discover(self) -> Optional[DiscoveryResult]:
+    def discover(self) -> List[DiscoveryResult]:
         raise NotImplementedError
 
     def fetch(self, ref: FileRef) -> bytes:

@@ -38,48 +38,50 @@ _RE_ZIP_HREF = re.compile(r'href="([^"]+\.zip)"', re.IGNORECASE)
 class KyushuAdapter(Adapter):
     bureau = "kyushu"
 
-    def discover(self) -> Optional[DiscoveryResult]:
+    def discover(self) -> List[DiscoveryResult]:
+        """インデックスページから利用可能な全月を返す（過去月backfill対応）。"""
         html = http_get(INDEX_URL).decode("utf-8", "replace")
 
-        # 最新月見出しを探す（最初に出てくるものが最新）
-        m = _RE_MONTH_HEADER.search(html)
-        if not m:
-            return None
-        y, mo = int(m.group(1)), int(m.group(2))
+        # すべての月見出しを順に拾う（ページ上は新→旧の順で並んでいる）
+        headers = list(_RE_MONTH_HEADER.finditer(html))
+        if not headers:
+            return []
 
-        # 次の月見出しまでの範囲を切り出す
-        start = m.end()
-        m2 = _RE_MONTH_HEADER.search(html, start)
-        section = html[start:m2.start()] if m2 else html[start:]
+        results: List[DiscoveryResult] = []
+        for i, m in enumerate(headers):
+            y, mo = int(m.group(1)), int(m.group(2))
+            start = m.end()
+            end = headers[i + 1].start() if i + 1 < len(headers) else len(html)
+            section = html[start:end]
 
-        zip_urls = _RE_ZIP_HREF.findall(section)
-        if len(zip_urls) != 8:
-            # 想定外。8府県分そろってない場合は失敗扱い
-            print(f"[kyushu] 想定外のZIP数: {len(zip_urls)} (期待値: 8)")
-            return None
+            zip_urls = _RE_ZIP_HREF.findall(section)
+            if len(zip_urls) != 8:
+                # 8府県分そろわないセクションはスキップ
+                # （例：「略称一覧（令和8年2月1日現在）」のPDFリンクなど）
+                continue
 
-        # 順序を pref code にマップ
-        file_refs = []
-        for code, url in zip(_PREF_ORDER, zip_urls):
-            # 相対URLでも絶対URLでも正しく解決される
-            full = urljoin(INDEX_URL, url)
-            file_refs.append(FileRef(
-                url=full,
-                filename=full.rsplit("/", 1)[-1],
-                extra={"pref_code": code},
+            full_urls = [urljoin(INDEX_URL, u) for u in zip_urls]
+            file_refs = [
+                FileRef(
+                    url=full,
+                    filename=full.rsplit("/", 1)[-1],
+                    extra={"pref_code": code},
+                )
+                for code, full in zip(_PREF_ORDER, full_urls)
+            ]
+            # signature: 全URLの結合（どれか1つでも変われば再処理対象）
+            signature = "|".join(full_urls)
+
+            results.append(DiscoveryResult(
+                bureau=self.bureau,
+                file_refs=file_refs,
+                version=f"{2018 + y}.{mo}",
+                year=2018 + y,
+                month=mo,
+                signature=signature,
             ))
 
-        # signature: 全URLの結合（どれか1つでも変われば再処理）
-        signature = "|".join(r.url for r in file_refs)
-
-        return DiscoveryResult(
-            bureau=self.bureau,
-            file_refs=file_refs,
-            version=f"{2018 + y}.{mo}",
-            year=2018 + y,
-            month=mo,
-            signature=signature,
-        )
+        return results
 
     def extract_xlsxs(self, blob: bytes, ref: FileRef) -> List[Tuple[str, bytes]]:
         """ZIP内の全xlsxを取り出す。歯科の判別は共通パーサ側の 区分=='歯科' フィルタに任せる。
@@ -92,5 +94,5 @@ class KyushuAdapter(Adapter):
             for nm in zf.namelist():
                 if nm.lower().endswith(".xlsx"):
                     out.append((nm, zf.read(nm)))
-        print(f"[kyushu] {ref.filename}: xlsx {len(out)}件抽出 ({[n for n,_ in out]})")
+        print(f"[kyushu] {ref.filename}: xlsx {len(out)}件抽出")
         return out
