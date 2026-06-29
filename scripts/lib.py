@@ -235,6 +235,49 @@ def parse_xlsx_to_records(xlsx_bytes: bytes) -> List[PrefRecord]:
     return records
 
 
+def merge_records_by_pref(records: List[PrefRecord]) -> List[PrefRecord]:
+    """
+    同じ（pref_code, version）のレコードが複数あればマージして1つにする。
+    想定ケース：1府県が複数xlsxに分かれている場合（ファイル分割・区分別出力など）。
+    通常は何もしない（pass-through）。
+    """
+    if not records:
+        return []
+    grouped: Dict[Tuple[str, str], PrefRecord] = {}
+    for rec in records:
+        key = (rec.pref_code, rec.version)
+        if key not in grouped:
+            grouped[key] = rec
+        else:
+            grouped[key] = _merge_two(grouped[key], rec)
+    return list(grouped.values())
+
+
+def _merge_two(a: PrefRecord, b: PrefRecord) -> PrefRecord:
+    """同じpref/versionの2レコードを足し合わせる。受理記号で集計する単純合算。"""
+    # 項番（医療機関数）は重複なしと仮定して合算
+    new_total = a.total_clinics + b.total_clinics
+    # 受理記号ごとに合算
+    by_kigo: Dict[str, dict] = {s["kigo"]: dict(s) for s in a.standards}
+    for s in b.standards:
+        if s["kigo"] in by_kigo:
+            by_kigo[s["kigo"]]["count"] += s["count"]
+            by_kigo[s["kigo"]]["count_uniq"] += s["count_uniq"]
+            # 名前は先に来た方を採用（同月内なので一致する想定）
+        else:
+            by_kigo[s["kigo"]] = dict(s)
+    new_standards = sorted(by_kigo.values(), key=lambda s: -s["count"])
+    return PrefRecord(
+        pref_code=a.pref_code,
+        pref_name=a.pref_name,
+        asof=a.asof,
+        version=a.version,
+        total_clinics=new_total,
+        standards=new_standards,
+        raw_xlsx=a.raw_xlsx,  # source xlsx は先頭のものだけ保持
+    )
+
+
 # ============ 出力 ============
 
 def _atomic_write_text(path: Path, text: str):
