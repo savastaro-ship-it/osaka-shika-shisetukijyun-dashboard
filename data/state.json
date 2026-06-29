@@ -5,7 +5,13 @@
       "version": "2026.5",
       "asof": "令和8年5月1日現在",
       "checked": "2026/06/29 15:07"
+    },
+    "kyushu": {
+      "signature": "https://kouseikyoku.mhlw.go.jp/kyushu/000483237.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483238.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483239.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483240.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483241.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483242.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483243.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483244.zip",
+      "version": "2026.5",
+      "asof": "令和8年5月1日現在",
+      "checked": "2026/06/29 16:17"
     }
   },
-  "last_checked": "2026/06/29 15:06"
+  "last_checked": "2026/06/29 16:15"
 }
