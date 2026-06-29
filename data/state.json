@@ -4,14 +4,31 @@
       "signature": "s2026.5_sisetukijun_sika.zip",
       "version": "2026.5",
       "asof": "令和8年5月1日現在",
-      "checked": "2026/06/29 15:07"
+      "checked": "2026/06/29 15:07",
+      "signatures": [
+        "s2026.5_sisetukijun_sika.zip"
+      ],
+      "latest_version": "2026.5"
     },
     "kyushu": {
-      "signature": "https://kouseikyoku.mhlw.go.jp/kyushu/000483237.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483238.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483239.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483240.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483241.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483242.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483243.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483244.zip",
-      "version": "2026.5",
+      "signatures": [
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000400761.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000400762.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000400763.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000400764.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000400765.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000400766.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000400767.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000400768.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000405127.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000405128.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000405129.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000405130.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000405131.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000405132.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000405133.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000405134.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000410524.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000410525.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000410527.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000410528.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000410529.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000410530.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000410531.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000410532.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000413475.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000413476.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000413477.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000413478.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000413479.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000413480.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000413481.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000413482.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000416404.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000416407.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000416409.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000416417.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000416420.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000416422.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000416425.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000416428.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000419673.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000419674.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000419675.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000419676.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000419677.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000419678.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000419679.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000419680.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000422556.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000422557.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000422558.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000422559.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000422560.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000422561.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000422562.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000422563.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000425942.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000425943.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000425944.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000425945.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000425946.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000425947.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000425948.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000425949.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000428566.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000428567.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000428568.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000428569.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000428570.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000428571.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000428572.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000428573.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000432655.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000432656.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000432657.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000432658.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000432659.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000432660.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000432661.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000432662.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000477640.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000477641.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000477643.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000477644.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000477645.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000477646.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000477647.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000477648.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000483237.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483238.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483239.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483240.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483241.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483242.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483243.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000483244.zip"
+      ],
+      "latest_version": "2026.5",
       "asof": "令和8年5月1日現在",
-      "checked": "2026/06/29 16:17"
+      "checked": "2026/06/29 16:54"
     }
   },
-  "last_checked": "2026/06/29 16:15"
+  "last_checked": "2026/06/29 16:38"
 }
