@@ -36,7 +36,15 @@
       "latest_version": "2026.5",
       "asof": "令和8年5月1日現在",
       "checked": "2026/06/29 17:12"
+    },
+    "tokaihokuriku": {
+      "signatures": [
+        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2605-06_01-03.zip"
+      ],
+      "latest_version": "2026.5",
+      "asof": "令和8年5月1日現在",
+      "checked": "2026/06/29 17:23"
     }
   },
-  "last_checked": "2026/06/29 17:12"
+  "last_checked": "2026/06/29 17:22"
 }
