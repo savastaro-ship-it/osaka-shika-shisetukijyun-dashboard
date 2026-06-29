@@ -68,7 +68,15 @@
       "latest_version": "2026.5",
       "asof": "令和8年5月1日現在",
       "checked": "2026/06/30 07:11"
+    },
+    "tohoku": {
+      "signatures": [
+        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0805.xlsx"
+      ],
+      "latest_version": "2026.5",
+      "asof": "令和8年5月1日現在",
+      "checked": "2026/06/30 08:00"
     }
   },
-  "last_checked": "2026/06/30 07:14"
+  "last_checked": "2026/06/30 08:00"
 }
