@@ -30,10 +30,15 @@ from lib import Adapter, DiscoveryResult, FileRef, http_get
 INDEX_URL = ("https://kouseikyoku.mhlw.go.jp/shikoku/gyomu/gyomu/"
              "hoken_kikan/shitei/index.html")
 
-# 「届出受理医療機関名簿（令和X年Y月1日現在）」見出し
-# ※「届出受理医療機関名簿（届出項目別）（令和...）」は途中で構造が違うのでマッチしない
+# 「届出受理医療機関名簿」と「（令和X年Y月1日現在）」の間に <br>・改行・全角空白等が
+# 入ることがあるので、最大80文字まで柔軟に許容（ただし「（届出項目別」がすぐ来る場合は
+# セクション7（届出項目別）なのでスキップ）。
 _RE_HEADER = re.compile(
-    r'届出受理医療機関名簿\s*[（(]令和\s*(\d+)\s*年\s*(\d+)\s*月\s*1\s*日\s*現在\s*[)）]'
+    r'届出受理医療機関名簿'
+    r'(?!（届出項目別|\(届出項目別)'           # 7セクションは除外
+    r'[^（(]{0,80}?'                           # 間のHTMLタグ・空白等
+    r'[（(]\s*令和\s*(\d+)\s*年\s*(\d+)\s*月\s*1\s*日\s*現在\s*[)）]',
+    re.DOTALL | re.IGNORECASE,
 )
 
 # テーブル中の「歯　科」（全角空白あり/なし両対応）行の最初の.zipリンク
