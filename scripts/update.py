@@ -29,10 +29,12 @@ from kinki import KinkiAdapter
 from kyushu import KyushuAdapter
 from hokkaido import HokkaidoAdapter
 from tokaihokuriku import TokaihokurikuAdapter
+from kantoshinetsu import KantoshinetsuAdapter
 
 # 有効化するアダプタ。新規追加はここに足すだけ。
 ADAPTERS: list = [
     HokkaidoAdapter(),
+    KantoshinetsuAdapter(),
     TokaihokurikuAdapter(),
     KinkiAdapter(),
     KyushuAdapter(),
