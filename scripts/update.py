@@ -22,13 +22,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lib import (
     Adapter,
     ensure_dirs, load_state, save_state, now_jst_str,
-    parse_xlsx_to_records, write_pref_outputs, rebuild_prefectures_json,
+    parse_xlsx_to_records, merge_records_by_pref,
+    write_pref_outputs, rebuild_prefectures_json,
 )
 from kinki import KinkiAdapter
+from kyushu import KyushuAdapter
 
 # 有効化するアダプタ。新規追加はここに足すだけ。
 ADAPTERS: list = [
     KinkiAdapter(),
+    KyushuAdapter(),
 ]
 
 
@@ -48,19 +51,24 @@ def run_adapter(adapter: Adapter, state: dict) -> bool:
         return False
 
     n_prefs = 0
+    all_records = []
     for ref in disc.file_refs:
         print(f"[{bureau}] fetch {ref.filename}")
         blob = adapter.fetch(ref)
         for name, xlsx_bytes in adapter.extract_xlsxs(blob, ref):
             recs = parse_xlsx_to_records(xlsx_bytes)
-            for rec in recs:
-                write_pref_outputs(rec, bureau=bureau)
-                rate = (rec.standards[0]["count"] / rec.total_clinics * 100
-                        if rec.standards and rec.total_clinics else 0)
-                print(f"  {rec.pref_code} {rec.pref_name}: "
-                      f"母数={rec.total_clinics} 種類={len(rec.standards)} "
-                      f"trend1={rate:.2f}%")
-                n_prefs += 1
+            all_records.extend(recs)
+
+    # 同じpref/versionが複数レコードに分かれてたらマージ
+    merged = merge_records_by_pref(all_records)
+    for rec in merged:
+        write_pref_outputs(rec, bureau=bureau)
+        rate = (rec.standards[0]["count"] / rec.total_clinics * 100
+                if rec.standards and rec.total_clinics else 0)
+        print(f"  {rec.pref_code} {rec.pref_name}: "
+              f"母数={rec.total_clinics} 種類={len(rec.standards)} "
+              f"trend1={rate:.2f}%")
+        n_prefs += 1
 
     if n_prefs == 0:
         print(f"[{bureau}] パース結果ゼロ。失敗扱い、stateは更新しません")
