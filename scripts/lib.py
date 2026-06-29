@@ -49,7 +49,7 @@ PREF_NAMES: Dict[str, str] = {
 
 # 表示順：北から順
 BUREAU_ORDER = ["hokkaido", "tohoku", "kantoshinetsu", "tokaihokuriku",
-                "kinki", "chugokushikoku", "kyushu"]
+                "kinki", "chugoku", "shikoku", "kyushu"]
 
 # 局ごとの管轄
 BUREAU_PREFS: Dict[str, List[str]] = {
@@ -58,7 +58,8 @@ BUREAU_PREFS: Dict[str, List[str]] = {
     "kantoshinetsu":  ["08", "09", "10", "11", "12", "13", "14", "15", "19", "20"],
     "tokaihokuriku":  ["16", "17", "21", "22", "23", "24"],
     "kinki":          ["18", "25", "26", "27", "28", "29", "30"],
-    "chugokushikoku": ["31", "32", "33", "34", "35", "36", "37", "38", "39"],
+    "chugoku":        ["31", "32", "33", "34", "35"],
+    "shikoku":        ["36", "37", "38", "39"],
     "kyushu":         ["40", "41", "42", "43", "44", "45", "46", "47"],
 }
 CODE_TO_BUREAU: Dict[str, str] = {

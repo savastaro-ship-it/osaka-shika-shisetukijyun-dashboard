@@ -30,6 +30,8 @@ from kyushu import KyushuAdapter
 from hokkaido import HokkaidoAdapter
 from tokaihokuriku import TokaihokurikuAdapter
 from kantoshinetsu import KantoshinetsuAdapter
+from chugoku import ChugokuAdapter
+from shikoku import ShikokuAdapter
 
 # 有効化するアダプタ。新規追加はここに足すだけ。
 ADAPTERS: list = [
@@ -37,6 +39,8 @@ ADAPTERS: list = [
     KantoshinetsuAdapter(),
     TokaihokurikuAdapter(),
     KinkiAdapter(),
+    ChugokuAdapter(),
+    ShikokuAdapter(),
     KyushuAdapter(),
 ]
 
