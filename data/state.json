@@ -44,7 +44,15 @@
       "latest_version": "2026.5",
       "asof": "令和8年5月1日現在",
       "checked": "2026/06/29 17:23"
+    },
+    "kantoshinetsu": {
+      "signatures": [
+        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0806.zip"
+      ],
+      "latest_version": "2026.6",
+      "asof": "令和8年6月1日現在",
+      "checked": "2026/06/29 21:46"
     }
   },
-  "last_checked": "2026/06/29 17:22"
+  "last_checked": "2026/06/29 21:45"
 }
