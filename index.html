@@ -376,14 +376,12 @@ function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a
 function clampN(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
 let PREFS = [
   {code:"27", name:"大阪", base:OSAKA.total_clinics, f:1.00, real:true},
-  {code:"28", name:"兵庫", base:3480, f:0.95},
-  {code:"26", name:"京都", base:1590, f:0.98},
+  {code:"18", name:"福井", base:470,  f:0.86},
   {code:"25", name:"滋賀", base:690,  f:0.90},
+  {code:"26", name:"京都", base:1590, f:0.98},
+  {code:"28", name:"兵庫", base:3480, f:0.95},
   {code:"29", name:"奈良", base:880,  f:0.93},
   {code:"30", name:"和歌山",base:680, f:0.88},
-  {code:"18", name:"福井", base:470,  f:0.86},
-  {code:"17", name:"石川", base:660,  f:0.91},
-  {code:"16", name:"富山", base:560,  f:0.89},
 ];
 const oBase = OSAKA.total_clinics;
 let PREF_DATA = {};
