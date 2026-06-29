@@ -356,7 +356,7 @@
       <button class="modal-x" id="dClose" aria-label="閉じる">×</button>
     </div>
     <div class="prev">
-      <span class="prev-lab">推移プレビュー：蓄積月数</span>
+      <span class="prev-lab">推移：表示月数</span>
       <input type="range" id="tslider" min="0" max="12" step="1" value="12">
       <span class="tread" id="tread"></span>
     </div>
@@ -749,12 +749,18 @@ function gatherTrend(){
     const hist = HISTORY[curPref] || {versions:[],totals:{},kigo:{}};
     const axis = (META && META.versions && META.versions.length) ? META.versions.slice() : (hist.versions||[]).slice();
     const rec = (hist.kigo||{})[curTrendStd];
+    // スライダー位置で「先頭から trendN 月まで」に絞る
+    const endIdx = trendN - 1;  // 0-indexed; trendN=0 → endIdx=-1 で空
     const pts=[];
-    if(rec){ axis.forEach((v,i)=>{ const sp=rec.series.find(p=>p.v===v); if(sp){
-      const val = mode==="uniq"? sp.u : sp.c; const tot=(hist.totals||{})[v]||0;
-      pts.push({i, count:val, rate: tot? Math.round(val/tot*10000)/100 : 0}); }});}
+    if(rec){ axis.forEach((v,i)=>{
+      if(i > endIdx) return;  // 表示終端より後はスキップ
+      const sp=rec.series.find(p=>p.v===v); if(sp){
+        const val = mode==="uniq"? sp.u : sp.c; const tot=(hist.totals||{})[v]||0;
+        pts.push({i, count:val, rate: tot? Math.round(val/tot*10000)/100 : 0}); }});}
     const names = rec ? (rec.names||[]) : [];
-    const changeMonths = names.slice(1).map(nm=>nm.v);
+    const changeMonths = names.slice(1).map(nm=>nm.v).filter(v=>{
+      const idx = axis.indexOf(v); return idx>=0 && idx<=endIdx;
+    });
     const marks = changeMonths.map(v=>({i:axis.indexOf(v)})).filter(m=>m.i>=1);
     return {axis, pts, marks, dispName: rec?rec.name:curTrendStd, changeMonths};
   }
@@ -772,6 +778,14 @@ function openDetail(abbr){
   document.getElementById("detail").hidden = false;
   document.body.style.overflow = "hidden";
   document.querySelectorAll(".row").forEach(x=>x.classList.toggle("is-sel",x.dataset.abbr===abbr));
+  // スライダーの範囲を実データの月数に合わせて再設定（REAL時のみ）
+  if(REAL){
+    const axisLen = (META && META.versions) ? META.versions.length : 0;
+    const maxN = Math.max(axisLen, 1);
+    tslider.max = String(maxN);
+    trendN = maxN;  // 開いた瞬間は全期間表示
+    tslider.value = String(trendN);
+  }
   if(REAL && !HISTORY[curPref]){
     document.getElementById("trendBody").innerHTML = '<div class="t-empty"><b>読み込み中…</b></div>';
     tryJSON(`data/history/${curPref}.json`).then(h=>{ HISTORY[curPref]=h||{versions:[],totals:{},kigo:{}}; renderTrend(); });
@@ -792,15 +806,29 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !document.getEl
 
 function renderTrend(){
   const pname=PREFS.find(p=>p.code===curPref).name;
-  document.querySelector(".prev").style.display = REAL ? "none" : "";
+  // スライダーは実モード・合成モード両方で表示する（実モードでは「タイムマシン」として使う）
+  document.querySelector(".prev").style.display = "";
   const g = gatherTrend();
   const stage = g.pts.length===0?0:g.pts.length===1?1:g.pts.length===2?2:3;
   const stageNames=["未集計","測定開始","前月比","推移"];
   document.getElementById("dBadge").textContent = curTrendStd;
   document.getElementById("dTitle").textContent = g.dispName;
   document.getElementById("dSub").innerHTML = `${pname} ・ 母数 ${fmt(TOTAL)}院 <span class="stage">${stageNames[stage]}</span>`;
-  if(!REAL){ tslider.style.setProperty("--pct",(trendN/12*100)+"%");
-    document.getElementById("tread").innerHTML = trendN===0?"<b>未集計</b>":`<b>${trendN}</b> か月分（最新 ${trendMonths[trendN-1]}）`; }
+
+  // スライダーの max・塗り・ラベルを更新（REAL/合成 両モード）
+  const axisForSlider = REAL ? ((META && META.versions) ? META.versions : []) : trendMonths;
+  const maxN = Math.max(axisForSlider.length || 12, 1);
+  tslider.max = String(maxN);
+  tslider.style.setProperty("--pct", (trendN/maxN*100) + "%");
+  const tread = document.getElementById("tread");
+  if(trendN === 0){
+    tread.innerHTML = "<b>未集計</b>";
+  } else if(REAL){
+    const cur = axisForSlider[trendN-1] || "";
+    tread.innerHTML = `<b>${cur}</b> 時点（${trendN}/${maxN} か月）`;
+  } else {
+    tread.innerHTML = `<b>${trendN}</b> か月分（最新 ${trendMonths[trendN-1]}）`;
+  }
 
   const hint=document.querySelector(".trend-hint");
   if(g.changeMonths.length){ hint.innerHTML = `${g.changeMonths.join("・")} に名称変更があります。略称（受理記号）で続けて集計しているため推移はつながっていますが、<b>要件の連続性にはご留意ください。</b>`; hint.style.display=""; }
