@@ -27,9 +27,12 @@ from lib import (
 )
 from kinki import KinkiAdapter
 from kyushu import KyushuAdapter
+from hokkaido import HokkaidoAdapter
 
 # 有効化するアダプタ。新規追加はここに足すだけ。
+# 順序：北→南（discover実行順 / 並び順は別途BUREAU_ORDERで決まる）
 ADAPTERS: list = [
+    HokkaidoAdapter(),
     KinkiAdapter(),
     KyushuAdapter(),
 ]
