@@ -65,6 +65,10 @@ CODE_TO_BUREAU: Dict[str, str] = {
     code: bureau for bureau, codes in BUREAU_PREFS.items() for code in codes
 }
 
+# 「特別ポジション」：このリストにあるコードは局並び順より前に出す。
+# 当面は大阪のみ。最終UXで「大阪」「全国」を主軸にする構想の布石。
+FEATURED_TOP: List[str] = ["27"]
+
 
 # ============ データ型 ============
 
@@ -301,9 +305,13 @@ def _update_history(rec: PrefRecord):
 def rebuild_prefectures_json(now_str: str, state: dict):
     """current/*.json を全部読んで prefectures.json を組み立て直す"""
     def sort_key(code: str):
+        # 1. FEATURED_TOP の順（無ければ大きな値で後ろ送り）
+        primary = FEATURED_TOP.index(code) if code in FEATURED_TOP else len(FEATURED_TOP)
+        # 2. 局の並び順
         bureau = CODE_TO_BUREAU.get(code, "")
         bi = BUREAU_ORDER.index(bureau) if bureau in BUREAU_ORDER else 99
-        return (bi, code)
+        # 3. JISコード昇順
+        return (primary, bi, code)
 
     prefs = []
     versions_set = set()
