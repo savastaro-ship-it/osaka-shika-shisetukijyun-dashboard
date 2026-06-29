@@ -52,7 +52,15 @@
       "latest_version": "2026.6",
       "asof": "令和8年6月1日現在",
       "checked": "2026/06/29 21:46"
+    },
+    "chugoku": {
+      "signatures": [
+        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000485758.zip"
+      ],
+      "latest_version": "2026.5",
+      "asof": "令和8年5月1日現在",
+      "checked": "2026/06/30 06:38"
     }
   },
-  "last_checked": "2026/06/29 21:45"
+  "last_checked": "2026/06/30 06:37"
 }
