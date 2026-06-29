@@ -28,7 +28,15 @@
       "latest_version": "2026.5",
       "asof": "令和8年5月1日現在",
       "checked": "2026/06/29 16:54"
+    },
+    "hokkaido": {
+      "signatures": [
+        "https://kouseikyoku.mhlw.go.jp/hokkaido/000482064.xlsx"
+      ],
+      "latest_version": "2026.5",
+      "asof": "令和8年5月1日現在",
+      "checked": "2026/06/29 17:12"
     }
   },
-  "last_checked": "2026/06/29 16:38"
+  "last_checked": "2026/06/29 17:12"
 }
