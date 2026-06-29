@@ -15,13 +15,13 @@ import io
 import re
 import zipfile
 from typing import List, Tuple, Optional
+from urllib.parse import urljoin
 
 from lib import Adapter, DiscoveryResult, FileRef, http_get
 
 
 INDEX_URL = ("https://kouseikyoku.mhlw.go.jp/kyushu/gyomu/gyomu/"
              "hoken_kikan/index_00007.html")
-BASE = "https://kouseikyoku.mhlw.go.jp/kyushu/"
 
 # 掲載順（公式注記による）。9府県目以降が出ることはない。
 _PREF_ORDER = ["40", "41", "42", "43", "44", "45", "46", "47"]
@@ -61,7 +61,8 @@ class KyushuAdapter(Adapter):
         # 順序を pref code にマップ
         file_refs = []
         for code, url in zip(_PREF_ORDER, zip_urls):
-            full = url if url.startswith("http") else (BASE + url.lstrip("/"))
+            # 相対URLでも絶対URLでも正しく解決される
+            full = urljoin(INDEX_URL, url)
             file_refs.append(FileRef(
                 url=full,
                 filename=full.rsplit("/", 1)[-1],
@@ -81,11 +82,15 @@ class KyushuAdapter(Adapter):
         )
 
     def extract_xlsxs(self, blob: bytes, ref: FileRef) -> List[Tuple[str, bytes]]:
-        """ZIPから "shika" を名前に含むxlsxを抜き出す。"""
+        """ZIP内の全xlsxを取り出す。歯科の判別は共通パーサ側の 区分=='歯科' フィルタに任せる。
+
+        ※命名規則が県ごとに揺れる可能性に備えて広めに拾う。
+          医科・薬局のxlsxを読んでも、区分フィルタで0行になるだけで害は無い。
+        """
         out: List[Tuple[str, bytes]] = []
         with zipfile.ZipFile(io.BytesIO(blob)) as zf:
             for nm in zf.namelist():
-                low = nm.lower()
-                if "shika" in low and low.endswith(".xlsx"):
+                if nm.lower().endswith(".xlsx"):
                     out.append((nm, zf.read(nm)))
+        print(f"[kyushu] {ref.filename}: xlsx {len(out)}件抽出 ({[n for n,_ in out]})")
         return out
