@@ -172,16 +172,34 @@
 
   /* prefecture tabs */
   .ptabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;margin-bottom:6px;-webkit-overflow-scrolling:touch}
-  .ntoggle{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-    padding:9px 12px;margin-bottom:12px;border-radius:8px;
+  body.loading > *:not(.loading-screen){visibility:hidden;}
+  body.loading .loading-screen{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    z-index:9999;background:var(--bg);color:var(--muted);font-size:14px;font-weight:600;
+    letter-spacing:.05em;}
+  body:not(.loading) .loading-screen{display:none;}
+  .loading-screen .dot{display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--accent);margin:0 2px;animation:ldot 1.2s ease-in-out infinite;}
+  .loading-screen .dot:nth-child(2){animation-delay:.2s;}
+  .loading-screen .dot:nth-child(3){animation-delay:.4s;}
+  @keyframes ldot{0%,80%,100%{opacity:.3;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+  .ntoggle{display:flex;flex-direction:column;gap:6px;
+    padding:10px 13px;margin-bottom:12px;border-radius:8px;
     background:#f3f6f7;border:1px solid var(--line);font-size:13px}
+  .ntoggle .nt-row1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .ntoggle .nt-lab{color:var(--muted);font-weight:600}
   .ntoggle .nt-btn{padding:5px 11px;border-radius:6px;border:1px solid var(--line);
     background:#fff;color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;
     transition:.12s}
   .ntoggle .nt-btn:hover{border-color:var(--accent);color:var(--ink)}
   .ntoggle .nt-btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
-  .ntoggle .nt-hint{color:var(--muted);font-size:11.5px;margin-left:4px}
+  .ntoggle .nt-state{color:var(--ink);font-size:12.5px;margin-left:6px;line-height:1.45}
+  .ntoggle .nt-state b{color:var(--accent)}
+  .ntoggle .nt-row2{display:flex;flex-wrap:wrap;gap:6px 12px;
+    padding-top:8px;border-top:1px dashed var(--line);
+    font-size:11.5px;color:var(--muted)}
+  .ntoggle .vgroup{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap}
+  .ntoggle .vgroup b{color:var(--accent);font-weight:700}
   .ptab{flex:none;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;
     border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);border-radius:999px;padding:8px 16px;transition:.12s}
   .ptab:hover{color:var(--ink)}
@@ -264,7 +282,10 @@
   }
 </style>
 </head>
-<body>
+<body class="loading">
+<div class="loading-screen" aria-live="polite">
+  <span>読み込み中<span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+</div>
 <div class="wrap">
 
   <!-- masthead -->
@@ -290,10 +311,13 @@
 
   <!-- 全国(00)タブ専用：速報/確定 トグル -->
   <div class="ntoggle" id="ntoggle" style="display:none;">
-    <span class="nt-lab">全国データの集計方式：</span>
-    <button class="nt-btn on" data-mode="confirmed" type="button">確定値（全府県共通月）</button>
-    <button class="nt-btn" data-mode="snapshot" type="button">速報値（各府県の最新月合算）</button>
-    <span class="nt-hint" id="ntHint"></span>
+    <div class="nt-row1">
+      <span class="nt-lab">全国データ：</span>
+      <button class="nt-btn on" data-mode="confirmed" type="button">確定値</button>
+      <button class="nt-btn" data-mode="snapshot" type="button">速報値</button>
+      <span class="nt-state" id="ntState"></span>
+    </div>
+    <div class="nt-row2" id="ntBreakdown" style="display:none;"></div>
   </div>
 
   <!-- KPI -->
@@ -682,19 +706,45 @@ function updateNationalToggleVisibility(){
   // 全国(00)で、かつ確定値・速報値の両方が用意されている場合のみ表示
   const show = (curPref === "00") && NATIONAL_CONFIRMED_DATA && NATIONAL_SNAPSHOT_DATA;
   el.style.display = show ? "flex" : "none";
-  if(show){
-    // 現在モードのボタンをactiveに
-    el.querySelectorAll(".nt-btn").forEach(b=>{
-      b.classList.toggle("on", b.dataset.mode === state.nationalMode);
+  if(!show) return;
+  // 現在モードのボタンをactiveに
+  el.querySelectorAll(".nt-btn").forEach(b=>{
+    b.classList.toggle("on", b.dataset.mode === state.nationalMode);
+  });
+  const stateEl = document.getElementById("ntState");
+  const breakdownEl = document.getElementById("ntBreakdown");
+  if(state.nationalMode === "confirmed"){
+    // 確定値：全府県共通の最新月を強調表示
+    const v = NATIONAL_CONFIRMED_DATA.version || "";
+    if(stateEl) stateEl.innerHTML = `全府県共通の最新月：<b>${v}</b> 時点`;
+    if(breakdownEl) breakdownEl.style.display = "none";
+  } else {
+    // 速報値：各府県の最新月の合算＋内訳を表示
+    const breakdown = NATIONAL_SNAPSHOT_DATA.breakdown || {};
+    const versions = Object.keys(breakdown).sort((a,b)=>{
+      const [ay,am] = a.split(".").map(Number);
+      const [by,bm] = b.split(".").map(Number);
+      return (by*12+bm) - (ay*12+am);  // 新→旧の降順
     });
-    // ヒント文（speedとconfirmedが乖離してたら注記）
-    const hint = document.getElementById("ntHint");
-    if(hint){
-      const sV = NATIONAL_SNAPSHOT_DATA.version || "";
-      const cV = NATIONAL_CONFIRMED_DATA.version || "";
-      hint.textContent = (sV && cV && sV !== cV)
-        ? `※ 速報=${sV}、確定=${cV}（共通最新月）`
-        : "";
+    if(stateEl){
+      if(versions.length <= 1){
+        stateEl.innerHTML = `各府県の最新月合算：<b>${versions[0] || "?"}</b>（揃ってる）`;
+      } else {
+        stateEl.innerHTML = `各府県の最新月合算：<b>${versions[0]}〜${versions[versions.length-1]}</b>（混在）`;
+      }
+    }
+    if(breakdownEl){
+      if(versions.length === 0){
+        breakdownEl.style.display = "none";
+      } else {
+        breakdownEl.innerHTML = "<span style='font-weight:600;color:var(--ink)'>内訳：</span> " +
+          versions.map(v=>{
+            const list = breakdown[v];
+            const names = list.map(p=>p.name).join("・");
+            return `<span class="vgroup" title="${names}"><b>${v}</b>：${list.length}府県</span>`;
+          }).join("");
+        breakdownEl.style.display = "flex";
+      }
     }
   }
 }
@@ -940,6 +990,19 @@ async function loadReal(){
   // 全国(00)があれば、history/00.jsonをロードして確定値も作っておく
   if(currents["00"]){
     NATIONAL_SNAPSHOT_DATA = PREF_DATA["00"];  // 速報値はそのまま保持
+
+    // 速報値の内訳：47府県（00を除く）の version 別グループ
+    const versionGroups = {};  // "2026.5" → [{code, name}, ...]
+    for(const code of codes){
+      if(code === "00") continue;
+      const c = currents[code];
+      const v = c.version || "";
+      if(!v) continue;
+      if(!versionGroups[v]) versionGroups[v] = [];
+      versionGroups[v].push({code, name: c.name});
+    }
+    NATIONAL_SNAPSHOT_DATA.breakdown = versionGroups;
+
     const histNat = await tryJSON("data/history/00.json");
     if(histNat){ HISTORY["00"] = histNat; }
     if(histNat && Array.isArray(histNat.versions) && histNat.versions.length){
@@ -983,8 +1046,13 @@ async function loadReal(){
   updateNationalToggleVisibility();
 }
 
-render();
-loadReal();
+// 初期表示：loadReal を待ってから描画（モック表示のチラ見えを防ぐ）
+loadReal().catch(err => {
+  console.error("loadReal失敗、サンプルデータで表示します:", err);
+  render();  // 失敗時はモック（OSAKAデータ）で表示
+}).finally(() => {
+  document.body.classList.remove("loading");
+});
 </script>
 </body>
 </html>
