@@ -24,7 +24,7 @@ from lib import (
     ensure_dirs, load_state, save_state, now_jst_str,
     parse_xlsx_to_records, merge_records_by_pref,
     write_pref_outputs, rebuild_prefectures_json,
-    build_national_aggregates,
+    build_national_aggregates, reconcile_currents_with_history,
 )
 from kinki import KinkiAdapter
 from kyushu import KyushuAdapter
@@ -137,6 +137,16 @@ def main():
             traceback.print_exc()
             failures.append((ad.bureau, repr(e)))
             print(f"[{ad.bureau}] エラー: {e!r}（この局はスキップ、前回値を保持）")
+
+    # 過去のbackfillバグの自動修復：
+    # current.version が history の真の最新月とズレてる府県があれば、historyから作り直す
+    try:
+        fixed = reconcile_currents_with_history()
+        if fixed:
+            print(f"[reconcile] 過去のbackfillで古い月で上書きされてた府県を修復: {fixed}")
+    except Exception as e:
+        traceback.print_exc()
+        print(f"[reconcile] エラー: {e!r}")
 
     # 47府県の集計値を「全国」として書き出す（current/00.json, history/00.json）
     try:

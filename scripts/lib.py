@@ -293,27 +293,47 @@ def _atomic_write_text(path: Path, text: str):
 
 
 def write_pref_outputs(rec: PrefRecord, bureau: str):
-    """1府県分の current/history/source を書き出す"""
-    # source xlsx
-    (DIR_SOURCE / f"{rec.pref_code}.xlsx").write_bytes(rec.raw_xlsx)
+    """1府県分の current/history/source を書き出す
 
-    # current
-    cur = {
-        "code": rec.pref_code,
-        "name": rec.pref_name,
-        "bureau": bureau,
-        "version": rec.version,
-        "asof": rec.asof,
-        "total_clinics": rec.total_clinics,
-        "n_standards": len(rec.standards),
-        "standards": rec.standards,
-    }
-    _atomic_write_text(
-        DIR_CURRENT / f"{rec.pref_code}.json",
-        json.dumps(cur, ensure_ascii=False, separators=(",", ":")),
-    )
+    重要：rec の version が既存の current/<code>.json の version より古い場合、
+    source/current は **上書きしない**（history だけ追記）。
+    これは backfill で「古い月 → 新しい月」の順に処理する時、最後の処理が
+    古い月だった場合に current が古い数字で上書きされるのを防ぐため。
+    """
+    # 既存 current より古い月の処理なら、source と current は上書きしない
+    cp = DIR_CURRENT / f"{rec.pref_code}.json"
+    overwrite_current = True
+    if cp.exists():
+        try:
+            existing = json.loads(cp.read_text(encoding="utf-8"))
+            ev = existing.get("version", "")
+            if ev and "." in ev:
+                ey, em = (int(x) for x in ev.split(".", 1))
+                if (ey, em) > (rec.year, rec.month):
+                    overwrite_current = False
+        except Exception:
+            pass
 
-    # history（追記）
+    if overwrite_current:
+        # source xlsx
+        (DIR_SOURCE / f"{rec.pref_code}.xlsx").write_bytes(rec.raw_xlsx)
+        # current
+        cur = {
+            "code": rec.pref_code,
+            "name": rec.pref_name,
+            "bureau": bureau,
+            "version": rec.version,
+            "asof": rec.asof,
+            "total_clinics": rec.total_clinics,
+            "n_standards": len(rec.standards),
+            "standards": rec.standards,
+        }
+        _atomic_write_text(
+            cp,
+            json.dumps(cur, ensure_ascii=False, separators=(",", ":")),
+        )
+
+    # history（追記）：これは常に行う（古い月のレコードも history には追加する）
     _update_history(rec)
 
 
@@ -348,6 +368,88 @@ def _update_history(rec: PrefRecord):
         path,
         json.dumps(hist, ensure_ascii=False, separators=(",", ":")),
     )
+
+
+def reconcile_currents_with_history() -> List[str]:
+    """current/<code>.json の version が history の真の最新月とズレていれば、
+    history の数字で current を作り直す（過去のbackfillバグの自動修復用）。
+
+    戻り値：修復した府県コードのリスト。
+    """
+    fixed: List[str] = []
+    for cp in DIR_CURRENT.glob("*.json"):
+        code = cp.stem
+        if code == "00":
+            continue  # 全国は別ロジック
+        hp = DIR_HISTORY / f"{code}.json"
+        if not hp.exists():
+            continue
+        try:
+            h = json.loads(hp.read_text(encoding="utf-8"))
+            c = json.loads(cp.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        versions = h.get("versions") or []
+        if not versions:
+            continue
+        # versions が時系列順とは限らないのでソート
+        v_sorted = sorted(versions,
+                          key=lambda v: tuple(int(x) for x in v.split(".")) if "." in v else (0, 0))
+        latest_v = v_sorted[-1]
+        if c.get("version") == latest_v:
+            continue  # 既に正しい
+        # current.version < latest_v なら、history の最新月で current を作り直す
+        try:
+            cv = c.get("version", "")
+            if cv and "." in cv:
+                cv_tup = tuple(int(x) for x in cv.split("."))
+                lv_tup = tuple(int(x) for x in latest_v.split("."))
+                if cv_tup >= lv_tup:
+                    continue  # current の方が新しいかイコール（=正常 or 別のケース）
+        except Exception:
+            pass
+        # historyから最新月のデータを抽出
+        total = (h.get("totals") or {}).get(latest_v, 0)
+        if total <= 0:
+            continue
+        stds = []
+        for kigo, rec in (h.get("kigo") or {}).items():
+            sp = None
+            for p in (rec.get("series") or []):
+                if p.get("v") == latest_v:
+                    sp = p
+                    break
+            if not sp:
+                continue
+            stds.append({
+                "kigo": kigo,
+                "name": rec.get("name", kigo),
+                "count": int(sp.get("c", 0)),
+                "count_uniq": int(sp.get("u", sp.get("c", 0))),
+            })
+        if not stds:
+            continue
+        stds.sort(key=lambda s: (-s["count"], s["kigo"]))
+        y_s, m_s = latest_v.split(".", 1)
+        try:
+            ry = int(y_s) - 2018
+            rm = int(m_s)
+            asof_str = f"令和{ry}年{rm}月1日現在"
+        except Exception:
+            asof_str = c.get("asof", "")
+        c_new = {
+            "code": code,
+            "name": c.get("name", PREF_NAMES.get(code, code)),
+            "bureau": c.get("bureau", ""),
+            "version": latest_v,
+            "asof": asof_str,
+            "total_clinics": total,
+            "n_standards": len(stds),
+            "standards": stds,
+        }
+        _atomic_write_text(cp, json.dumps(c_new, ensure_ascii=False, separators=(",", ":")))
+        fixed.append(code)
+    return fixed
 
 
 def build_national_aggregates() -> bool:
