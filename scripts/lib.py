@@ -37,6 +37,7 @@ PREFS_FILE = DATA / "prefectures.json"
 
 # JISコード "01"〜"47" → 表示名
 PREF_NAMES: Dict[str, str] = {
+    "00": "全国",  # 特別エントリ：47府県の集計
     "01": "北海道", "02": "青森", "03": "岩手", "04": "宮城", "05": "秋田", "06": "山形",
     "07": "福島", "08": "茨城", "09": "栃木", "10": "群馬", "11": "埼玉", "12": "千葉",
     "13": "東京", "14": "神奈川", "15": "新潟", "16": "富山", "17": "石川", "18": "福井",
@@ -46,6 +47,9 @@ PREF_NAMES: Dict[str, str] = {
     "37": "香川", "38": "愛媛", "39": "高知", "40": "福岡", "41": "佐賀", "42": "長崎",
     "43": "熊本", "44": "大分", "45": "宮崎", "46": "鹿児島", "47": "沖縄",
 }
+
+# 47府県のコード（"00" を含まない）
+ALL_47_CODES: List[str] = [c for c in PREF_NAMES.keys() if c != "00"]
 
 # 表示順：北から順
 BUREAU_ORDER = ["hokkaido", "tohoku", "kantoshinetsu", "tokaihokuriku",
@@ -67,8 +71,8 @@ CODE_TO_BUREAU: Dict[str, str] = {
 }
 
 # 「特別ポジション」：このリストにあるコードは局並び順より前に出す。
-# 当面は大阪のみ。最終UXで「大阪」「全国」を主軸にする構想の布石。
-FEATURED_TOP: List[str] = ["27"]
+# 「全国」が一番上、その次に「大阪」。
+FEATURED_TOP: List[str] = ["00", "27"]
 
 
 # ============ データ型 ============
@@ -344,6 +348,178 @@ def _update_history(rec: PrefRecord):
         path,
         json.dumps(hist, ensure_ascii=False, separators=(",", ":")),
     )
+
+
+def build_national_aggregates() -> bool:
+    """47府県の current/*.json と history/*.json から、
+    全国集計を data/current/00.json と data/history/00.json に書き出す。
+
+    速報値（current/00.json）：各府県の最新月を単純合算（月混在OK、鮮度優先）
+    確定値（history/00.json）：全47府県が共通して持つ月だけ集計（時系列グラフ用）
+
+    47府県全部分のデータが揃ってないと「集計範囲が狭くなる」が、走らせて損は無い。
+    戻り値：書き出しが成功したら True。
+    """
+    # --- 各府県の current/history を読み込み ---
+    pref_currents: Dict[str, dict] = {}
+    pref_histories: Dict[str, dict] = {}
+    for code in ALL_47_CODES:
+        cp = DIR_CURRENT / f"{code}.json"
+        if cp.exists():
+            try:
+                pref_currents[code] = json.loads(cp.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        hp = DIR_HISTORY / f"{code}.json"
+        if hp.exists():
+            try:
+                pref_histories[code] = json.loads(hp.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
+    if not pref_currents:
+        print("[national] 府県データが1件もないのでスキップ")
+        return False
+
+    n_prefs = len(pref_currents)
+    print(f"[national] {n_prefs}/47府県のデータから集計")
+
+    # === 速報値（current）：各府県の最新月を単純合算 ===
+    total_clinics = sum(c.get("total_clinics", 0) for c in pref_currents.values())
+    # kigo別合計
+    kigos: Dict[str, dict] = {}
+    for c in pref_currents.values():
+        for std in c.get("standards", []):
+            k = std.get("kigo", "")
+            if not k:
+                continue
+            if k not in kigos:
+                kigos[k] = {
+                    "kigo": k,
+                    "name": std.get("name", k),
+                    "count": 0,
+                    "count_uniq": 0,
+                }
+            kigos[k]["count"] += int(std.get("count", 0))
+            kigos[k]["count_uniq"] += int(std.get("count_uniq", std.get("count", 0)))
+
+    # version: 府県の最新月のうち最新（max）。混在してたら「（速報）」表記
+    versions_set = {c.get("version", "") for c in pref_currents.values() if c.get("version")}
+    versions_sorted = sorted(
+        versions_set,
+        key=lambda v: tuple(int(x) for x in v.split(".")) if v and "." in v else (0, 0),
+    )
+    if not versions_sorted:
+        version_label = ""
+        asof_label = ""
+    elif len(versions_sorted) == 1:
+        version_label = versions_sorted[0]
+        # asof は最新月のものを採用
+        asof_label = next(
+            (c.get("asof", "") for c in pref_currents.values()
+             if c.get("version") == version_label),
+            "",
+        )
+    else:
+        # 月が混在 → 最新月を version、asofは「速報」表記
+        version_label = versions_sorted[-1]
+        asof_label = f"各府県の最新月の合算（速報、{versions_sorted[0]}〜{versions_sorted[-1]}）"
+
+    standards_sorted = sorted(
+        kigos.values(),
+        key=lambda s: (-int(s["count"]), s["kigo"]),
+    )
+
+    current_data = {
+        "code": "00",
+        "name": "全国",
+        "bureau": "national",
+        "total_clinics": total_clinics,
+        "n_standards": len(standards_sorted),
+        "version": version_label,
+        "asof": asof_label,
+        "standards": standards_sorted,
+        "n_prefs_aggregated": n_prefs,  # 何府県分から集計したか
+    }
+    _atomic_write_text(
+        DIR_CURRENT / "00.json",
+        json.dumps(current_data, ensure_ascii=False, separators=(",", ":")),
+    )
+    print(f"[national] current: 母数={total_clinics} 種類={len(standards_sorted)} "
+          f"version={version_label}")
+
+    # === 確定値（history）：全47府県が共通して持つ月だけ ===
+    if not pref_histories:
+        print("[national] historyデータが無いので確定値はスキップ")
+        return True
+
+    # ALL_47_CODES 全府県が history を持っていない場合、「持ってる府県の共通月」になる
+    common_months = None
+    for code, h in pref_histories.items():
+        months = set(h.get("versions", []))
+        if common_months is None:
+            common_months = months
+        else:
+            common_months &= months
+    common_months = sorted(
+        common_months or [],
+        key=lambda v: tuple(int(x) for x in v.split(".")),
+    )
+
+    if not common_months:
+        print("[national] 全府県共通の月がないのでhistory空")
+        # 空のhistoryでも書く
+        _atomic_write_text(
+            DIR_HISTORY / "00.json",
+            json.dumps({"versions": [], "totals": {}, "kigo": {}},
+                       ensure_ascii=False, separators=(",", ":")),
+        )
+        return True
+
+    print(f"[national] history: 全府県共通の月 = {len(common_months)}月分"
+          f" ({common_months[0]}〜{common_months[-1]})")
+
+    history_versions = common_months
+    history_totals: Dict[str, int] = {v: 0 for v in history_versions}
+    history_kigos: Dict[str, dict] = {}  # kigo → {name, names, series_dict{v→{c,u}}}
+
+    for code, h in pref_histories.items():
+        totals = h.get("totals", {})
+        for v in history_versions:
+            history_totals[v] += int(totals.get(v, 0))
+        for kigo, rec in (h.get("kigo") or {}).items():
+            for sp in rec.get("series", []):
+                v = sp.get("v", "")
+                if v not in history_versions:
+                    continue
+                slot = history_kigos.setdefault(kigo, {
+                    "name": rec.get("name", kigo),
+                    "names": [{"v": history_versions[0], "name": rec.get("name", kigo)}],
+                    "_series_dict": {v: {"c": 0, "u": 0} for v in history_versions},
+                })
+                slot["_series_dict"][v]["c"] += int(sp.get("c", 0))
+                slot["_series_dict"][v]["u"] += int(sp.get("u", sp.get("c", 0)))
+
+    # series_dict → series list（versions順）
+    for kigo, slot in history_kigos.items():
+        slot["series"] = [
+            {"v": v, "c": slot["_series_dict"][v]["c"], "u": slot["_series_dict"][v]["u"]}
+            for v in history_versions
+            if slot["_series_dict"][v]["c"] > 0  # 0件の月は省略
+        ]
+        slot.pop("_series_dict", None)
+
+    history_data = {
+        "versions": history_versions,
+        "totals": history_totals,
+        "kigo": history_kigos,
+    }
+    _atomic_write_text(
+        DIR_HISTORY / "00.json",
+        json.dumps(history_data, ensure_ascii=False, separators=(",", ":")),
+    )
+    print(f"[national] history書き出し完了（kigo {len(history_kigos)}種類）")
+    return True
 
 
 def rebuild_prefectures_json(now_str: str, state: dict):
