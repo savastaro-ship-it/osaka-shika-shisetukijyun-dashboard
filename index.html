@@ -33,6 +33,9 @@
   }
   .mast h1{font-size:clamp(20px,3.4vw,28px);line-height:1.25;margin:0;font-weight:800;letter-spacing:.01em}
   .mast .sub{margin:6px 0 0;color:var(--muted);font-size:13px}
+  .mast .src-list{display:inline;line-height:1.7}
+  .mast .src-list a{color:var(--accent);text-decoration:none;white-space:nowrap}
+  .mast .src-list a:hover{text-decoration:underline}
   .mast .sub a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
   .mast .sub a:hover{border-bottom-color:var(--accent)}
 
@@ -294,11 +297,19 @@
   <!-- masthead -->
   <header class="mast">
     <div class="lead">
-      <p class="eyebrow">近畿・北陸 ／ 歯科</p>
+      <p class="eyebrow"><span id="eyeName">全国</span> ／ 歯科</p>
       <h1>施設基準 届出状況ダッシュボード</h1>
       <p class="sub">
         府県を切り替えて届出状況を確認できます。母数は各府県の歯科医療機関数。点数改定月等、更新がない場合があります。<br>
-        出典：<a href="https://kouseikyoku.mhlw.go.jp/kinki/gyomu/gyomu/hoken_kikan/shitei_jokyo_00004.html" target="_blank" rel="noopener">近畿厚生局 施設基準の届出状況</a>
+        出典（厚生局の届出受理状況ページ）：<span class="src-list">
+        <a href="https://kouseikyoku.mhlw.go.jp/hokkaido/gyomu/gyomu/hoken_kikan/todokede_juri_ichiran.html" target="_blank" rel="noopener">北海道</a>・
+        <a href="https://kouseikyoku.mhlw.go.jp/tohoku/gyomu/gyomu/hoken_kikan/documents/201805koushin.html" target="_blank" rel="noopener">東北</a>・
+        <a href="https://kouseikyoku.mhlw.go.jp/kantoshinetsu/chousa/kijyun.html" target="_blank" rel="noopener">関東信越</a>・
+        <a href="https://kouseikyoku.mhlw.go.jp/tokaihokuriku/newpage_00349.html" target="_blank" rel="noopener">東海北陸</a>・
+        <a href="https://kouseikyoku.mhlw.go.jp/kinki/gyomu/gyomu/hoken_kikan/shitei_jokyo_00004.html" target="_blank" rel="noopener">近畿</a>・
+        <a href="https://kouseikyoku.mhlw.go.jp/chugokushikoku/chousaka/shisetsukijunjuri.html" target="_blank" rel="noopener">中国</a>・
+        <a href="https://kouseikyoku.mhlw.go.jp/shikoku/gyomu/gyomu/hoken_kikan/shitei/index.html" target="_blank" rel="noopener">四国</a>・
+        <a href="https://kouseikyoku.mhlw.go.jp/kyushu/gyomu/gyomu/hoken_kikan/index_00007.html" target="_blank" rel="noopener">九州</a></span>
       </p>
     </div>
     <div class="status">
@@ -368,7 +379,7 @@
 
   <div class="note-card">
     <h4>このダッシュボードについて</h4>
-    このページは、近畿厚生局が公開している「施設基準の届出状況」をもとに、大阪府内の歯科医療機関の届出状況を集計して表示しています。
+    このページは、全国8つの<b>地方厚生局</b>が公開している「施設基準の届出状況」をもとに、各都道府県の歯科医療機関の届出状況を集計して表示しています。
     元データは原則として毎月更新されますが、点数改定の月など、更新がない場合もあります。
     システムが1日1回、新しいデータが公開されていないかを自動で確認し、更新があればこの画面に反映します。
     <b>届出率</b>は、その施設基準を届け出ている件数を、府内の歯科医療機関数で割った割合です。
@@ -700,6 +711,22 @@ function setPref(code){
   document.querySelectorAll(".ptab").forEach(t=>t.classList.toggle("on",t.dataset.code===code));
   render();
   updateNationalToggleVisibility();
+  updateHeaderForPref();
+}
+
+// ヘッダーと脚注の「府県名 ／ 歯科」「データ版」「○○版（○年○月○日現在）」を
+// 現在選択中の府県のものに更新
+function updateHeaderForPref(){
+  const eyeName = document.getElementById("eyeName");
+  if(eyeName) eyeName.textContent = (DATA && DATA.name) || "全国";
+  const ver = document.getElementById("ver");
+  if(ver) ver.textContent = (DATA && DATA.version) || "";
+  const footver = document.getElementById("footver");
+  if(footver){
+    const v = (DATA && DATA.version) || "";
+    const a = (DATA && DATA.asof) || "";
+    footver.textContent = a ? `${v}版（${a}）` : `${v}版`;
+  }
 }
 
 // 全国(00)タブ専用：速報/確定 トグルの表示制御
@@ -770,6 +797,7 @@ document.addEventListener("click", (e)=>{
     TOTAL = DATA.total_clinics;
     recompute();
     render();
+    updateHeaderForPref();
   }
   updateNationalToggleVisibility();
 });
@@ -1047,6 +1075,7 @@ async function loadReal(){
   DATA = PREF_DATA[curPref]; TOTAL = DATA.total_clinics;
   buildTabs(); recompute(); render();
   updateNationalToggleVisibility();
+  updateHeaderForPref();
 }
 
 // 初期表示：loadReal を待ってから描画（モック表示のチラ見えを防ぐ）
