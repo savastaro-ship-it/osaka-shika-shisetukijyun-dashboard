@@ -172,6 +172,16 @@
 
   /* prefecture tabs */
   .ptabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;margin-bottom:6px;-webkit-overflow-scrolling:touch}
+  .ntoggle{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    padding:9px 12px;margin-bottom:12px;border-radius:8px;
+    background:#f3f6f7;border:1px solid var(--line);font-size:13px}
+  .ntoggle .nt-lab{color:var(--muted);font-weight:600}
+  .ntoggle .nt-btn{padding:5px 11px;border-radius:6px;border:1px solid var(--line);
+    background:#fff;color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;
+    transition:.12s}
+  .ntoggle .nt-btn:hover{border-color:var(--accent);color:var(--ink)}
+  .ntoggle .nt-btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .ntoggle .nt-hint{color:var(--muted);font-size:11.5px;margin-left:4px}
   .ptab{flex:none;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;
     border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);border-radius:999px;padding:8px 16px;transition:.12s}
   .ptab:hover{color:var(--ink)}
@@ -277,6 +287,14 @@
 
   <!-- prefecture tabs -->
   <div class="ptabs" id="ptabs"></div>
+
+  <!-- 全国(00)タブ専用：速報/確定 トグル -->
+  <div class="ntoggle" id="ntoggle" style="display:none;">
+    <span class="nt-lab">全国データの集計方式：</span>
+    <button class="nt-btn on" data-mode="confirmed" type="button">確定値（全府県共通月）</button>
+    <button class="nt-btn" data-mode="snapshot" type="button">速報値（各府県の最新月合算）</button>
+    <span class="nt-hint" id="ntHint"></span>
+  </div>
 
   <!-- KPI -->
   <section class="kpis">
@@ -420,7 +438,12 @@ function tierColor(r){
 function cntOf(s){ return state.countMode==="uniq" ? (s.count_uniq != null ? s.count_uniq : s.count) : s.count; }
 function recompute(){ DATA.standards.forEach(s=>{ s.cnt = cntOf(s); s.rate = s.cnt/TOTAL*100; }); }
 
-let state = {q:"", sort:"rate_desc", mode:{kind:"all"}, countMode:(DATA.count_mode||"raw")};
+let state = {q:"", sort:"rate_desc", mode:{kind:"all"}, countMode:(DATA.count_mode||"raw"),
+             nationalMode:"confirmed"};  // 全国タブ専用：'confirmed'=確定値（デフォルト）、'snapshot'=速報値
+
+// 全国(00)の確定値・速報値を別途保持し、nationalModeに応じて PREF_DATA["00"] を入れ替える
+let NATIONAL_SNAPSHOT_DATA = null;  // 速報値（current/00.json）
+let NATIONAL_CONFIRMED_DATA = null;  // 確定値（history/00.jsonの最終月から計算）
 recompute();
 
 const fmt = n => n.toLocaleString("ja-JP");
@@ -649,7 +672,54 @@ function setPref(code){
   recompute();
   document.querySelectorAll(".ptab").forEach(t=>t.classList.toggle("on",t.dataset.code===code));
   render();
+  updateNationalToggleVisibility();
 }
+
+// 全国(00)タブ専用：速報/確定 トグルの表示制御
+function updateNationalToggleVisibility(){
+  const el = document.getElementById("ntoggle");
+  if(!el) return;
+  // 全国(00)で、かつ確定値・速報値の両方が用意されている場合のみ表示
+  const show = (curPref === "00") && NATIONAL_CONFIRMED_DATA && NATIONAL_SNAPSHOT_DATA;
+  el.style.display = show ? "flex" : "none";
+  if(show){
+    // 現在モードのボタンをactiveに
+    el.querySelectorAll(".nt-btn").forEach(b=>{
+      b.classList.toggle("on", b.dataset.mode === state.nationalMode);
+    });
+    // ヒント文（speedとconfirmedが乖離してたら注記）
+    const hint = document.getElementById("ntHint");
+    if(hint){
+      const sV = NATIONAL_SNAPSHOT_DATA.version || "";
+      const cV = NATIONAL_CONFIRMED_DATA.version || "";
+      hint.textContent = (sV && cV && sV !== cV)
+        ? `※ 速報=${sV}、確定=${cV}（共通最新月）`
+        : "";
+    }
+  }
+}
+
+// トグルクリック
+document.addEventListener("click", (e)=>{
+  const btn = e.target.closest(".nt-btn");
+  if(!btn) return;
+  const mode = btn.dataset.mode;
+  if(!mode || state.nationalMode === mode) return;
+  state.nationalMode = mode;
+  // 全国の PREF_DATA を入れ替える
+  if(mode === "snapshot" && NATIONAL_SNAPSHOT_DATA){
+    PREF_DATA["00"] = NATIONAL_SNAPSHOT_DATA;
+  } else if(NATIONAL_CONFIRMED_DATA){
+    PREF_DATA["00"] = NATIONAL_CONFIRMED_DATA;
+  }
+  if(curPref === "00"){
+    DATA = PREF_DATA["00"];
+    TOTAL = DATA.total_clinics;
+    recompute();
+    render();
+  }
+  updateNationalToggleVisibility();
+});
 
 /* ---------- trend ---------- */
 let curTrendStd = "医療ＤＸ";
@@ -866,15 +936,51 @@ async function loadReal(){
   codes.forEach(code=>{ const c=currents[code];
     PREF_DATA[code]={...c, total_clinics:c.total_clinics, n_standards:c.n_standards,
       standards:c.standards.map(s=>({name:s.name, abbr:s.kigo, count:s.count, count_uniq:s.count_uniq}))}; });
+
+  // 全国(00)があれば、history/00.jsonをロードして確定値も作っておく
+  if(currents["00"]){
+    NATIONAL_SNAPSHOT_DATA = PREF_DATA["00"];  // 速報値はそのまま保持
+    const histNat = await tryJSON("data/history/00.json");
+    if(histNat){ HISTORY["00"] = histNat; }
+    if(histNat && Array.isArray(histNat.versions) && histNat.versions.length){
+      // 確定値 = history の最終月のスナップショット
+      const lastV = histNat.versions[histNat.versions.length - 1];
+      const lastTotal = (histNat.totals || {})[lastV] || 0;
+      const stds = [];
+      for(const kigo in (histNat.kigo || {})){
+        const rec = histNat.kigo[kigo];
+        const sp = (rec.series || []).find(p=>p.v===lastV);
+        if(!sp) continue;
+        stds.push({name: rec.name || kigo, abbr: kigo,
+                   count: sp.c, count_uniq: sp.u != null ? sp.u : sp.c});
+      }
+      stds.sort((a,b)=>b.count - a.count);
+      NATIONAL_CONFIRMED_DATA = {
+        code:"00", name:"全国", bureau:"national",
+        total_clinics: lastTotal,
+        n_standards: stds.length,
+        version: lastV,
+        asof: `${lastV} 時点（全府県共通の最新月）`,
+        standards: stds,
+      };
+      // デフォルトは「確定値」モードなので、PREF_DATA["00"] を確定版に置き換える
+      PREF_DATA["00"] = NATIONAL_CONFIRMED_DATA;
+    } else {
+      // 確定値が作れない → 「速報値しか無い」状態。トグルは隠す。
+      NATIONAL_CONFIRMED_DATA = null;
+    }
+  }
+
   document.getElementById("ver").textContent = meta.version;
   if(meta.checked && meta.checked!=="(seed)") document.getElementById("checked").textContent = meta.checked;
   document.getElementById("footver").textContent = `${meta.version}版（${meta.asof}）`;
   const sb=document.querySelector(".sbanner");
   if(sb){ if(PREFS.length<=1){ sb.innerHTML='実データを表示中。現在は<b>大阪のみ</b>のデータです（他府県は更新処理の実行で追加されます）。推移は月次で蓄積されます。'; }
     else sb.style.display="none"; }
-  curPref = PREFS.some(p=>p.code==="27") ? "27" : PREFS[0].code;
+  curPref = PREFS.some(p=>p.code==="00") ? "00" : (PREFS.some(p=>p.code==="27") ? "27" : PREFS[0].code);
   DATA = PREF_DATA[curPref]; TOTAL = DATA.total_clinics;
   buildTabs(); recompute(); render();
+  updateNationalToggleVisibility();
 }
 
 render();
