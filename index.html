@@ -175,6 +175,98 @@
 
   /* prefecture tabs */
   .ptabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;margin-bottom:6px;-webkit-overflow-scrolling:touch}
+
+  /* ビューモード切替 */
+  .vmode{display:inline-flex;gap:3px;padding:3px;margin-bottom:10px;
+    border-radius:8px;background:#f3f6f7;border:1px solid var(--line)}
+  .vmode-btn{padding:6px 14px;border:0;background:transparent;border-radius:6px;
+    color:var(--muted);font-weight:600;font-size:12.5px;cursor:pointer;transition:.12s}
+  .vmode-btn:hover{color:var(--ink)}
+  .vmode-btn.on{background:#fff;color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+  /* 受理記号タブ */
+  .ktabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;margin-bottom:10px;
+    -webkit-overflow-scrolling:touch}
+  .ktab{flex-shrink:0;padding:7px 11px;background:#fff;border:1px solid var(--line);
+    border-radius:7px;color:var(--ink);font-size:12px;font-weight:600;cursor:pointer;
+    white-space:nowrap;transition:.12s}
+  .ktab:hover{border-color:var(--accent)}
+  .ktab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  /* 受理記号ヒーロー */
+  .kigo-hero{background:#fff;border:1px solid var(--line);border-radius:12px;
+    padding:16px;margin-bottom:14px}
+  .kigo-hero .kabbr{display:inline-block;padding:2px 8px;background:var(--accent);
+    color:#fff;border-radius:4px;font-size:11px;font-weight:700;margin-bottom:6px}
+  .kigo-hero .kname{font-size:15.5px;font-weight:700;line-height:1.35}
+  .kigo-hero .kstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+    margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+  .kigo-hero .kstat{text-align:left}
+  .kigo-hero .kstat .l{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:3px;
+    letter-spacing:.03em}
+  .kigo-hero .kstat .v{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;
+    line-height:1.1}
+  .kigo-hero .kstat.main .v{color:var(--accent);font-size:24px}
+  .kigo-hero .kstat .u{font-size:11px;font-weight:600;color:var(--muted);margin-left:2px}
+
+  /* コントロール（ソート＋ダウンロード） */
+  .kigo-controls{display:flex;align-items:center;justify-content:space-between;
+    gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .kigo-controls .ksubtitle{font-size:12px;font-weight:600;color:var(--muted)}
+  .kigo-controls .kright{display:flex;align-items:center;gap:10px}
+  .kigo-controls select{font-size:12px;font-weight:600;padding:4px 7px;
+    border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);cursor:pointer}
+  .kdownload{padding:5px 11px;background:var(--accent);color:#fff;border:1px solid var(--accent);
+    border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;transition:.12s}
+  .kdownload:hover{opacity:.85}
+
+  /* 47府県横棒グラフ */
+  .prefbars{background:#fff;border:1px solid var(--line);border-radius:12px;
+    padding:12px;margin-bottom:14px}
+  .pbrow{display:flex;align-items:center;gap:6px;padding:2px 0;font-size:12px}
+  .pbrow .pbrank{width:22px;font-size:10px;font-weight:700;color:var(--muted);
+    text-align:right;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .pbrow .pbname{width:54px;font-size:12px;font-weight:600;flex-shrink:0}
+  .pbrow .pbname.osaka{color:var(--accent)}
+  .pbrow .pbbar-wrap{flex:1;position:relative;height:22px;min-width:60px}
+  .pbrow .pbbar{position:absolute;top:0;left:0;height:100%;border-radius:3px;
+    opacity:.85;transition:width .25s}
+  .pbrow .pbnationalline{position:absolute;top:0;height:100%;
+    border-left:1.5px dashed #c0392b;pointer-events:none}
+  .pbrow .pbrate{width:50px;font-size:12px;font-weight:700;text-align:right;
+    font-variant-numeric:tabular-nums;flex-shrink:0}
+  .pbrow .pbrate .u{font-size:10px;font-weight:400;color:var(--muted);margin-left:1px}
+  .pbrow .pbdiff{width:48px;font-size:10px;text-align:right;
+    font-variant-numeric:tabular-nums;flex-shrink:0}
+  @media (max-width: 480px){
+    .pbrow .pbname{width:48px;font-size:11px}
+    .pbrow .pbrate{width:46px;font-size:11px}
+    .pbrow .pbdiff{width:42px}
+  }
+  .pblegend{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;
+    border-top:1px solid var(--line);font-size:10px;color:var(--muted);flex-wrap:wrap}
+  .pblegend .lcolor{display:inline-block;width:12px;height:8px;border-radius:2px;
+    margin-right:3px;vertical-align:middle}
+  .pblegend .lavg{display:inline-block;width:0;height:11px;border-left:1.5px dashed #c0392b;
+    margin-right:4px;vertical-align:middle}
+
+  /* TOP3 / WORST3 */
+  .kigo-highlights{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  @media (max-width: 540px){.kigo-highlights{grid-template-columns:1fr}}
+  .khl{border-radius:12px;padding:12px}
+  .khl.khl-top{background:#e8f4ee;border:1px solid var(--accent)}
+  .khl.khl-bot{background:#fbf0eb;border:1px solid #d97757}
+  .khl-title{font-size:10px;font-weight:700;letter-spacing:.05em;margin-bottom:8px}
+  .khl.khl-top .khl-title{color:var(--accent)}
+  .khl.khl-bot .khl-title{color:#d97757}
+  .khl-row{display:flex;align-items:center;gap:5px;padding:3px 0;font-size:12px}
+  .khl-row .khl-rank{font-weight:700;width:14px;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .khl-row .khl-name{font-weight:600;flex-shrink:0}
+  .khl-row .khl-bureau{font-size:10px;color:var(--muted);flex:1;min-width:0;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .khl-row .khl-rate{font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .khl.khl-top .khl-rank,.khl.khl-top .khl-rate{color:var(--accent)}
+  .khl.khl-bot .khl-rank,.khl.khl-bot .khl-rate{color:#d97757}
   body.loading > *:not(.loading-screen){visibility:hidden;}
   body.loading .loading-screen{
     position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
@@ -320,6 +412,15 @@
 
   <div class="sbanner">大阪は実データ。<b>他府県の数値と推移グラフは説明用のサンプル（推計）</b>で、本実装時に各府県の実データへ置き換わります。</div>
 
+  <!-- ビューモード切替 -->
+  <div class="vmode" id="vmode">
+    <button class="vmode-btn on" data-mode="pref" type="button">府県別</button>
+    <button class="vmode-btn" data-mode="kigo" type="button">受理記号別</button>
+  </div>
+
+  <!-- 府県別ビュー（既存） -->
+  <div id="viewPref">
+
   <!-- prefecture tabs -->
   <div class="ptabs" id="ptabs"></div>
 
@@ -376,6 +477,42 @@
 
     <div class="list" id="list"></div>
   </section>
+
+  </div><!-- /viewPref -->
+
+  <!-- 受理記号別ビュー -->
+  <div id="viewKigo" style="display:none;">
+
+    <!-- 受理記号タブ -->
+    <div class="ktabs" id="ktabs"></div>
+
+    <!-- ヒーロー：受理記号名＋全国届出率 -->
+    <div class="kigo-hero" id="kigoHero"></div>
+
+    <!-- ソート切替＋Excelダウンロード -->
+    <div class="kigo-controls">
+      <div class="ksubtitle">47都道府県の届出率</div>
+      <div class="kright">
+        <select id="kigoSortSel">
+          <option value="rate_desc">届出率：高→低</option>
+          <option value="rate_asc">届出率：低→高</option>
+          <option value="bureau">厚生局順</option>
+          <option value="jis">JISコード順</option>
+        </select>
+        <button class="kdownload" id="kigoDownload" type="button">📥 Excelダウンロード</button>
+      </div>
+    </div>
+
+    <!-- 47府県横棒グラフ -->
+    <div class="prefbars" id="prefBars"></div>
+
+    <!-- TOP3 / WORST3 -->
+    <div class="kigo-highlights">
+      <div class="khl khl-top" id="kigoTop3"></div>
+      <div class="khl khl-bot" id="kigoBot3"></div>
+    </div>
+
+  </div><!-- /viewKigo -->
 
   <div class="note-card">
     <h4>このダッシュボードについて</h4>
@@ -477,7 +614,10 @@ function cntOf(s){ return state.countMode==="uniq" ? (s.count_uniq != null ? s.c
 function recompute(){ DATA.standards.forEach(s=>{ s.cnt = cntOf(s); s.rate = s.cnt/TOTAL*100; }); }
 
 let state = {q:"", sort:"rate_desc", mode:{kind:"all"}, countMode:(DATA.count_mode||"raw"),
-             nationalMode:"confirmed"};  // 全国タブ専用：'confirmed'=確定値（デフォルト）、'snapshot'=速報値
+             nationalMode:"confirmed",  // 全国タブ専用：'confirmed'=確定値（デフォルト）、'snapshot'=速報値
+             view:"pref",               // ビューモード：'pref'=府県別、'kigo'=受理記号別
+             kigoSelected:null,         // 選択中の受理記号 abbr
+             kigoSort:"rate_desc"};     // 受理記号ビューでの並び順
 
 // 全国(00)の確定値・速報値を別途保持し、nationalModeに応じて PREF_DATA["00"] を入れ替える
 let NATIONAL_SNAPSHOT_DATA = null;  // 速報値（current/00.json）
@@ -713,6 +853,245 @@ function setPref(code){
   updateNationalToggleVisibility();
   updateHeaderForPref();
 }
+
+// =================== 受理記号別ビュー ===================
+
+const BUREAU_NAMES_FRONT = {
+  hokkaido:"北海道", tohoku:"東北", kantoshinetsu:"関東信越",
+  tokaihokuriku:"東海北陸", kinki:"近畿", chugoku:"中国",
+  shikoku:"四国", kyushu:"九州", national:"全国",
+};
+const BUREAU_ORDER_FRONT = ["hokkaido","tohoku","kantoshinetsu","tokaihokuriku","kinki","chugoku","shikoku","kyushu"];
+
+function getAllKigos(){
+  // 47府県（00を除く）の standards から、全受理記号を集めて、届出件数の多い順に返す
+  const kigoMap = new Map();
+  for(const code in PREF_DATA){
+    if(code === "00") continue;
+    const stds = PREF_DATA[code].standards || [];
+    for(const s of stds){
+      const abbr = s.abbr;
+      if(!abbr) continue;
+      if(!kigoMap.has(abbr)){
+        kigoMap.set(abbr, {abbr:abbr, name:s.name || abbr, totalCount:0, prefCount:0});
+      }
+      const k = kigoMap.get(abbr);
+      k.totalCount += (s.count || 0);
+      k.prefCount += 1;
+    }
+  }
+  return Array.from(kigoMap.values()).sort((a,b) => b.totalCount - a.totalCount);
+}
+
+function getRatesForKigo(abbr){
+  // 選択受理記号について、47府県の届出率を計算
+  const rows = [];
+  for(const code in PREF_DATA){
+    if(code === "00") continue;
+    const pd = PREF_DATA[code];
+    const std = (pd.standards || []).find(s => s.abbr === abbr);
+    const count = std ? (std.count || 0) : 0;
+    const total = pd.total_clinics || 0;
+    const rate = total > 0 ? (count / total * 100) : 0;
+    rows.push({code, name:pd.name, bureau:pd.bureau, count, total, rate});
+  }
+  return rows;
+}
+
+function sortKigoRows(rows, mode){
+  const arr = [...rows];
+  if(mode === "rate_desc") arr.sort((a,b) => b.rate - a.rate);
+  else if(mode === "rate_asc") arr.sort((a,b) => a.rate - b.rate);
+  else if(mode === "jis") arr.sort((a,b) => a.code.localeCompare(b.code));
+  else if(mode === "bureau"){
+    arr.sort((a,b) => {
+      const ai = BUREAU_ORDER_FRONT.indexOf(a.bureau);
+      const bi = BUREAU_ORDER_FRONT.indexOf(b.bureau);
+      if(ai !== bi) return ai - bi;
+      return a.code.localeCompare(b.code);
+    });
+  }
+  return arr;
+}
+
+function renderKigoView(){
+  // 受理記号タブ（上位50個、横スクロール可）
+  const kigos = getAllKigos();
+  if(!kigos.length) return;
+  if(!state.kigoSelected || !kigos.find(k => k.abbr === state.kigoSelected)){
+    state.kigoSelected = kigos[0].abbr;
+  }
+  const ktabs = document.getElementById("ktabs");
+  ktabs.innerHTML = "";
+  kigos.slice(0, 50).forEach(k => {
+    const btn = document.createElement("button");
+    btn.className = "ktab" + (k.abbr === state.kigoSelected ? " on" : "");
+    btn.type = "button";
+    btn.textContent = k.abbr;
+    btn.addEventListener("click", () => {
+      state.kigoSelected = k.abbr;
+      renderKigoView();
+    });
+    ktabs.appendChild(btn);
+  });
+
+  const selectedInfo = kigos.find(k => k.abbr === state.kigoSelected);
+  const rows = getRatesForKigo(state.kigoSelected);
+
+  // 全国合算（速報値ベース＝47府県の現時点合算）
+  const nationalCount = rows.reduce((s,r) => s + r.count, 0);
+  const nationalTotal = rows.reduce((s,r) => s + r.total, 0);
+  const nationalRate = nationalTotal > 0 ? (nationalCount / nationalTotal * 100) : 0;
+
+  // ヒーロー
+  document.getElementById("kigoHero").innerHTML = `
+    <span class="kabbr">${selectedInfo.abbr}</span>
+    <div class="kname">${selectedInfo.name}</div>
+    <div class="kstats">
+      <div class="kstat main">
+        <div class="l">全国届出率</div>
+        <div class="v">${nationalRate.toFixed(1)}<span class="u">%</span></div>
+      </div>
+      <div class="kstat">
+        <div class="l">全国届出件数</div>
+        <div class="v">${nationalCount.toLocaleString()}<span class="u">件</span></div>
+      </div>
+      <div class="kstat">
+        <div class="l">母数（全国）</div>
+        <div class="v" style="color:var(--muted);font-size:16px;">${nationalTotal.toLocaleString()}<span class="u">院</span></div>
+      </div>
+    </div>
+  `;
+
+  // 47府県横棒グラフ
+  const sorted = sortKigoRows(rows, state.kigoSort);
+  const maxRate = Math.max(...rows.map(r => r.rate), nationalRate) * 1.05 || 1;
+  const showRank = (state.kigoSort === "rate_desc" || state.kigoSort === "rate_asc");
+  const nationalLeftPct = (nationalRate / maxRate) * 100;
+  let barsHtml = "";
+  sorted.forEach((r, i) => {
+    const diff = r.rate - nationalRate;
+    const isAbove = diff > 0;
+    const isHigh = r.rate >= nationalRate + 5;
+    const isLow = r.rate <= nationalRate - 5;
+    const barColor = isHigh ? "#2da37a" : isLow ? "#d97757" : "#9bb5a9";
+    const widthPct = (r.rate / maxRate) * 100;
+    const isOsaka = r.code === "27";
+    const diffColor = Math.abs(diff) < 2 ? "var(--muted)" : (isAbove ? "var(--accent)" : "#d97757");
+    const diffText = Math.abs(diff) < 0.05 ? "±0.0" : `${isAbove?"+":""}${diff.toFixed(1)}`;
+    barsHtml += `
+      <div class="pbrow">
+        <div class="pbrank">${showRank ? (i+1) : ""}</div>
+        <div class="pbname ${isOsaka?"osaka":""}">${isOsaka?"★":""}${r.name}</div>
+        <div class="pbbar-wrap">
+          <div class="pbbar" style="width:${widthPct}%;background:${barColor};"></div>
+          <div class="pbnationalline" style="left:${nationalLeftPct}%;"></div>
+        </div>
+        <div class="pbrate">${r.rate.toFixed(1)}<span class="u">%</span></div>
+        <div class="pbdiff" style="color:${diffColor};">${diffText}</div>
+      </div>
+    `;
+  });
+  barsHtml += `
+    <div class="pblegend">
+      <span><span class="lcolor" style="background:#2da37a;opacity:.85;"></span>全国+5pt以上</span>
+      <span><span class="lcolor" style="background:#9bb5a9;opacity:.85;"></span>±5pt以内</span>
+      <span><span class="lcolor" style="background:#d97757;opacity:.85;"></span>全国-5pt以下</span>
+      <span style="margin-left:auto;"><span class="lavg"></span>全国平均 ${nationalRate.toFixed(1)}%</span>
+    </div>
+  `;
+  document.getElementById("prefBars").innerHTML = barsHtml;
+
+  // TOP3 / WORST3
+  const top3 = [...rows].sort((a,b) => b.rate - a.rate).slice(0,3);
+  const bot3 = [...rows].sort((a,b) => a.rate - b.rate).slice(0,3);
+  const rowHtml = items => items.map((r,i) => `
+    <div class="khl-row">
+      <span class="khl-rank">${i+1}</span>
+      <span class="khl-name">${r.name}</span>
+      <span class="khl-bureau">${BUREAU_NAMES_FRONT[r.bureau] || ""}</span>
+      <span class="khl-rate">${r.rate.toFixed(1)}%</span>
+    </div>
+  `).join("");
+  document.getElementById("kigoTop3").innerHTML = `<div class="khl-title">届出率 TOP 3</div>${rowHtml(top3)}`;
+  document.getElementById("kigoBot3").innerHTML = `<div class="khl-title">届出率 WORST 3</div>${rowHtml(bot3)}`;
+}
+
+function switchView(mode){
+  state.view = mode;
+  document.querySelectorAll(".vmode-btn").forEach(b => b.classList.toggle("on", b.dataset.mode === mode));
+  document.getElementById("viewPref").style.display = mode === "pref" ? "" : "none";
+  document.getElementById("viewKigo").style.display = mode === "kigo" ? "" : "none";
+  if(mode === "kigo"){
+    renderKigoView();
+  }
+}
+
+function downloadKigoExcel(){
+  if(!state.kigoSelected || typeof XLSX === "undefined"){
+    alert("Excelライブラリが読み込まれていません。ページをリロードしてください。");
+    return;
+  }
+  const kigos = getAllKigos();
+  const selectedInfo = kigos.find(k => k.abbr === state.kigoSelected);
+  if(!selectedInfo) return;
+  const rows = getRatesForKigo(state.kigoSelected);
+  const sorted = sortKigoRows(rows, state.kigoSort);
+  const nationalCount = rows.reduce((s,r) => s + r.count, 0);
+  const nationalTotal = rows.reduce((s,r) => s + r.total, 0);
+  const nationalRate = nationalTotal > 0 ? (nationalCount / nationalTotal * 100) : 0;
+
+  const xlsxData = sorted.map(r => ({
+    "施設基準名": selectedInfo.name,
+    "略称": selectedInfo.abbr,
+    "府県名": r.name,
+    "厚生局": BUREAU_NAMES_FRONT[r.bureau] || "",
+    "届出件数": r.count,
+    "保険医療機関数": r.total,
+    "届出率(%)": Math.round(r.rate * 10) / 10,
+    "全国平均との差(pt)": Math.round((r.rate - nationalRate) * 10) / 10,
+  }));
+  // 末尾に全国合算行
+  xlsxData.push({
+    "施設基準名": selectedInfo.name,
+    "略称": selectedInfo.abbr,
+    "府県名": "全国",
+    "厚生局": "全国合算",
+    "届出件数": nationalCount,
+    "保険医療機関数": nationalTotal,
+    "届出率(%)": Math.round(nationalRate * 10) / 10,
+    "全国平均との差(pt)": 0,
+  });
+
+  const ws = XLSX.utils.json_to_sheet(xlsxData);
+  ws["!cols"] = [
+    {wch:40},{wch:12},{wch:10},{wch:12},
+    {wch:12},{wch:16},{wch:12},{wch:18}
+  ];
+  const wb = XLSX.utils.book_new();
+  // シート名にabbr使うが、Excel仕様で禁止文字を除去
+  const safeSheet = (selectedInfo.abbr || "kigo").replace(/[\\\/\?\*\[\]:]/g, "_").slice(0, 31);
+  XLSX.utils.book_append_sheet(wb, ws, safeSheet);
+
+  const today = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, `${selectedInfo.abbr}_47都道府県届出状況_${today}.xlsx`);
+}
+
+// vmodeボタン・ソートセレクタ・ダウンロードボタンのイベント登録
+document.addEventListener("click", e => {
+  const vb = e.target.closest(".vmode-btn");
+  if(vb && vb.dataset.mode) switchView(vb.dataset.mode);
+});
+document.addEventListener("change", e => {
+  if(e.target && e.target.id === "kigoSortSel"){
+    state.kigoSort = e.target.value;
+    renderKigoView();
+  }
+});
+document.addEventListener("click", e => {
+  if(e.target && e.target.id === "kigoDownload") downloadKigoExcel();
+});
+
 
 // ヘッダーと脚注の「府県名 ／ 歯科」「データ版」「○○版（○年○月○日現在）」を
 // 現在選択中の府県のものに更新
