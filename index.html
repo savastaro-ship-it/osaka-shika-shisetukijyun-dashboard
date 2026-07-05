@@ -1325,7 +1325,10 @@ function latestName(abbr,baseName,n){ const a=(NAME_CHANGES[abbr]||[]).filter(c=
 const tslider=document.getElementById("tslider");
 tslider.addEventListener("input",()=>{ trendN=+tslider.value; renderTrend(); });
 
-async function tryJSON(url){ try{ const r=await fetch(url,{cache:"no-store"}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; } }
+async function tryJSON(url, cacheMode){ try{ const r=await fetch(url,{cache:cacheMode||"no-store"}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; } }
+// データ版をキャッシュキーにしたURL（版が変わらない限りブラウザキャッシュが効いて爆速）
+let CACHE_KEY = "";
+function verURL(url){ return CACHE_KEY ? `${url}?v=${encodeURIComponent(CACHE_KEY)}` : url; }
 
 const stdInPref = abbr => DATA.standards.find(s=>s.abbr===abbr);
 function trendSeries(abbr){
@@ -1469,7 +1472,7 @@ function openDetail(abbr){
   }
   if(REAL && !HISTORY[curPref]){
     document.getElementById("trendBody").innerHTML = '<div class="t-empty"><b>読み込み中…</b></div>';
-    tryJSON(`data/history/${curPref}.json`).then(h=>{ HISTORY[curPref]=h||{versions:[],totals:{},kigo:{}}; renderTrend(); });
+    tryJSON(verURL(`data/history/${curPref}.json`), "force-cache").then(h=>{ HISTORY[curPref]=h||{versions:[],totals:{},kigo:{}}; renderTrend(); });
     document.getElementById("dBadge").textContent=curTrendStd;
     document.getElementById("dTitle").textContent=(stdInPref(curTrendStd)||{}).name||curTrendStd;
     return;
@@ -1537,8 +1540,16 @@ function renderTrend(){
 async function loadReal(){
   const meta = await tryJSON("data/prefectures.json");
   if(!meta || !Array.isArray(meta.prefectures) || !meta.prefectures.length) return;
-  const currents={};
-  for(const p of meta.prefectures){ const c=await tryJSON(`data/current/${p.code}.json`); if(c) currents[p.code]=c; }
+  // メタの更新時刻をキャッシュキーに：これが変わらない限り個別JSONはブラウザキャッシュから読む
+  CACHE_KEY = meta.checked || meta.version || "";
+  // 48府県のJSONを並列で取得（直列だと48×150ms≈7秒、並列＋キャッシュなら初回数百ms・2回目以降ほぼ0秒）
+  const results = await Promise.all(
+    meta.prefectures.map(p =>
+      tryJSON(verURL(`data/current/${p.code}.json`), "force-cache").then(c => ({code: p.code, data: c}))
+    )
+  );
+  const currents = {};
+  for(const r of results){ if(r.data) currents[r.code] = r.data; }
   const codes=Object.keys(currents);
   if(!codes.length) return;
   REAL=true; META=meta;
@@ -1564,7 +1575,7 @@ async function loadReal(){
     }
     NATIONAL_SNAPSHOT_DATA.breakdown = versionGroups;
 
-    const histNat = await tryJSON("data/history/00.json");
+    const histNat = await tryJSON(verURL("data/history/00.json"), "force-cache");
     if(histNat){ HISTORY["00"] = histNat; }
     if(histNat && Array.isArray(histNat.versions) && histNat.versions.length){
       // 確定値 = history の最終月のスナップショット
