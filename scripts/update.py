@@ -148,6 +148,17 @@ def main():
         traceback.print_exc()
         print(f"[reconcile] エラー: {e!r}")
 
+    # 大阪の地区別集計（医療機関コード上2桁→府歯地区）
+    try:
+        from lib import DIR_SOURCE
+        from region_osaka import update_osaka_region_outputs
+        osaka_xlsx = DIR_SOURCE / "27.xlsx"
+        if osaka_xlsx.exists():
+            update_osaka_region_outputs(osaka_xlsx.read_bytes())
+    except Exception as e:
+        traceback.print_exc()
+        print(f"[region] 大阪地区集計でエラー: {e!r}（スキップ）")
+
     # 47府県の集計値を「全国」として書き出す（current/00.json, history/00.json）
     try:
         build_national_aggregates()
