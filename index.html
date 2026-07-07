@@ -195,6 +195,7 @@
   .ios-knob{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;
     background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
   .ios-toggle.on .ios-knob{transform:translateX(18px)}
+  #rOtherToggleSw.on .ios-knob{transform:translateX(14px)}
   .ios-toggle-label .t{display:block;font-size:12px;font-weight:700;color:var(--ink)}
   .ios-toggle.on ~ .ios-toggle-label .t{color:#5b7fd4}
   .ios-toggle-label .d{display:block;font-size:10px;color:var(--muted)}
@@ -553,9 +554,15 @@
   </div>
 
   <div id="regionPanel" style="display:none;">
-    <div class="rmode" id="rmode">
-      <button class="rmode-btn on" data-rm="chiku" type="button">地区別</button>
-      <button class="rmode-btn" data-rm="kigo" type="button">受理記号別</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+      <div class="rmode" id="rmode" style="margin-bottom:0;">
+        <button class="rmode-btn on" data-rm="chiku" type="button">地区別</button>
+        <button class="rmode-btn" data-rm="kigo" type="button">受理記号別</button>
+      </div>
+      <button class="ios-toggle-wrap" id="rOtherToggle" type="button" title="「その他」（地区に割り当てられない医療機関）を表示します。母数が小さく届出率が極端な値になるため、初期状態では非表示です。">
+        <span class="ios-toggle" id="rOtherToggleSw" style="width:36px;height:22px;border-radius:11px;"><span class="ios-knob" style="width:18px;height:18px;"></span></span>
+        <span class="ios-toggle-label"><span class="t" style="font-size:11px;">「その他」を表示</span></span>
+      </button>
     </div>
     <div id="rChikuView">
       <div class="rtabs" id="rDistTabs"></div>
@@ -1732,7 +1739,12 @@ async function loadReal(){
 
 // =================== 大阪府内 地区分析 ===================
 let REGION = { current:null, history:null, loading:false, open:false, mode:"chiku",
-               dist:null, kigo:null };
+               dist:null, kigo:null, showOther:false };
+
+function regionVisibleDistricts(){
+  const all = regionDistricts();
+  return REGION.showOther ? all : all.filter(d => d.name !== "その他");
+}
 
 function updateRegionBarVisibility(){
   const bar = document.getElementById("regionBar");
@@ -1793,7 +1805,7 @@ function renderRegion(){
 }
 
 function renderRegionChiku(){
-  const dists = regionDistricts();
+  const dists = regionVisibleDistricts();
   const cur = dists.find(d=>d.name===REGION.dist) || dists[0];
   if(!cur) return;
   REGION.dist = cur.name;
@@ -1810,8 +1822,8 @@ function renderRegionChiku(){
     tabs.appendChild(b);
   });
 
-  // KPI
-  const fuTotal = dists.reduce((s,d)=>s+d.clinics,0);
+  // KPI（府内シェアの分母は「その他」込みの府全体）
+  const fuTotal = regionDistricts().reduce((s,d)=>s+d.clinics,0);
   document.getElementById("rKpis").innerHTML = `
     <div class="rkpi"><div class="l">歯科医療機関数（${cur.name}）</div>
       <div class="v">${cur.clinics.toLocaleString()}<span class="u">院</span></div></div>
@@ -1847,7 +1859,8 @@ function renderRegionChiku(){
 }
 
 function renderRegionKigo(){
-  const dists = regionDistricts();
+  const dists = regionVisibleDistricts();
+  const allDists = regionDistricts();
   // 全地区の合算基準リスト（大阪全体のkigo一覧、届出件数順）
   const kigoMap = new Map();
   for(const d of dists){
@@ -1880,8 +1893,12 @@ function renderRegionKigo(){
     const c = s ? cntOf(s) : 0;
     return {name:d.name, clinics:d.clinics, count:c, rate: d.clinics>0 ? c/d.clinics*100 : 0};
   }).sort((a,b)=>b.rate-a.rate);
-  const fuTotal = dists.reduce((s,d)=>s+d.clinics,0);
-  const fuCount = rows.reduce((s,r)=>s+r.count,0);
+  // 府平均は「その他」込みの府全体で計算（表示フィルタの影響を受けない）
+  const fuTotal = allDists.reduce((s,d)=>s+d.clinics,0);
+  const fuCount = allDists.reduce((s,d)=>{
+    const st = regionMergedStandards(d).find(x=>x.abbr===REGION.kigo);
+    return s + (st ? cntOf(st) : 0);
+  },0);
   const fuRate = fuTotal>0 ? fuCount/fuTotal*100 : 0;
   const maxRate = Math.max(...rows.map(r=>r.rate), fuRate)*1.05 || 1;
 
@@ -2010,6 +2027,13 @@ document.querySelectorAll("#regionBar .rb-btn").forEach(b=>{
 // 地区分析内のモード切替
 document.querySelectorAll(".rmode-btn").forEach(b=>{
   b.addEventListener("click", ()=>{ REGION.mode = b.dataset.rm; renderRegion(); });
+});
+// 「その他」表示トグル
+document.getElementById("rOtherToggle").addEventListener("click", ()=>{
+  REGION.showOther = !REGION.showOther;
+  document.getElementById("rOtherToggleSw").classList.toggle("on", REGION.showOther);
+  if(!REGION.showOther && REGION.dist === "その他") REGION.dist = null;
+  renderRegion();
 });
 
 // 初期表示：loadReal を待ってから描画（モック表示のチラ見えを防ぐ）
