@@ -374,6 +374,81 @@
   .t-hero .t-cnt{font-size:20px;font-weight:800;color:var(--ink)}
   .t-hero .t-cnt .u{font-size:12px;font-weight:600;color:var(--muted);margin-left:2px}
 
+
+  /* ===== 大阪 地区分析 ===== */
+  .region-bar{display:none;align-items:center;justify-content:space-between;gap:10px;
+    padding:9px 13px;margin-bottom:12px;border-radius:10px;flex-wrap:wrap;
+    background:#f2edfa;border:1px solid #8a63c9}
+  .region-bar.show{display:flex}
+  .region-bar .rb-lab{font-size:12.5px;font-weight:700;color:#8a63c9}
+  .region-bar .rb-sub{font-size:10.5px;color:var(--muted)}
+  .region-bar .rb-switch{display:inline-flex;gap:3px;padding:3px;border-radius:8px;background:#fff}
+  .region-bar .rb-btn{padding:5px 12px;border:0;background:transparent;border-radius:6px;
+    color:var(--muted);font-weight:600;font-size:12px;cursor:pointer}
+  .region-bar .rb-btn.on{background:#8a63c9;color:#fff}
+  .rmode{display:inline-flex;gap:3px;padding:3px;margin-bottom:12px;
+    border-radius:8px;background:#f3f6f7;border:1px solid var(--line)}
+  .rmode-btn{padding:6px 14px;border:0;background:transparent;border-radius:6px;
+    color:var(--muted);font-weight:600;font-size:12.5px;cursor:pointer}
+  .rmode-btn.on{background:#fff;color:#8a63c9;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .rtabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;margin-bottom:8px;
+    -webkit-overflow-scrolling:touch}
+  .rtab{flex-shrink:0;padding:7px 11px;background:#fff;border:1px solid var(--line);
+    border-radius:7px;color:var(--ink);font-size:12px;font-weight:600;cursor:pointer;
+    white-space:nowrap}
+  .rtab:hover{border-color:#8a63c9}
+  .rtab.on{background:#8a63c9;color:#fff;border-color:#8a63c9}
+  .rtab.other{color:var(--muted)}
+  .rtab.other.on{color:#fff}
+  .rkpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  .rkpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .rkpi .l{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:3px}
+  .rkpi .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+  .rkpi .v.pur{color:#8a63c9}
+  .rkpi .u{font-size:11px;font-weight:400;color:var(--muted);margin-left:2px}
+  .rother{background:#f3f6f7;border:1px dashed var(--line);border-radius:8px;
+    padding:9px 12px;margin-bottom:12px;font-size:11px;color:var(--muted);line-height:1.6}
+  .rother b{color:var(--ink)}
+  .rlist{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .rlist .rl-title{font-size:12.5px;font-weight:700;margin-bottom:8px}
+  .rlist .rl-hint{font-size:10px;color:var(--muted);font-weight:400}
+  .rrow{display:flex;align-items:center;gap:8px;width:100%;padding:7px 6px;border:0;
+    background:transparent;border-radius:8px;cursor:pointer;text-align:left;font-size:12px}
+  .rrow:hover{background:#f7f9fa}
+  .rrow .rbadge{padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;
+    background:var(--accent-bg,#e8f4ee);color:var(--accent);flex-shrink:0}
+  .rrow .rbadge.mg{background:#eef2fb;color:#5b7fd4;border:1px solid #5b7fd4}
+  .rrow .rname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:11px;color:var(--muted)}
+  .rrow .rbar{width:64px;height:6px;border-radius:3px;background:#f0f3f5;position:relative;
+    overflow:hidden;flex-shrink:0}
+  .rrow .rbar>span{position:absolute;inset:0 auto 0 0;border-radius:3px;background:#8a63c9;opacity:.7}
+  .rrow .rrate{width:52px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .rrow .rrate .u{font-size:9px;font-weight:400;color:var(--muted)}
+  .rrow .rcnt{width:44px;text-align:right;font-size:10px;color:var(--muted);
+    font-variant-numeric:tabular-nums;flex-shrink:0}
+  .rbars{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .rbrow{display:flex;align-items:center;gap:7px;font-size:12px;padding:1.5px 0}
+  .rbrow .rbrank{width:20px;font-size:10px;font-weight:700;color:var(--muted);text-align:right;
+    font-variant-numeric:tabular-nums;flex-shrink:0}
+  .rbrow .rbname{width:100px;font-weight:600;font-size:11px;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;flex-shrink:0}
+  .rbrow .rbwrap{flex:1;position:relative;height:17px;min-width:44px}
+  .rbrow .rbfill{position:absolute;top:0;left:0;height:100%;border-radius:3px;opacity:.85}
+  .rbrow .rbavg{position:absolute;top:0;height:100%;border-left:1.5px dashed #c0392b;pointer-events:none}
+  .rbrow .rbrate{width:48px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .rbrow .rbrate .u{font-size:9px;font-weight:400;color:var(--muted)}
+  .rbrow .rbdiff{width:42px;text-align:right;font-size:10px;font-variant-numeric:tabular-nums;flex-shrink:0}
+  @media (max-width:480px){ .rbrow .rbname{width:82px;font-size:10.5px} }
+  .rkhero{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  .rkhero .kh-abbr{display:inline-block;padding:2px 8px;background:#8a63c9;color:#fff;
+    border-radius:4px;font-size:10.5px;font-weight:700;margin-bottom:5px}
+  .rkhero .kh-abbr.mg{background:#5b7fd4}
+  .rkhero .kh-name{font-size:14px;font-weight:700;line-height:1.35}
+  .rkhero .kh-rate{font-size:26px;font-weight:700;color:#8a63c9;font-variant-numeric:tabular-nums}
+  .rkhero .kh-sub{font-size:11px;color:var(--muted)}
+  .rlegend{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;
+    border-top:1px solid var(--line);font-size:10px;color:var(--muted);flex-wrap:wrap}
   /* detail modal */
   .modal-bg{position:fixed;inset:0;background:rgba(20,35,42,.5);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}
   .modal-bg[hidden]{display:none}
@@ -463,6 +538,36 @@
       <span class="nt-state" id="ntState"></span>
     </div>
     <div class="nt-row2" id="ntBreakdown" style="display:none;"></div>
+  </div>
+
+  <!-- 大阪府内 地区分析（大阪タブ選択時のみ表示） -->
+  <div class="region-bar" id="regionBar">
+    <div>
+      <span class="rb-lab">🗾 大阪府内の地区分析</span>
+      <span class="rb-sub">医療機関コード上2桁 → 府歯地区に振り分け</span>
+    </div>
+    <div class="rb-switch">
+      <button class="rb-btn on" data-r="zentai" type="button">府全体</button>
+      <button class="rb-btn" data-r="region" type="button">地区分析</button>
+    </div>
+  </div>
+
+  <div id="regionPanel" style="display:none;">
+    <div class="rmode" id="rmode">
+      <button class="rmode-btn on" data-rm="chiku" type="button">地区別</button>
+      <button class="rmode-btn" data-rm="kigo" type="button">受理記号別</button>
+    </div>
+    <div id="rChikuView">
+      <div class="rtabs" id="rDistTabs"></div>
+      <div class="rkpis" id="rKpis"></div>
+      <div class="rother" id="rOther" style="display:none;"></div>
+      <div class="rlist" id="rList"></div>
+    </div>
+    <div id="rKigoView" style="display:none;">
+      <div class="rtabs" id="rKigoTabs"></div>
+      <div class="rkhero" id="rKigoHero"></div>
+      <div class="rbars" id="rKigoBars"></div>
+    </div>
   </div>
 
   <!-- KPI -->
@@ -934,6 +1039,7 @@ function setPref(code){
   render();
   updateNationalToggleVisibility();
   updateHeaderForPref();
+  updateRegionBarVisibility();
 }
 
 // =================== 受理記号別ビュー ===================
@@ -1119,6 +1225,7 @@ function switchView(mode){
   if(mode === "kigo"){
     renderKigoView();
   }
+  updateRegionBarVisibility();
 }
 
 function downloadKigoExcel(){
@@ -1203,6 +1310,8 @@ document.getElementById("mergeToggle").addEventListener("click", () => {
   }
   // 受理記号ビューを開いてる場合は再描画
   if(state.view === "kigo") renderKigoView();
+  // 地区分析を開いてる場合も再描画
+  if(REGION.open) renderRegion();
 });
 document.addEventListener("change", e => {
   if(e.target && e.target.id === "kigoSortSel"){
@@ -1617,7 +1726,291 @@ async function loadReal(){
   buildTabs(); recompute(); render();
   updateNationalToggleVisibility();
   updateHeaderForPref();
+  updateRegionBarVisibility();
 }
+
+
+// =================== 大阪府内 地区分析 ===================
+let REGION = { current:null, history:null, loading:false, open:false, mode:"chiku",
+               dist:null, kigo:null };
+
+function updateRegionBarVisibility(){
+  const bar = document.getElementById("regionBar");
+  if(!bar) return;
+  const show = REAL && curPref === "27" && state.view === "pref";
+  bar.classList.toggle("show", show);
+  if(!show && REGION.open){ setRegionOpen(false); }
+}
+
+function setRegionOpen(open){
+  REGION.open = open;
+  document.querySelectorAll("#regionBar .rb-btn").forEach(b=>
+    b.classList.toggle("on", (b.dataset.r==="region") === open));
+  // 既存の大阪表示（KPI・推移・リスト・全国トグル）を隠す/戻す
+  document.querySelectorAll("#viewPref .kpis, #viewPref .panel").forEach(el=>
+    el.style.display = open ? "none" : "");
+  document.getElementById("regionPanel").style.display = open ? "" : "none";
+  if(open){
+    if(!REGION.current && !REGION.loading){ loadRegionData(); }
+    else { renderRegion(); }
+  } else {
+    updateNationalToggleVisibility();
+  }
+}
+
+async function loadRegionData(){
+  REGION.loading = true;
+  document.getElementById("rList").innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">地区データ読み込み中…</div>';
+  const [cur, hist] = await Promise.all([
+    tryJSON(verURL("data/region/27_current.json"), "force-cache"),
+    tryJSON(verURL("data/region/27_history.json"), "force-cache"),
+  ]);
+  REGION.loading = false;
+  if(!cur){
+    document.getElementById("rList").innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">地区データがまだありません。次回のデータ更新（Actions実行）後に利用可能になります。</div>';
+    return;
+  }
+  REGION.current = cur;
+  REGION.history = hist || {versions:[], districts:{}};
+  if(!REGION.dist && cur.districts.length) REGION.dist = cur.districts[0].name;
+  renderRegion();
+}
+
+function regionDistricts(){ return (REGION.current && REGION.current.districts) || []; }
+
+function regionMergedStandards(dist){
+  return applyMergeStandards((dist.standards||[]).map(s=>({...s, abbr:s.kigo}))) || [];
+}
+
+function renderRegion(){
+  if(!REGION.current) return;
+  document.querySelectorAll(".rmode-btn").forEach(b=>
+    b.classList.toggle("on", b.dataset.rm === REGION.mode));
+  document.getElementById("rChikuView").style.display = REGION.mode==="chiku" ? "" : "none";
+  document.getElementById("rKigoView").style.display = REGION.mode==="kigo" ? "" : "none";
+  if(REGION.mode === "chiku") renderRegionChiku();
+  else renderRegionKigo();
+}
+
+function renderRegionChiku(){
+  const dists = regionDistricts();
+  const cur = dists.find(d=>d.name===REGION.dist) || dists[0];
+  if(!cur) return;
+  REGION.dist = cur.name;
+
+  // 地区タブ
+  const tabs = document.getElementById("rDistTabs");
+  tabs.innerHTML = "";
+  dists.forEach(d=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "rtab" + (d.name==="その他" ? " other" : "") + (d.name===cur.name ? " on" : "");
+    b.textContent = d.name;
+    b.addEventListener("click", ()=>{ REGION.dist = d.name; renderRegionChiku(); });
+    tabs.appendChild(b);
+  });
+
+  // KPI
+  const fuTotal = dists.reduce((s,d)=>s+d.clinics,0);
+  document.getElementById("rKpis").innerHTML = `
+    <div class="rkpi"><div class="l">歯科医療機関数（${cur.name}）</div>
+      <div class="v">${cur.clinics.toLocaleString()}<span class="u">院</span></div></div>
+    <div class="rkpi"><div class="l">府内シェア</div>
+      <div class="v pur">${(cur.clinics/fuTotal*100).toFixed(1)}<span class="u">%</span></div></div>`;
+
+  // その他の内訳
+  const otherEl = document.getElementById("rOther");
+  if(cur.name === "その他" && REGION.current.other_members && REGION.current.other_members.length){
+    otherEl.innerHTML = "<b>内訳：</b>地区に割り当てられない医療機関コードをまとめています ― " +
+      REGION.current.other_members.map(m=>`${m.code}（${m.name}）`).join(" ／ ");
+    otherEl.style.display = "";
+  } else {
+    otherEl.style.display = "none";
+  }
+
+  // 基準リスト（合算トグル適用、行タップでモーダル推移）
+  const stds = regionMergedStandards(cur)
+    .map(s=>({...s, cnt: cntOf(s), rate: cur.clinics>0 ? cntOf(s)/cur.clinics*100 : 0}))
+    .sort((a,b)=>b.cnt-a.cnt);
+  const listEl = document.getElementById("rList");
+  listEl.innerHTML = `<div class="rl-title">${cur.name}の届出状況 <span class="rl-hint">行をタップで推移表示</span></div>` +
+    stds.map(s=>`
+      <button class="rrow" data-abbr="${s.abbr}" type="button">
+        <span class="rbadge${s.merged?" mg":""}">${s.merged?"⧉ ":""}${s.abbr}</span>
+        <span class="rname" title="${s.name}">${s.name}</span>
+        <span class="rbar"><span style="width:${Math.min(100,s.rate)}%"></span></span>
+        <span class="rrate">${s.rate.toFixed(1)}<span class="u">%</span></span>
+        <span class="rcnt">${s.cnt.toLocaleString()}件</span>
+      </button>`).join("");
+  listEl.querySelectorAll(".rrow").forEach(r=>
+    r.addEventListener("click", ()=>openRegionDetail(cur.name, r.dataset.abbr)));
+}
+
+function renderRegionKigo(){
+  const dists = regionDistricts();
+  // 全地区の合算基準リスト（大阪全体のkigo一覧、届出件数順）
+  const kigoMap = new Map();
+  for(const d of dists){
+    for(const s of regionMergedStandards(d)){
+      if(!kigoMap.has(s.abbr)) kigoMap.set(s.abbr, {abbr:s.abbr, name:s.name, total:0, merged:!!s.merged});
+      kigoMap.get(s.abbr).total += (s.count||0);
+    }
+  }
+  const kigos = Array.from(kigoMap.values()).sort((a,b)=>b.total-a.total).slice(0, 50);
+  if(!REGION.kigo || !kigos.find(k=>k.abbr===REGION.kigo)) REGION.kigo = kigos[0] ? kigos[0].abbr : null;
+  const selInfo = kigos.find(k=>k.abbr===REGION.kigo);
+  if(!selInfo) return;
+
+  const tabs = document.getElementById("rKigoTabs");
+  tabs.innerHTML = "";
+  kigos.forEach(k=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "rtab" + (k.abbr===REGION.kigo ? " on" : "");
+    if(k.merged && k.abbr!==REGION.kigo) b.style.cssText = "border-color:#5b7fd4;color:#5b7fd4;";
+    if(k.merged && k.abbr===REGION.kigo) b.style.cssText = "background:#5b7fd4;border-color:#5b7fd4;";
+    b.textContent = (k.merged?"⧉ ":"") + k.abbr;
+    b.addEventListener("click", ()=>{ REGION.kigo = k.abbr; renderRegionKigo(); });
+    tabs.appendChild(b);
+  });
+
+  // 地区別の率
+  const rows = dists.map(d=>{
+    const s = regionMergedStandards(d).find(x=>x.abbr===REGION.kigo);
+    const c = s ? cntOf(s) : 0;
+    return {name:d.name, clinics:d.clinics, count:c, rate: d.clinics>0 ? c/d.clinics*100 : 0};
+  }).sort((a,b)=>b.rate-a.rate);
+  const fuTotal = dists.reduce((s,d)=>s+d.clinics,0);
+  const fuCount = rows.reduce((s,r)=>s+r.count,0);
+  const fuRate = fuTotal>0 ? fuCount/fuTotal*100 : 0;
+  const maxRate = Math.max(...rows.map(r=>r.rate), fuRate)*1.05 || 1;
+
+  document.getElementById("rKigoHero").innerHTML = `
+    <span class="kh-abbr${selInfo.merged?" mg":""}">${selInfo.merged?"⧉ ":""}${selInfo.abbr}</span>
+    <div class="kh-name">${selInfo.name}</div>
+    <div style="margin-top:8px;"><span class="kh-rate">${fuRate.toFixed(1)}</span><span style="font-weight:700;color:#8a63c9;">%</span>
+    <span class="kh-sub" style="margin-left:8px;">大阪府全体（${fuCount.toLocaleString()}件 / ${fuTotal.toLocaleString()}院）</span></div>`;
+
+  const barsEl = document.getElementById("rKigoBars");
+  const natLeft = (fuRate/maxRate)*100;
+  barsEl.innerHTML = rows.map((r,i)=>{
+    const diff = r.rate - fuRate;
+    const barColor = r.rate>=fuRate+5 ? "var(--accent)" : r.rate<=fuRate-5 ? "#d97757" : "#b1a3cf";
+    const dColor = Math.abs(diff)<2 ? "var(--muted)" : (diff>0 ? "var(--accent)" : "#d97757");
+    return `<div class="rbrow">
+      <span class="rbrank">${i+1}</span>
+      <span class="rbname" title="${r.name}">${r.name}</span>
+      <span class="rbwrap">
+        <span class="rbfill" style="width:${(r.rate/maxRate)*100}%;background:${barColor};"></span>
+        <span class="rbavg" style="left:${natLeft}%;"></span>
+      </span>
+      <span class="rbrate">${r.rate.toFixed(1)}<span class="u">%</span></span>
+      <span class="rbdiff" style="color:${dColor};">${diff>0?"+":""}${diff.toFixed(1)}</span>
+    </div>`;
+  }).join("") + `
+    <div class="rlegend">
+      <span><span style="display:inline-block;width:12px;height:8px;border-radius:2px;background:var(--accent);opacity:.85;margin-right:3px;vertical-align:middle;"></span>府平均+5pt↑</span>
+      <span><span style="display:inline-block;width:12px;height:8px;border-radius:2px;background:#b1a3cf;opacity:.85;margin-right:3px;vertical-align:middle;"></span>±5pt</span>
+      <span><span style="display:inline-block;width:12px;height:8px;border-radius:2px;background:#d97757;opacity:.85;margin-right:3px;vertical-align:middle;"></span>-5pt↓</span>
+      <span style="margin-left:auto;"><span style="display:inline-block;height:11px;border-left:1.5px dashed #c0392b;margin-right:4px;vertical-align:middle;"></span>府平均 ${fuRate.toFixed(1)}%</span>
+    </div>`;
+}
+
+// 地区の推移モーダル（既存 #detail を流用）
+let REGION_MODAL_OPEN = false;
+function regionHistRecFor(distHist, abbr){
+  const kigo = distHist.kigo || {};
+  if(kigo[abbr]) return kigo[abbr];
+  const g = MERGE_GROUPS.find(g => g.label === abbr);
+  if(!g) return null;
+  const byV = {};
+  let name = g.dispName || abbr;
+  for(const m of g.members){
+    const rec = kigo[m];
+    if(!rec) continue;
+    for(const sp of (rec.series||[])){
+      if(!byV[sp.v]) byV[sp.v] = {c:0,u:0};
+      byV[sp.v].c += (sp.c||0);
+      byV[sp.v].u += (sp.u!=null?sp.u:(sp.c||0));
+    }
+  }
+  const vs = Object.keys(byV);
+  if(!vs.length) return null;
+  return {name, series: vs.map(v=>({v, c:byV[v].c, u:byV[v].u}))};
+}
+
+function openRegionDetail(distName, abbr){
+  const distCur = regionDistricts().find(d=>d.name===distName);
+  const std = distCur ? regionMergedStandards(distCur).find(s=>s.abbr===abbr) : null;
+  REGION_MODAL_OPEN = true;
+  document.getElementById("detail").hidden = false;
+  document.body.style.overflow = "hidden";
+  document.getElementById("dBadge").textContent = abbr;
+  document.getElementById("dTitle").textContent = (std && std.name) || abbr;
+  document.getElementById("dSub").textContent = `大阪府 ${distName} の推移`;
+  document.querySelector("#detail .prev").style.display = "none";
+  document.querySelector("#detail .trend-hint").style.display = "none";
+
+  const body = document.getElementById("trendBody");
+  const distHist = (REGION.history && REGION.history.districts && REGION.history.districts[distName]) || null;
+  const rec = distHist ? regionHistRecFor(distHist, abbr) : null;
+  if(!rec || !rec.series || !rec.series.length){
+    body.innerHTML = '<div class="t-empty"><b>推移データがまだありません</b></div>';
+    return;
+  }
+  const vk = v => { const [y,m] = v.split("."); return (+y)*12+(+m); };
+  const pts = rec.series.slice().sort((a,b)=>vk(a.v)-vk(b.v));
+  const totals = distHist.totals || {};
+  const series = pts.map(p=>{
+    const t = totals[p.v] || 0;
+    const c = state.countMode==="uniq" ? (p.u!=null?p.u:p.c) : p.c;
+    return {v:p.v, c, rate: t>0 ? c/t*100 : 0};
+  });
+  const maxR = Math.max(...series.map(s=>s.rate))*1.08 || 1;
+  const minR = Math.min(...series.map(s=>s.rate))*0.92;
+  const W=560, H=180, PL=14, PR=48, PT=10, PB=24;
+  const x = i => PL + i*(W-PL-PR)/Math.max(series.length-1,1);
+  const y = r => PT + (1-(r-minR)/Math.max(maxR-minR,0.001))*(H-PT-PB);
+  const last = series[series.length-1];
+  let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block;">`;
+  [0.25,0.5,0.75].forEach(g=>{
+    svg += `<line x1="${PL}" x2="${W-PR}" y1="${PT+g*(H-PT-PB)}" y2="${PT+g*(H-PT-PB)}" stroke="var(--line)" stroke-width="0.6"/>`;
+  });
+  svg += `<polyline fill="none" stroke="#8a63c9" stroke-width="2.2" points="${series.map((s,i)=>`${x(i)},${y(s.rate)}`).join(" ")}"/>`;
+  series.forEach((s,i)=>{ svg += `<circle cx="${x(i)}" cy="${y(s.rate)}" r="3" fill="#8a63c9"/>`; });
+  svg += `<text x="${PL}" y="${H-6}" font-size="9" fill="var(--muted)">${series[0].v}</text>`;
+  svg += `<text x="${W-PR}" y="${H-6}" font-size="9" fill="var(--muted)" text-anchor="end">${last.v}</text>`;
+  svg += `<text x="${W-6}" y="${y(last.rate)+3}" font-size="12" font-weight="700" fill="#8a63c9" text-anchor="end">${last.rate.toFixed(1)}%</text>`;
+  svg += `</svg>`;
+  body.innerHTML = svg + `<div style="font-size:11px;color:var(--muted);padding:4px 2px 10px;">最新 ${last.v}：<b>${last.c.toLocaleString()}件</b> ／ ${series.length}ヶ月分</div>`;
+}
+
+// 既存 renderTrend を地区モーダル中は迂回（tsliderイベント等からの上書き防止）
+const _origRenderTrend = renderTrend;
+renderTrend = function(){ if(REGION_MODAL_OPEN) return; return _origRenderTrend.apply(this, arguments); };
+
+// モーダルを閉じたら地区モードのフラグ・非表示にしたUIを戻す
+(function(){
+  const detail = document.getElementById("detail");
+  const restore = () => {
+    if(!REGION_MODAL_OPEN) return;
+    REGION_MODAL_OPEN = false;
+    document.querySelector("#detail .prev").style.display = "";
+    document.querySelector("#detail .trend-hint").style.display = "";
+    document.getElementById("dSub").textContent = "";
+  };
+  document.getElementById("dClose").addEventListener("click", restore);
+  detail.addEventListener("click", e => { if(e.target === detail) restore(); });
+})();
+
+// 地区分析バーのスイッチ
+document.querySelectorAll("#regionBar .rb-btn").forEach(b=>{
+  b.addEventListener("click", ()=> setRegionOpen(b.dataset.r === "region"));
+});
+// 地区分析内のモード切替
+document.querySelectorAll(".rmode-btn").forEach(b=>{
+  b.addEventListener("click", ()=>{ REGION.mode = b.dataset.rm; renderRegion(); });
+});
 
 // 初期表示：loadReal を待ってから描画（モック表示のチラ見えを防ぐ）
 loadReal().catch(err => {
