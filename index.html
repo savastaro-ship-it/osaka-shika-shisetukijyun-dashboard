@@ -561,14 +561,12 @@
       </div>
       <button class="ios-toggle-wrap" id="rOtherToggle" type="button" title="「その他」（地区に割り当てられない医療機関）を表示します。母数が小さく届出率が極端な値になるため、初期状態では非表示です。">
         <span class="ios-toggle" id="rOtherToggleSw" style="width:36px;height:22px;border-radius:11px;"><span class="ios-knob" style="width:18px;height:18px;"></span></span>
-        <span class="ios-toggle-label"><span class="t" style="font-size:11px;">「その他」を表示</span></span>
+        <span class="ios-toggle-label"><span class="t" style="font-size:11px;">「その他」医療機関等を表示</span></span>
       </button>
     </div>
     <div id="rChikuView">
       <div class="rtabs" id="rDistTabs"></div>
-      <div class="rkpis" id="rKpis"></div>
       <div class="rother" id="rOther" style="display:none;"></div>
-      <div class="rlist" id="rList"></div>
     </div>
     <div id="rKigoView" style="display:none;">
       <div class="rtabs" id="rKigoTabs"></div>
@@ -985,7 +983,7 @@ function downloadCSV(base){
 
 async function downloadResult(){
   const btn = document.getElementById("dl");
-  const pname = (PREFS.find(p=>p.code===curPref)||{}).name || "";
+  const pname = (PREFS.find(p=>p.code===curPref)||{}).name || (DATA && DATA.name) || "";
   const base = `${pname}_歯科施設基準届出状況_${(META&&META.version)||DATA.version}`;
 
   // no SheetJS → CSV fallback (aggregate only)
@@ -1308,8 +1306,10 @@ document.getElementById("mergeToggle").addEventListener("click", () => {
   // 選択中の受理記号が合算/個別で消える場合はリセット
   const g = MERGE_GROUPS.find(g => g.label === state.kigoSelected || g.members.includes(state.kigoSelected));
   if(g) state.kigoSelected = state.mergeOn ? g.label : g.members[0];
-  // 府県別ビューのDATAを再構築
-  if(REAL){
+  // 表示中データの再構築
+  if(REGION.open){
+    renderRegion();  // 地区モードならsetDistrictがDATA再構築、受理記号別なら再描画
+  } else if(REAL){
     DATA = displayDataFor(curPref);
     TOTAL = DATA.total_clinics;
     recompute();
@@ -1317,8 +1317,6 @@ document.getElementById("mergeToggle").addEventListener("click", () => {
   }
   // 受理記号ビューを開いてる場合は再描画
   if(state.view === "kigo") renderKigoView();
-  // 地区分析を開いてる場合も再描画
-  if(REGION.open) renderRegion();
 });
 document.addEventListener("change", e => {
   if(e.target && e.target.id === "kigoSortSel"){
@@ -1605,7 +1603,7 @@ document.getElementById("detail").addEventListener("click", e=>{ if(e.target.id=
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !document.getElementById("detail").hidden) closeDetail(); });
 
 function renderTrend(){
-  const pname=PREFS.find(p=>p.code===curPref).name;
+  const pname=((PREFS.find(p=>p.code===curPref))||DATA||{}).name||"";
   // スライダーは実モード・合成モード両方で表示する（実モードでは「タイムマシン」として使う）
   document.querySelector(".prev").style.display = "";
   const g = gatherTrend();
@@ -1758,33 +1756,38 @@ function setRegionOpen(open){
   REGION.open = open;
   document.querySelectorAll("#regionBar .rb-btn").forEach(b=>
     b.classList.toggle("on", (b.dataset.r==="region") === open));
-  // 既存の大阪表示（KPI・推移・リスト・全国トグル）を隠す/戻す
-  document.querySelectorAll("#viewPref .kpis, #viewPref .panel").forEach(el=>
-    el.style.display = open ? "none" : "");
   document.getElementById("regionPanel").style.display = open ? "" : "none";
   if(open){
     if(!REGION.current && !REGION.loading){ loadRegionData(); }
     else { renderRegion(); }
   } else {
+    // 既存の府県UIを復帰
+    document.querySelectorAll("#viewPref .kpis, #viewPref .panel").forEach(el=> el.style.display = "");
+    // curPrefが地区の仮想キー（R27:〜）のままなら大阪府全体に戻す
+    // （setPref経由で他府県に移った場合はcurPrefが正規コードなので触らない）
+    if(REAL && String(curPref).startsWith("R27:") && PREF_DATA["27"]){
+      curPref = "27";
+      DATA = displayDataFor("27"); TOTAL = DATA.total_clinics;
+      recompute(); render(); updateHeaderForPref();
+    }
     updateNationalToggleVisibility();
   }
 }
 
 async function loadRegionData(){
   REGION.loading = true;
-  document.getElementById("rList").innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">地区データ読み込み中…</div>';
+  document.getElementById("rDistTabs").innerHTML = '<div style="padding:12px;color:var(--muted);font-size:12px;">地区データ読み込み中…</div>';
   const [cur, hist] = await Promise.all([
     tryJSON(verURL("data/region/27_current.json"), "force-cache"),
     tryJSON(verURL("data/region/27_history.json"), "force-cache"),
   ]);
   REGION.loading = false;
   if(!cur){
-    document.getElementById("rList").innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">地区データがまだありません。次回のデータ更新（Actions実行）後に利用可能になります。</div>';
+    document.getElementById("rDistTabs").innerHTML = '<div style="padding:12px;color:var(--muted);font-size:12px;">地区データがまだありません。次回のデータ更新後に利用可能になります。</div>';
     return;
   }
   REGION.current = cur;
   REGION.history = hist || {versions:[], districts:{}};
-  if(!REGION.dist && cur.districts.length) REGION.dist = cur.districts[0].name;
   renderRegion();
 }
 
@@ -1798,41 +1801,47 @@ function renderRegion(){
   if(!REGION.current) return;
   document.querySelectorAll(".rmode-btn").forEach(b=>
     b.classList.toggle("on", b.dataset.rm === REGION.mode));
-  document.getElementById("rChikuView").style.display = REGION.mode==="chiku" ? "" : "none";
-  document.getElementById("rKigoView").style.display = REGION.mode==="kigo" ? "" : "none";
-  if(REGION.mode === "chiku") renderRegionChiku();
-  else renderRegionKigo();
+  const isChiku = REGION.mode === "chiku";
+  document.getElementById("rChikuView").style.display = isChiku ? "" : "none";
+  document.getElementById("rKigoView").style.display = isChiku ? "none" : "";
+  // 地区別モードでは既存の府県UI（KPI・推移・リスト）をそのまま使う
+  document.querySelectorAll("#viewPref .kpis, #viewPref .panel").forEach(el=>
+    el.style.display = isChiku ? "" : "none");
+  document.getElementById("ntoggle").style.display = "none";
+  if(isChiku){
+    renderDistTabs();
+    const dists = regionVisibleDistricts();
+    const cur = dists.find(d=>d.name===REGION.dist) || dists[0];
+    if(cur) setDistrict(cur.name);
+  } else {
+    renderRegionKigo();
+  }
 }
 
-function renderRegionChiku(){
+function renderDistTabs(){
   const dists = regionVisibleDistricts();
-  const cur = dists.find(d=>d.name===REGION.dist) || dists[0];
-  if(!cur) return;
-  REGION.dist = cur.name;
-
-  // 地区タブ
+  const curName = (dists.find(d=>d.name===REGION.dist) || dists[0] || {}).name;
   const tabs = document.getElementById("rDistTabs");
   tabs.innerHTML = "";
   dists.forEach(d=>{
     const b = document.createElement("button");
     b.type = "button";
-    b.className = "rtab" + (d.name==="その他" ? " other" : "") + (d.name===cur.name ? " on" : "");
+    b.className = "rtab" + (d.name==="その他" ? " other" : "") + (d.name===curName ? " on" : "");
     b.textContent = d.name;
-    b.addEventListener("click", ()=>{ REGION.dist = d.name; renderRegionChiku(); });
+    b.addEventListener("click", ()=>{ REGION.dist = d.name; renderRegion(); });
     tabs.appendChild(b);
   });
+}
 
-  // KPI（府内シェアの分母は「その他」込みの府全体）
-  const fuTotal = regionDistricts().reduce((s,d)=>s+d.clinics,0);
-  document.getElementById("rKpis").innerHTML = `
-    <div class="rkpi"><div class="l">歯科医療機関数（${cur.name}）</div>
-      <div class="v">${cur.clinics.toLocaleString()}<span class="u">院</span></div></div>
-    <div class="rkpi"><div class="l">府内シェア</div>
-      <div class="v pur">${(cur.clinics/fuTotal*100).toFixed(1)}<span class="u">%</span></div></div>`;
+// 地区を「仮想の府県」として既存UI（KPI・リスト・推移モーダル・Excel DL）に流し込む
+function setDistrict(name){
+  const dist = regionDistricts().find(d=>d.name===name);
+  if(!dist) return;
+  REGION.dist = name;
 
-  // その他の内訳
+  // その他の内訳表示
   const otherEl = document.getElementById("rOther");
-  if(cur.name === "その他" && REGION.current.other_members && REGION.current.other_members.length){
+  if(name === "その他" && REGION.current.other_members && REGION.current.other_members.length){
     otherEl.innerHTML = "<b>内訳：</b>地区に割り当てられない医療機関コードをまとめています ― " +
       REGION.current.other_members.map(m=>`${m.code}（${m.name}）`).join(" ／ ");
     otherEl.style.display = "";
@@ -1840,22 +1849,29 @@ function renderRegionChiku(){
     otherEl.style.display = "none";
   }
 
-  // 基準リスト（合算トグル適用、行タップでモーダル推移）
-  const stds = regionMergedStandards(cur)
-    .map(s=>({...s, cnt: cntOf(s), rate: cur.clinics>0 ? cntOf(s)/cur.clinics*100 : 0}))
-    .sort((a,b)=>b.cnt-a.cnt);
-  const listEl = document.getElementById("rList");
-  listEl.innerHTML = `<div class="rl-title">${cur.name}の届出状況 <span class="rl-hint">行をタップで推移表示</span></div>` +
-    stds.map(s=>`
-      <button class="rrow" data-abbr="${s.abbr}" type="button">
-        <span class="rbadge${s.merged?" mg":""}">${s.merged?"⧉ ":""}${s.abbr}</span>
-        <span class="rname" title="${s.name}">${s.name}</span>
-        <span class="rbar"><span style="width:${Math.min(100,s.rate)}%"></span></span>
-        <span class="rrate">${s.rate.toFixed(1)}<span class="u">%</span></span>
-        <span class="rcnt">${s.cnt.toLocaleString()}件</span>
-      </button>`).join("");
-  listEl.querySelectorAll(".rrow").forEach(r=>
-    r.addEventListener("click", ()=>openRegionDetail(cur.name, r.dataset.abbr)));
+  // DATA差し替え（合算トグルも適用）
+  const vkey = "R27:" + name;
+  const stds = (dist.standards||[]).map(s=>({name:s.name, abbr:s.kigo, count:s.count, count_uniq:s.count_uniq}));
+  DATA = {
+    code: vkey,
+    name: `大阪・${name}`,
+    bureau: "kinki",
+    version: REGION.current.version,
+    asof: REGION.current.asof,
+    total_clinics: dist.clinics,
+    n_standards: stds.length,
+    standards: state.mergeOn ? applyMergeStandards(stds) : stds,
+  };
+  TOTAL = dist.clinics;
+  curPref = vkey;
+
+  // 地区のhistoryを府県history形式で登録（既存の推移モーダルがそのまま動く）
+  const dh = (REGION.history && REGION.history.districts && REGION.history.districts[name]) || null;
+  HISTORY[vkey] = dh
+    ? { versions: (REGION.history.versions||[]).slice(), totals: dh.totals||{}, kigo: dh.kigo||{} }
+    : { versions: [], totals: {}, kigo: {} };
+
+  recompute(); render(); updateHeaderForPref();
 }
 
 function renderRegionKigo(){
@@ -1932,93 +1948,6 @@ function renderRegionKigo(){
       <span style="margin-left:auto;"><span style="display:inline-block;height:11px;border-left:1.5px dashed #c0392b;margin-right:4px;vertical-align:middle;"></span>府平均 ${fuRate.toFixed(1)}%</span>
     </div>`;
 }
-
-// 地区の推移モーダル（既存 #detail を流用）
-let REGION_MODAL_OPEN = false;
-function regionHistRecFor(distHist, abbr){
-  const kigo = distHist.kigo || {};
-  if(kigo[abbr]) return kigo[abbr];
-  const g = MERGE_GROUPS.find(g => g.label === abbr);
-  if(!g) return null;
-  const byV = {};
-  let name = g.dispName || abbr;
-  for(const m of g.members){
-    const rec = kigo[m];
-    if(!rec) continue;
-    for(const sp of (rec.series||[])){
-      if(!byV[sp.v]) byV[sp.v] = {c:0,u:0};
-      byV[sp.v].c += (sp.c||0);
-      byV[sp.v].u += (sp.u!=null?sp.u:(sp.c||0));
-    }
-  }
-  const vs = Object.keys(byV);
-  if(!vs.length) return null;
-  return {name, series: vs.map(v=>({v, c:byV[v].c, u:byV[v].u}))};
-}
-
-function openRegionDetail(distName, abbr){
-  const distCur = regionDistricts().find(d=>d.name===distName);
-  const std = distCur ? regionMergedStandards(distCur).find(s=>s.abbr===abbr) : null;
-  REGION_MODAL_OPEN = true;
-  document.getElementById("detail").hidden = false;
-  document.body.style.overflow = "hidden";
-  document.getElementById("dBadge").textContent = abbr;
-  document.getElementById("dTitle").textContent = (std && std.name) || abbr;
-  document.getElementById("dSub").textContent = `大阪府 ${distName} の推移`;
-  document.querySelector("#detail .prev").style.display = "none";
-  document.querySelector("#detail .trend-hint").style.display = "none";
-
-  const body = document.getElementById("trendBody");
-  const distHist = (REGION.history && REGION.history.districts && REGION.history.districts[distName]) || null;
-  const rec = distHist ? regionHistRecFor(distHist, abbr) : null;
-  if(!rec || !rec.series || !rec.series.length){
-    body.innerHTML = '<div class="t-empty"><b>推移データがまだありません</b></div>';
-    return;
-  }
-  const vk = v => { const [y,m] = v.split("."); return (+y)*12+(+m); };
-  const pts = rec.series.slice().sort((a,b)=>vk(a.v)-vk(b.v));
-  const totals = distHist.totals || {};
-  const series = pts.map(p=>{
-    const t = totals[p.v] || 0;
-    const c = state.countMode==="uniq" ? (p.u!=null?p.u:p.c) : p.c;
-    return {v:p.v, c, rate: t>0 ? c/t*100 : 0};
-  });
-  const maxR = Math.max(...series.map(s=>s.rate))*1.08 || 1;
-  const minR = Math.min(...series.map(s=>s.rate))*0.92;
-  const W=560, H=180, PL=14, PR=48, PT=10, PB=24;
-  const x = i => PL + i*(W-PL-PR)/Math.max(series.length-1,1);
-  const y = r => PT + (1-(r-minR)/Math.max(maxR-minR,0.001))*(H-PT-PB);
-  const last = series[series.length-1];
-  let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block;">`;
-  [0.25,0.5,0.75].forEach(g=>{
-    svg += `<line x1="${PL}" x2="${W-PR}" y1="${PT+g*(H-PT-PB)}" y2="${PT+g*(H-PT-PB)}" stroke="var(--line)" stroke-width="0.6"/>`;
-  });
-  svg += `<polyline fill="none" stroke="#8a63c9" stroke-width="2.2" points="${series.map((s,i)=>`${x(i)},${y(s.rate)}`).join(" ")}"/>`;
-  series.forEach((s,i)=>{ svg += `<circle cx="${x(i)}" cy="${y(s.rate)}" r="3" fill="#8a63c9"/>`; });
-  svg += `<text x="${PL}" y="${H-6}" font-size="9" fill="var(--muted)">${series[0].v}</text>`;
-  svg += `<text x="${W-PR}" y="${H-6}" font-size="9" fill="var(--muted)" text-anchor="end">${last.v}</text>`;
-  svg += `<text x="${W-6}" y="${y(last.rate)+3}" font-size="12" font-weight="700" fill="#8a63c9" text-anchor="end">${last.rate.toFixed(1)}%</text>`;
-  svg += `</svg>`;
-  body.innerHTML = svg + `<div style="font-size:11px;color:var(--muted);padding:4px 2px 10px;">最新 ${last.v}：<b>${last.c.toLocaleString()}件</b> ／ ${series.length}ヶ月分</div>`;
-}
-
-// 既存 renderTrend を地区モーダル中は迂回（tsliderイベント等からの上書き防止）
-const _origRenderTrend = renderTrend;
-renderTrend = function(){ if(REGION_MODAL_OPEN) return; return _origRenderTrend.apply(this, arguments); };
-
-// モーダルを閉じたら地区モードのフラグ・非表示にしたUIを戻す
-(function(){
-  const detail = document.getElementById("detail");
-  const restore = () => {
-    if(!REGION_MODAL_OPEN) return;
-    REGION_MODAL_OPEN = false;
-    document.querySelector("#detail .prev").style.display = "";
-    document.querySelector("#detail .trend-hint").style.display = "";
-    document.getElementById("dSub").textContent = "";
-  };
-  document.getElementById("dClose").addEventListener("click", restore);
-  detail.addEventListener("click", e => { if(e.target === detail) restore(); });
-})();
 
 // 地区分析バーのスイッチ
 document.querySelectorAll("#regionBar .rb-btn").forEach(b=>{
