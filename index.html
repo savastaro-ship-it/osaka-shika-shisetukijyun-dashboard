@@ -573,6 +573,9 @@
       <div class="rkhero" id="rKigoHero"></div>
       <div class="rbars" id="rKigoBars"></div>
     </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6;">
+      ※ 保険医療機関コードでは分離できないため、「北」は北＋大淀、「中央区」は東＋南、「東大阪」は東大阪東＋東大阪西の合算です。
+    </div>
   </div>
 
   <!-- KPI -->
@@ -1739,6 +1742,14 @@ async function loadReal(){
 let REGION = { current:null, history:null, loading:false, open:false, mode:"chiku",
                dist:null, kigo:null, showOther:false };
 
+// 表示用の短縮名（データ上は正式名のまま。ホバー/титルでフル名表示）
+const DIST_SHORT = {
+  "北（北＋大淀）": "北",
+  "中央区（東＋南）": "中央区",
+  "東大阪（東大阪東＋東大阪西）": "東大阪",
+};
+const distShort = n => DIST_SHORT[n] || n;
+
 function regionVisibleDistricts(){
   const all = regionDistricts();
   return REGION.showOther ? all : all.filter(d => d.name !== "その他");
@@ -1827,7 +1838,8 @@ function renderDistTabs(){
     const b = document.createElement("button");
     b.type = "button";
     b.className = "rtab" + (d.name==="その他" ? " other" : "") + (d.name===curName ? " on" : "");
-    b.textContent = d.name;
+    b.textContent = distShort(d.name);
+    b.title = d.name;
     b.addEventListener("click", ()=>{ REGION.dist = d.name; renderRegion(); });
     tabs.appendChild(b);
   });
@@ -1854,7 +1866,7 @@ function setDistrict(name){
   const stds = (dist.standards||[]).map(s=>({name:s.name, abbr:s.kigo, count:s.count, count_uniq:s.count_uniq}));
   DATA = {
     code: vkey,
-    name: `大阪・${name}`,
+    name: `大阪・${distShort(name)}`,
     bureau: "kinki",
     version: REGION.current.version,
     asof: REGION.current.asof,
@@ -1932,7 +1944,7 @@ function renderRegionKigo(){
     const dColor = Math.abs(diff)<2 ? "var(--muted)" : (diff>0 ? "var(--accent)" : "#d97757");
     return `<div class="rbrow">
       <span class="rbrank">${i+1}</span>
-      <span class="rbname" title="${r.name}">${r.name}</span>
+      <span class="rbname" title="${r.name}">${distShort(r.name)}</span>
       <span class="rbwrap">
         <span class="rbfill" style="width:${(r.rate/maxRate)*100}%;background:${barColor};"></span>
         <span class="rbavg" style="left:${natLeft}%;"></span>
