@@ -722,7 +722,7 @@ let PREFS = [
 const oBase = OSAKA.total_clinics;
 let PREF_DATA = {};
 PREFS.forEach(p=>{
-  if(p.real){ PREF_DATA[p.code] = OSAKA; return; }
+  if(p.real){ PREF_DATA[p.code] = {...OSAKA, name: OSAKA.name || p.name, code: p.code}; return; }
   const rnd = mulberry32(parseInt(p.code,10)*97 + p.base);
   const standards = OSAKA.standards.map(s=>{
     const orate = s.count / oBase * 100;
@@ -731,7 +731,7 @@ PREFS.forEach(p=>{
     const ur = s.count ? s.count_uniq/s.count : 1;
     return {name:s.name, abbr:s.abbr, count, count_uniq:Math.round(count*ur)};
   }).filter(s=>s.count>0);   // その府県で届出のある基準のみ（A案：種類数は府県ごと可変）
-  PREF_DATA[p.code] = {...OSAKA, total_clinics:p.base, n_standards:standards.length, standards};
+  PREF_DATA[p.code] = {...OSAKA, name: p.name, code: p.code, total_clinics:p.base, n_standards:standards.length, standards};
 });
 
 let curPref = "27";
@@ -1048,6 +1048,7 @@ function setPref(code){
   updateNationalToggleVisibility();
   updateHeaderForPref();
   updateRegionBarVisibility();
+  writeHash();
 }
 
 // =================== 受理記号別ビュー ===================
@@ -1223,6 +1224,7 @@ function renderKigoView(){
   `).join("");
   document.getElementById("kigoTop3").innerHTML = `<div class="khl-title">届出率 TOP 3</div>${rowHtml(top3)}`;
   document.getElementById("kigoBot3").innerHTML = `<div class="khl-title">届出率 WORST 3</div>${rowHtml(bot3)}`;
+  writeHash();
 }
 
 function switchView(mode){
@@ -1234,6 +1236,7 @@ function switchView(mode){
     renderKigoView();
   }
   updateRegionBarVisibility();
+  writeHash();
 }
 
 function downloadKigoExcel(){
@@ -1320,6 +1323,7 @@ document.getElementById("mergeToggle").addEventListener("click", () => {
   }
   // 受理記号ビューを開いてる場合は再描画
   if(state.view === "kigo") renderKigoView();
+  writeHash();
 });
 document.addEventListener("change", e => {
   if(e.target && e.target.id === "kigoSortSel"){
@@ -1783,6 +1787,7 @@ function setRegionOpen(open){
     }
     updateNationalToggleVisibility();
   }
+  writeHash();
 }
 
 async function loadRegionData(){
@@ -1827,6 +1832,7 @@ function renderRegion(){
   } else {
     renderRegionKigo();
   }
+  writeHash();
 }
 
 function renderDistTabs(){
@@ -1961,6 +1967,68 @@ function renderRegionKigo(){
     </div>`;
 }
 
+
+// =================== URL共有（ハッシュに表示状態を同期） ===================
+// 例: #pref=27&region=1&rmode=chiku&dist=堺 / #view=kigo&kigo=医療ＤＸ
+let HASH_READY = false;  // 起動時の復元が終わるまでURLを書き換えない
+
+function writeHash(){
+  if(!HASH_READY || !REAL) return;
+  const h = new URLSearchParams();
+  if(state.view === "kigo"){
+    h.set("view", "kigo");
+    if(state.kigoSelected) h.set("kigo", state.kigoSelected);
+  } else {
+    const p = String(curPref).startsWith("R27:") ? "27" : curPref;
+    if(p) h.set("pref", p);
+    if(REGION.open){
+      h.set("region", "1");
+      h.set("rmode", REGION.mode);
+      if(REGION.mode === "chiku" && REGION.dist) h.set("dist", REGION.dist);
+      if(REGION.mode === "kigo" && REGION.kigo) h.set("rkigo", REGION.kigo);
+      if(REGION.showOther) h.set("other", "1");
+    }
+  }
+  if(!state.mergeOn) h.set("merge", "0");
+  const s = h.toString();
+  history.replaceState(null, "", s ? "#" + s : location.pathname);
+}
+
+function applyHash(){
+  const raw = location.hash.slice(1);
+  if(!raw) return;
+  const h = new URLSearchParams(raw);
+  // 合算トグル
+  if(h.get("merge") === "0" && state.mergeOn){
+    state.mergeOn = false;
+    const sw = document.getElementById("mergeToggleSw");
+    const lbl = document.getElementById("mergeToggleLabel");
+    if(sw) sw.classList.remove("on");
+    if(lbl) lbl.textContent = "分割項目を個別表示中";
+  }
+  // 府県
+  const p = h.get("pref");
+  if(p && PREF_DATA[p]) setPref(p);
+  // 受理記号別ビュー
+  if(h.get("view") === "kigo"){
+    if(h.get("kigo")) state.kigoSelected = h.get("kigo");
+    switchView("kigo");
+    return;
+  }
+  // 地区分析（大阪のみ）
+  if(h.get("region") === "1" && curPref === "27"){
+    REGION.mode = h.get("rmode") === "kigo" ? "kigo" : "chiku";
+    if(h.get("dist")) REGION.dist = h.get("dist");
+    if(h.get("rkigo")) REGION.kigo = h.get("rkigo");
+    if(h.get("other") === "1"){
+      REGION.showOther = true;
+      const sw = document.getElementById("rOtherToggleSw");
+      if(sw) sw.classList.add("on");
+    }
+    setRegionOpen(true);
+  }
+}
+
 // 地区分析バーのスイッチ
 document.querySelectorAll("#regionBar .rb-btn").forEach(b=>{
   b.addEventListener("click", ()=> setRegionOpen(b.dataset.r === "region"));
@@ -1980,8 +2048,13 @@ document.getElementById("rOtherToggle").addEventListener("click", ()=>{
 // 初期表示：loadReal を待ってから描画（モック表示のチラ見えを防ぐ）
 loadReal().catch(err => {
   console.error("loadReal失敗、サンプルデータで表示します:", err);
-  render();  // 失敗時はモック（OSAKAデータ）で表示
 }).finally(() => {
+  // データが取得できなかった場合（例外・静かなreturnどちらでも）はモックで描画
+  if(!REAL){ try{ recompute(); render(); }catch(e){ console.error(e); } }
+  // URLハッシュから表示状態を復元（共有リンク対応）
+  if(REAL){ try{ applyHash(); }catch(e){ console.error("applyHash:", e); } }
+  HASH_READY = true;
+  writeHash();
   document.body.classList.remove("loading");
 });
 </script>
