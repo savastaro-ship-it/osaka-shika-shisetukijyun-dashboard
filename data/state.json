@@ -55,11 +55,12 @@
     },
     "chugoku": {
       "signatures": [
-        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000485758.zip"
+        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000485758.zip",
+        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000492084.zip"
       ],
-      "latest_version": "2026.5",
-      "asof": "令和8年5月1日現在",
-      "checked": "2026/06/30 06:38"
+      "latest_version": "2026.6",
+      "asof": "令和8年6月1日現在",
+      "checked": "2026/07/09 07:13"
     },
     "shikoku": {
       "signatures": [
@@ -79,5 +80,5 @@
       "checked": "2026/06/30 08:00"
     }
   },
-  "last_checked": "2026/07/08 07:16"
+  "last_checked": "2026/07/09 07:13"
 }
