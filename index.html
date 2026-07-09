@@ -1395,7 +1395,8 @@ function updateNationalToggleVisibility(){
       } else {
         breakdownEl.innerHTML = "<div style='font-weight:600;color:var(--ink);margin-bottom:2px'>内訳：</div>" +
           versions.map(v=>{
-            const list = breakdown[v];
+            // JIS順（都道府県コード順）で表示（Object.keysの数値キー順序問題を回避）
+            const list = breakdown[v].slice().sort((a,b)=>a.code.localeCompare(b.code));
             const names = list.map(p=>p.name).join("・");
             return `<div class="vgroup-row"><span class="vgroup"><b>${v}</b>：${list.length}府県</span><span class="vnames">${names}</span></div>`;
           }).join("");
