@@ -773,7 +773,11 @@ function applyMergeStandards(standards){
   const consumed = new Set();
   for(const g of MERGE_GROUPS){
     const members = standards.filter(s => g.members.includes(s.abbr));
-    if(members.length >= 2){
+    // メンバーが1つでもあれば合算ラベルに寄せる。
+    // （例：全院が「注」へ移行して本体の届出が0件の地区でも、
+    //   「歯外在ベⅠ+注」として正しく計上されるように。>=2 だと片方のみの
+    //   地区が合算ビューで0扱いになるバグがあった）
+    if(members.length >= 1){
       out.push({
         abbr: g.label,
         name: g.dispName,
