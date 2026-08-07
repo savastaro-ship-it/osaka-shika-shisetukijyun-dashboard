@@ -42,11 +42,12 @@
     "tokaihokuriku": {
       "signatures": [
         "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2605-06_01-03.zip",
-        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2607-06_10-03.zip"
+        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2607-06_10-03.zip",
+        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2608-06_01-03.zip"
       ],
-      "latest_version": "2026.7",
-      "asof": "令和8年7月1日現在",
-      "checked": "2026/07/04 07:10"
+      "latest_version": "2026.8",
+      "asof": "令和8年8月1日現在",
+      "checked": "2026/08/07 10:01"
     },
     "kantoshinetsu": {
       "signatures": [
@@ -70,11 +71,12 @@
     "shikoku": {
       "signatures": [
         "https://kouseikyoku.mhlw.go.jp/shikoku/000482172.zip",
-        "https://kouseikyoku.mhlw.go.jp/shikoku/000490543.zip"
+        "https://kouseikyoku.mhlw.go.jp/shikoku/000490543.zip",
+        "https://kouseikyoku.mhlw.go.jp/shikoku/000495960.zip"
       ],
-      "latest_version": "2026.7",
-      "asof": "令和8年7月1日現在",
-      "checked": "2026/07/07 14:02"
+      "latest_version": "2026.8",
+      "asof": "令和8年8月1日現在",
+      "checked": "2026/08/07 10:02"
     },
     "tohoku": {
       "signatures": [
@@ -86,5 +88,5 @@
       "checked": "2026/07/15 07:04"
     }
   },
-  "last_checked": "2026/08/06 07:15"
+  "last_checked": "2026/08/07 10:01"
 }
