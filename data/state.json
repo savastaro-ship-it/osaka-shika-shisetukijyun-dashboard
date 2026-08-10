@@ -33,11 +33,12 @@
     "hokkaido": {
       "signatures": [
         "https://kouseikyoku.mhlw.go.jp/hokkaido/000482064.xlsx",
-        "https://kouseikyoku.mhlw.go.jp/hokkaido/000490418.xlsx"
+        "https://kouseikyoku.mhlw.go.jp/hokkaido/000490418.xlsx",
+        "https://kouseikyoku.mhlw.go.jp/hokkaido/000495843.xlsx"
       ],
-      "latest_version": "2026.7",
-      "asof": "令和8年7月1日現在",
-      "checked": "2026/07/11 07:11"
+      "latest_version": "2026.8",
+      "asof": "令和8年8月1日現在",
+      "checked": "2026/08/11 06:49"
     },
     "tokaihokuriku": {
       "signatures": [
@@ -88,5 +89,5 @@
       "checked": "2026/07/15 07:04"
     }
   },
-  "last_checked": "2026/08/10 06:39"
+  "last_checked": "2026/08/11 06:49"
 }
