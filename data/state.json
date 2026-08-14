@@ -54,11 +54,12 @@
     "kantoshinetsu": {
       "signatures": [
         "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0806.zip",
-        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0807.zip"
+        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0807.zip",
+        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0808.zip"
       ],
-      "latest_version": "2026.7",
-      "asof": "令和8年7月1日現在",
-      "checked": "2026/07/16 07:08"
+      "latest_version": "2026.8",
+      "asof": "令和8年8月1日現在",
+      "checked": "2026/08/15 06:32"
     },
     "chugoku": {
       "signatures": [
@@ -83,12 +84,13 @@
     "tohoku": {
       "signatures": [
         "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0805.xlsx",
-        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0806.xlsx"
+        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0806.xlsx",
+        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0807.xlsx"
       ],
-      "latest_version": "2026.6",
-      "asof": "令和8年6月1日現在",
-      "checked": "2026/07/15 07:04"
+      "latest_version": "2026.7",
+      "asof": "令和8年7月1日現在",
+      "checked": "2026/08/15 06:30"
     }
   },
-  "last_checked": "2026/08/14 06:53"
+  "last_checked": "2026/08/15 06:30"
 }
