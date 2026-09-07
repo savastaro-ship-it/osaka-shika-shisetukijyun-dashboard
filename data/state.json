@@ -78,11 +78,12 @@
       "signatures": [
         "https://kouseikyoku.mhlw.go.jp/shikoku/000482172.zip",
         "https://kouseikyoku.mhlw.go.jp/shikoku/000490543.zip",
-        "https://kouseikyoku.mhlw.go.jp/shikoku/000495960.zip"
+        "https://kouseikyoku.mhlw.go.jp/shikoku/000495960.zip",
+        "https://kouseikyoku.mhlw.go.jp/shikoku/000499506.zip"
       ],
-      "latest_version": "2026.8",
-      "asof": "令和8年8月1日現在",
-      "checked": "2026/08/07 10:02"
+      "latest_version": "2026.9",
+      "asof": "令和8年9月1日現在",
+      "checked": "2026/09/08 08:23"
     },
     "tohoku": {
       "signatures": [
@@ -95,5 +96,5 @@
       "checked": "2026/08/15 06:30"
     }
   },
-  "last_checked": "2026/09/07 07:50"
+  "last_checked": "2026/09/08 08:23"
 }
