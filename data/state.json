@@ -71,11 +71,12 @@
         "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000485758.zip",
         "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000492084.zip",
         "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000493880.zip",
-        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000498630.zip"
+        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000498630.zip",
+        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000502057.zip"
       ],
-      "latest_version": "2026.8",
-      "asof": "令和8年8月1日現在",
-      "checked": "2026/08/26 06:35"
+      "latest_version": "2026.9",
+      "asof": "令和8年9月1日現在",
+      "checked": "2026/09/28 08:44"
     },
     "shikoku": {
       "signatures": [
@@ -100,5 +101,5 @@
       "checked": "2026/09/16 08:28"
     }
   },
-  "last_checked": "2026/09/27 08:28"
+  "last_checked": "2026/09/28 08:43"
 }
