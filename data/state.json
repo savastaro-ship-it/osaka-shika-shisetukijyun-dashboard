@@ -99,12 +99,13 @@
         "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0805.xlsx",
         "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0806.xlsx",
         "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0807.xlsx",
-        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0808.xlsx"
+        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0808.xlsx",
+        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-shika-r0809.xlsx"
       ],
-      "latest_version": "2026.8",
-      "asof": "令和8年8月1日現在",
-      "checked": "2026/09/16 08:28"
+      "latest_version": "2026.9",
+      "asof": "令和8年9月1日現在",
+      "checked": "2026/10/15 08:49"
     }
   },
-  "last_checked": "2026/10/14 09:13"
+  "last_checked": "2026/10/15 08:48"
 }
