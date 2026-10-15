@@ -64,11 +64,12 @@
         "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0806.zip",
         "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0807.zip",
         "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0808.zip",
-        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0809.zip"
+        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0809.zip",
+        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_shika_r0810.zip"
       ],
-      "latest_version": "2026.9",
-      "asof": "令和8年9月1日現在",
-      "checked": "2026/09/16 08:29"
+      "latest_version": "2026.10",
+      "asof": "令和8年10月1日現在",
+      "checked": "2026/10/16 08:38"
     },
     "chugoku": {
       "signatures": [
@@ -107,5 +108,5 @@
       "checked": "2026/10/15 08:49"
     }
   },
-  "last_checked": "2026/10/15 08:48"
+  "last_checked": "2026/10/16 08:37"
 }
