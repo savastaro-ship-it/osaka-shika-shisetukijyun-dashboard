@@ -3,14 +3,15 @@
     "kinki": {
       "signatures": [
         "2026.10_sisetukijun_sika.zip",
+        "2026.11_sisetukijun_sika.zip",
         "2026.7_sisetukijun_sika.zip",
         "2026.8_sisetukijun_sika.zip",
         "2026.9_sisetukijun_sika.zip",
         "s2026.5_sisetukijun_sika.zip"
       ],
-      "latest_version": "2026.10",
-      "asof": "令和8年10月1日現在",
-      "checked": "2026/10/05 08:55"
+      "latest_version": "2026.11",
+      "asof": "令和8年11月1日現在",
+      "checked": "2026/11/05 10:24"
     },
     "kyushu": {
       "signatures": [
@@ -109,5 +110,5 @@
       "checked": "2026/10/15 08:49"
     }
   },
-  "last_checked": "2026/11/04 10:09"
+  "last_checked": "2026/11/05 10:24"
 }
