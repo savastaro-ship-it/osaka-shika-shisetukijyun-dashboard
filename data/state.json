@@ -54,11 +54,12 @@
         "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2607-06_10-03.zip",
         "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2608-06_01-03.zip",
         "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2609-06_01-03.zip",
-        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-03.zip"
+        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-03.zip",
+        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2611-06_01-03.zip"
       ],
-      "latest_version": "2026.10",
-      "asof": "令和8年10月1日現在",
-      "checked": "2026/10/07 09:32"
+      "latest_version": "2026.11",
+      "asof": "令和8年11月1日現在",
+      "checked": "2026/11/07 09:48"
     },
     "kantoshinetsu": {
       "signatures": [
@@ -110,5 +111,5 @@
       "checked": "2026/10/15 08:49"
     }
   },
-  "last_checked": "2026/11/06 10:27"
+  "last_checked": "2026/11/07 09:48"
 }
