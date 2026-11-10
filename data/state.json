@@ -7,11 +7,12 @@
         "2026.7_sisetukijun_sika.zip",
         "2026.8_sisetukijun_sika.zip",
         "2026.9_sisetukijun_sika.zip",
+        "s2026.11_sisetukijun_sika.zip",
         "s2026.5_sisetukijun_sika.zip"
       ],
       "latest_version": "2026.11",
       "asof": "令和8年11月1日現在",
-      "checked": "2026/11/05 10:24"
+      "checked": "2026/11/10 12:22"
     },
     "kyushu": {
       "signatures": [
@@ -42,11 +43,12 @@
         "https://kouseikyoku.mhlw.go.jp/hokkaido/000490418.xlsx",
         "https://kouseikyoku.mhlw.go.jp/hokkaido/000495843.xlsx",
         "https://kouseikyoku.mhlw.go.jp/hokkaido/000499353.xlsx",
-        "https://kouseikyoku.mhlw.go.jp/hokkaido/000502825.xlsx"
+        "https://kouseikyoku.mhlw.go.jp/hokkaido/000502825.xlsx",
+        "https://kouseikyoku.mhlw.go.jp/hokkaido/000506081.xlsx"
       ],
-      "latest_version": "2026.10",
-      "asof": "令和8年10月1日現在",
-      "checked": "2026/10/09 10:07"
+      "latest_version": "2026.11",
+      "asof": "令和8年11月1日現在",
+      "checked": "2026/11/10 12:21"
     },
     "tokaihokuriku": {
       "signatures": [
@@ -92,11 +94,12 @@
         "https://kouseikyoku.mhlw.go.jp/shikoku/000490543.zip",
         "https://kouseikyoku.mhlw.go.jp/shikoku/000495960.zip",
         "https://kouseikyoku.mhlw.go.jp/shikoku/000499506.zip",
-        "https://kouseikyoku.mhlw.go.jp/shikoku/000502938.zip"
+        "https://kouseikyoku.mhlw.go.jp/shikoku/000502938.zip",
+        "https://kouseikyoku.mhlw.go.jp/shikoku/000506282.zip"
       ],
-      "latest_version": "2026.10",
-      "asof": "令和8年10月1日現在",
-      "checked": "2026/10/08 09:53"
+      "latest_version": "2026.11",
+      "asof": "令和8年11月1日現在",
+      "checked": "2026/11/10 12:22"
     },
     "tohoku": {
       "signatures": [
@@ -111,5 +114,5 @@
       "checked": "2026/10/15 08:49"
     }
   },
-  "last_checked": "2026/11/09 09:41"
+  "last_checked": "2026/11/10 12:21"
 }
