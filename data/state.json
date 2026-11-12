@@ -31,11 +31,12 @@
         "https://kouseikyoku.mhlw.go.jp/kyushu/000491355.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000491356.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000491357.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000491358.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000491359.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000491360.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000491361.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000491362.zip",
         "https://kouseikyoku.mhlw.go.jp/kyushu/000496855.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000496856.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000496857.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000496858.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000496859.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000496860.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000496861.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000496862.zip",
         "https://kouseikyoku.mhlw.go.jp/kyushu/000500350.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000500351.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000500352.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000500353.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000500354.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000500355.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000500356.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000500357.zip",
-        "https://kouseikyoku.mhlw.go.jp/kyushu/000503830.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503831.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503832.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503833.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503834.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503835.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503836.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503837.zip"
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503830.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503831.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503832.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503833.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503834.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503835.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503836.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000503837.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000507045.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000507046.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000507047.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000507048.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000507049.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000507050.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000507051.zip|https://kouseikyoku.mhlw.go.jp/kyushu/000507052.zip"
       ],
-      "latest_version": "2026.10",
-      "asof": "令和8年10月1日現在",
-      "checked": "2026/10/09 10:08"
+      "latest_version": "2026.11",
+      "asof": "令和8年11月1日現在",
+      "checked": "2026/11/12 11:12"
     },
     "hokkaido": {
       "signatures": [
@@ -115,5 +116,5 @@
       "checked": "2026/10/15 08:49"
     }
   },
-  "last_checked": "2026/11/11 10:09"
+  "last_checked": "2026/11/12 11:10"
 }
